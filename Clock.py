@@ -193,10 +193,13 @@ class clock:
         """ KEY1 """
         if state=='UP':
             #print( "size:{} ind={}".format(len(clock.baks), self.ind) )
-            if self.ind == len(clock.baksnames)-1:
-                self.ind = 0
+            ind = [*clock.backs].index(self.cnf["global"]["theme"])
+            if ind == len(clock.baks)-1:
+                ind = 0
             else:
-                self.ind += 1
+                ind += 1
+            self.cnf["global"]["theme"]=[*clock.backs][ind]
+            clock.cnf.save()
 
     def sysexit( self, name, state ):
         """ KEY3 """
