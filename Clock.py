@@ -19,6 +19,7 @@ class clock:
         clock.cnf = Appconfig.Appconfig("rpi0.ini")
         self.cnf = clock.cnf.conf
         clock.images = self.cnf["global"]["images"]
+        print(self.cnf["clock"]["icons"])
         for n in self.cnf["clock"]["icons"]:
             print(self.cnf["clock"]["icons"][n])
             clock.icons[n] = int( self.cnf["clock"]["icons"][n], 16 )
