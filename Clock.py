@@ -32,10 +32,10 @@ class clock:
         self.info = ""
         self.showinfo = False
         self.kbd = kbd
-        self.s_color = self.cnf["clock"]["s_color"]
-        self.m_color = self.cnf["clock"]["m_color"]
-        self.h_color = self.cnf["clock"]["h_color"]
-        self.outline_color = self.cnf["clock"]["outline_color"]
+        self.s_color = tuple(self.cnf["clock"]["s_color"])
+        self.m_color = tuple(self.cnf["clock"]["m_color"])
+        self.h_color = tuple(self.cnf["clock"]["h_color"])
+        self.outline_color = tuple(self.cnf["clock"]["outline_color"])
         self.arrowsize_h = self.cnf["clock"]["h_arrowsize"]
         self.arrowsize_m = self.cnf["clock"]["m_arrowsize"]
         self.arrowsize_s = self.cnf["clock"]["s_arrowsize"]
