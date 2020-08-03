@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# setip <dev> <ip/mask> [r]
+# r - replace all (if [r] absent, a new IP will be ad) 
+#
+MOD=x$3
+if [ $MOD == 'xr' ];
+then 
+    for ADR in `ip -4 address show dev $1|grep inet|nawk '{print $2}'`; 
+    do
+       ip -4 a del $ADR dev $1
+    done
+fi
+ip -4 address add $2 dev $1    

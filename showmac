@@ -1,0 +1,3 @@
+#!/bin/bash
+DEV=$1
+ip link show $DEV|grep link|nawk '{print $2}'

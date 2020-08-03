@@ -1,0 +1,21 @@
+#!/bin/bash
+#
+# setip <dev> [<ip/mask>|<all>]
+#
+if [ -z $1 ]; then 
+   echo "  usage: setip <dev> [<ip/mask>|<'all'>]"
+else    
+for ADR in `ip -4 address show dev $1|grep inet|nawk '{print $2}'`; 
+do
+  if [ $2 == 'all' ]
+  then 
+      ip -4 a del $ADR dev $1
+  elif [ -n $2 ]
+  then
+      if [ $2 == $ADR ]
+      then
+          ip -4 a del $2 dev $1
+      fi    
+  fi        
+done
+fi
