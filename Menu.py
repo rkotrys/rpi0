@@ -7,7 +7,7 @@ class Menu:
 
     def __init__(self,size,box,parent):
         """  joystic menu  """
-        self.cnf = parent.cnf.conf
+        self.cnf = parent.cnf
         self.parent = parent
         self.active = False
         self.state = []

@@ -17,11 +17,9 @@ class clock:
 
     def __init__(self,kbd):
         clock.cnf = Appconfig.Appconfig("rpi0.ini")
-        self.cnf = clock.cnf.conf
+        self.cnf = clock.cnf.dml
         clock.images = self.cnf["global"]["images"]
-        print(self.cnf["clock"]["icons"])
         for n in self.cnf["clock"]["icons"]:
-            print(self.cnf["clock"]["icons"][n])
             clock.icons[n] = int( self.cnf["clock"]["icons"][n], 16 )
         self.sheduler = sched.scheduler(time.time, time.sleep)
         self.cpu = 0
