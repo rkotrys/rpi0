@@ -144,7 +144,7 @@ class clock:
             symbol = chr(clock.icons["wifi"])+u''
         elif wlanip == "" and ethip != "":
             symbol = chr(clock.icons["eth"])+u''
-        else
+        else:
             symbol = chr(clock.icons["wifi_off"])+u''
         draw.text( (128-17,1), symbol, font=self.symbols, fill=iconcolor )
         if self.isonline():
