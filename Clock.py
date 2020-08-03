@@ -194,7 +194,7 @@ class clock:
         if state=='UP':
             #print( "size:{} ind={}".format(len(clock.baks), self.ind) )
             ind = [*clock.backs].index(self.cnf["global"]["theme"])
-            if ind == len(clock.baks)-1:
+            if ind == len(clock.backs)-1:
                 ind = 0
             else:
                 ind += 1
