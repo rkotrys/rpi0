@@ -5,7 +5,7 @@ import Kbd, Clock
 
 #def sinfo(name, state):
 #    print(u'Showinfo')
-        
+
 
 #try:
 def menuload(filename):
@@ -14,14 +14,14 @@ def menuload(filename):
         r = csv.reader( csvfile )
         first = True
         for row in r:
-            if first: 
+            if first:
                 first = False
                 continue
             if row[0][0] == '#':
-                continue    
+                continue
             row[0] = row[0].replace(u'|',u'\n')
             menucontent.append( row )
-    return menucontent if len(menucontent)>0 else False    
+    return menucontent if len(menucontent)>0 else False
 
 def myexec( label='', menu=False, arg=False ):
     if arg==False:
@@ -29,11 +29,11 @@ def myexec( label='', menu=False, arg=False ):
     a = []
     for item in arg.split(' '):
         if item != '':
-            a.append(item)    
+            a.append(item)
     r = str(proc.check_output( a ), encoding='utf-8').strip()
     print( label, r, '\n' )
     menu.active = False
-#    return r        
+#    return r
 
 
 def pr0( label, menu ):
@@ -41,7 +41,7 @@ def pr0( label, menu ):
         menu.parent.sinfo('k2','UP')
     else:
         menu.parent.sinfo('k2','Down')
-    menu.active = False    
+    menu.active = False
 
 def pr1( label, menu ):
     proc.run(['/etc/netconf/setdhcpcd'])
@@ -92,10 +92,10 @@ def main():
     kbd.sethanddle( 'down', clk.menu.next )
 
     clk.run()
-	
+
 if __name__ == '__main__':
     main()
 
 #except:
-#	print("except")
-#	GPIO.cleanup()
+#   print("except")
+#   GPIO.cleanup()

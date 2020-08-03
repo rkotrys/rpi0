@@ -6,8 +6,8 @@ from PIL import Image,ImageDraw,ImageFont,ImageColor,ImageFilter
 class Menu:
 
     def __init__(self,size,box,parent):
-		"""  joystic menu  """
-		self.cnf = parent.cnf.conf
+        """  joystic menu  """
+        self.cnf = parent.cnf.conf
         self.parent = parent
         self.active = False
         self.state = []
@@ -63,4 +63,4 @@ class Menu:
     def stop(self,name,state):
         if state == 'UP' and self.active:
             self.active = False
- 
+

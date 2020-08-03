@@ -14,12 +14,12 @@ class clock:
     backs = {}
     icons = {}
     cnf = None
-    
+
     def __init__(self,kbd):
-		clock.cnf = Appconfig.Appconfig("rpi0.ini")
-		self.cnf = clock.cnf.conf
-		clock.images = self.cnf["global"]["images"]
-		clock.icons = self.cnf["clock"]["icons"]
+        clock.cnf = Appconfig.Appconfig("rpi0.ini")
+        self.cnf = clock.cnf.conf
+        clock.images = self.cnf["global"]["images"]
+        clock.icons = self.cnf["clock"]["icons"]
         self.sheduler = sched.scheduler(time.time, time.sleep)
         self.cpu = 0
         self.mem = 0
@@ -39,15 +39,15 @@ class clock:
         self.arrowsize_m = self.cnf["clock"]["m_arrowsize"]
         self.arrowsize_s = self.cnf["clock"]["s_arrowsize"]
         self.menu = Menu.Menu( (128,128), [(3,63-20),(125,63+20)], self )
-        
+
         for n in self.cnf["clock"]["faces"]:
-			clock.backs[n] = Image.open( self.cnf["global"]["images"] + self.cnf["clock"]["faces"][n] ).resize( (128,128),PIL.Image.BICUBIC)
-		self.icons = self.cnf["clock"]["icons"]	
+            clock.backs[n] = Image.open( self.cnf["global"]["images"] + self.cnf["clock"]["faces"][n] ).resize( (128,128),PIL.Image.BICUBIC)
+        self.icons = self.cnf["clock"]["icons"]
         self.font = ImageFont.truetype( self.cnf["global"]["fonts"]+self.cnf["clock"]["font_bold"], self.cnf["clock"]["font_bold_size"] )
-        self.font12 = ImageFont.truetype(self.cnf["global"]["fonts"]+self.cnf["clock"]["font_mono"], self.cnf["clock"]["font_mono_size"]) 
+        self.font12 = ImageFont.truetype(self.cnf["global"]["fonts"]+self.cnf["clock"]["font_mono"], self.cnf["clock"]["font_mono_size"])
         self.symbols = ImageFont.truetype(self.cnf["global"]["fonts"]+self.cnf["clock"]["font_symbol"], self.cnf["clock"]["font_symbol_size"])
-       
-           
+
+
         self.LCD = LCD_1in44.LCD()
         Lcd_ScanDir = LCD_1in44.SCAN_DIR_DFT  #SCAN_DIR_DFT = D2U_L2R
         self.LCD.LCD_Init(Lcd_ScanDir)
@@ -55,7 +55,7 @@ class clock:
         self.x = threading.Thread( name='cpuload', target=self.runcpu, args=(), daemon=True)
         self.x.start()
 
-        
+
 
     def drawhands( self, t, r, image ):
         x = int(image.size[0]/2)
@@ -77,7 +77,7 @@ class clock:
         return Image.alpha_composite( hmim, im.rotate( -(360*t[2])/60, Image.BICUBIC ) )
 
     def isonline(self, ip='8.8.8.8'):
-        try: 
+        try:
             r = str(proc.check_output(['/bin/ping', '-c', '3', '-i', '0.2', '-w', '1', '-q', ip] ), encoding='utf-8').strip()
         except proc.CalledProcessError:
             r = '0 received'
@@ -85,8 +85,8 @@ class clock:
         if( int(r[ind-1:ind]) > 0 ):
             return True
         else:
-            return False    
-        
+            return False
+
     def runcpu(self):
         while self.go:
             memlines = str(proc.check_output(['free']), encoding='utf-8').strip().split('\n')
@@ -95,13 +95,13 @@ class clock:
             for l in cpulines[7].split(' '):
                 if l == '': continue
                 r.append(int(l))
-            self.cpu = r[5]           
+            self.cpu = r[5]
             r = []
             for l in memlines[1].split(' '):
                 if l == '': continue
                 r.append(l)
             self.mem = (100.0 * int(r[2])) / int(r[1]);
-            time.sleep(2) 
+            time.sleep(2)
 
     def runclock(self):
         if self.go:
@@ -144,67 +144,67 @@ class clock:
             symbol = chr(clock.icons["wifi"])+u''
         elif wlanip == "" and ethip != "":
             symbol = chr(clock.icons["eth"])+u''
-        else    
-            symbol = chr(clock.icons["wifi_off"])+u''    
+        else
+            symbol = chr(clock.icons["wifi_off"])+u''
         draw.text( (128-17,1), symbol, font=self.symbols, fill=iconcolor )
         if self.isonline():
             draw.text( (64-8,31), chr(clock.icons["globe"])+u'', font=self.symbols, fill=iconcolor )
-        draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols, fill=iconcolor )    
-        im = Image.alpha_composite( im, self.drawhands( (tm[3],tm[4],tm[5]), (12, 25, 35), image ) )   
+        draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols, fill=iconcolor )
+        im = Image.alpha_composite( im, self.drawhands( (tm[3],tm[4],tm[5]), (12, 25, 35), image ) )
 
         """ KEY2 - buttons action """
         if self.showinfo:
            imtext = Image.new( "RGBA", image.size, (0,0,0,0) )
-           drawtext = ImageDraw.Draw(imtext)            
+           drawtext = ImageDraw.Draw(imtext)
            drawtext.rectangle([0,0,127,127], fill=tuple(self.con["clock"]["self_info_fill"]), outline=tuple(self.con["clock"]["self_info_outline"]), width=2)
            drawtext.multiline_text( (1,1), self.info, font=self.font12, fill=tuple(self.con["clock"]["self_font_fill"]) )
-        
-        """ KEY3 - buttons action """     
+
+        """ KEY3 - buttons action """
         if self.kbd.buttons['k3'] and self.kbd.buttons['enter']:
             draw.rectangle([0,0,127,127], fill=(0,0,0,255), outline=(50,50,50,255), width=3)
-            draw.text( (30,50), 'DOWN', font=self.font, fill=(255,0,0,255) )   
+            draw.text( (30,50), 'DOWN', font=self.font, fill=(255,0,0,255) )
             self.LCD.LCD_ShowImage( Image.alpha_composite(im,imtext),0,0)
             time.sleep(3)
             self.LCD.LCD_Clear()
             proc.run(["shutdown", "now"])
             time.sleep(3)
-              
-        """ menu images overlay """      
+
+        """ menu images overlay """
         menu = self.menu.show()
         if menu:
             self.LCD.LCD_ShowImage( Image.alpha_composite(im,menu),0,0)
         else:
             if self.showinfo:
                 self.LCD.LCD_ShowImage( Image.alpha_composite(im,imtext),0,0)
-            else:    
+            else:
                 self.LCD.LCD_ShowImage( im,0,0)
-    
+
     def run(self):
         self.sheduler.enter(1,1,self.runclock)
         self.sheduler.run()
         while self.go:
             time.sleep(5)
-        self.LCD.LCD_Clear()    
+        self.LCD.LCD_Clear()
 
 
     """  buttons on right callbaks """
     def nextbk( self, name, state ):
-		""" KEY1 """
+        """ KEY1 """
         if state=='UP':
-            #print( "size:{} ind={}".format(len(clock.baks), self.ind) ) 
+            #print( "size:{} ind={}".format(len(clock.baks), self.ind) )
             if self.ind == len(clock.baksnames)-1:
                 self.ind = 0
             else:
-                self.ind += 1        
+                self.ind += 1
 
     def sysexit( self, name, state ):
-		""" KEY3 """
+        """ KEY3 """
         if state=='UP':
             print("EXIT!")
             self.go = False
-            
+
     def sinfo(self, name, state ):
-		""" KEY2 """
+        """ KEY2 """
         if state == "UP":
             self.showinfo = False
         else:
@@ -220,4 +220,4 @@ class clock:
 
             self.showinfo = True
             self.isonline()
-            #print(self.info) 
+            #print(self.info)
