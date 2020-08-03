@@ -73,7 +73,7 @@ class clock:
         im = Image.new( "RGBA", image.size, (255,255,255,0) )
         dr = ImageDraw.Draw( im )
         dr.line([ ( x, y+20 ), ( x, r[0]+self.arrowsize_h)], fill = self.s_color, width = 2 )
-        dr.line([ ( x-3, r[0]+self.arrowsize_h ), ( x, r[0]), ( x+3, r[0]+self.arrowsize_h ), ( x-3, r[0]+self.arrowsize_s )], fill = self.s_color, width = 2 )
+        dr.line([ ( x-3, r[0]+self.arrowsize_s ), ( x, r[0]), ( x+3, r[0]+self.arrowsize_s ), ( x-3, r[0]+self.arrowsize_s )], fill = self.s_color, width = 2 )
         dr.ellipse([x-7,y-7,x+7,y+7],fill=self.s_color,outline='#777')
         return Image.alpha_composite( hmim, im.rotate( -(360*t[2])/60, Image.BICUBIC ) )
 
