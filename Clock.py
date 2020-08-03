@@ -158,7 +158,7 @@ class clock:
            imtext = Image.new( "RGBA", image.size, (0,0,0,0) )
            drawtext = ImageDraw.Draw(imtext)
            drawtext.rectangle([0,0,127,127], fill=tuple(self.cnf["clock"]["self_info_fill"]), outline=tuple(self.cnf["clock"]["self_info_outline"]), width=2)
-           drawtext.multiline_text( (1,1), self.info, font=self.font12, fill=tuple(self.cnf["clock"]["self_font_fill"]) )
+           drawtext.multiline_text( (1,1), self.info, font=self.font12, fill=tuple(self.cnf["clock"]["self_info_font_fill"]) )
 
         """ KEY3 - buttons action """
         if self.kbd.buttons['k3'] and self.kbd.buttons['enter']:
