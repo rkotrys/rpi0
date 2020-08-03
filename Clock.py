@@ -20,7 +20,8 @@ class clock:
         self.cnf = clock.cnf.conf
         clock.images = self.cnf["global"]["images"]
         for n in self.cnf["clock"]["icons"]:
-            clock.icons[n] = int(self.cnf["clock"]["icons"][n],16)
+            print(self.cnf["clock"]["icons"][n])
+            clock.icons[n] = int( self.cnf["clock"]["icons"][n], 16 )
         self.sheduler = sched.scheduler(time.time, time.sleep)
         self.cpu = 0
         self.mem = 0
