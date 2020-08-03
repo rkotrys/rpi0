@@ -32,7 +32,6 @@ class Appconfig:
             for k in _sec:
                 if _sec[k][:5]=="json:":
                     buf=_sec[k][5:]
-                    print(buf)
                     self.dml[s][k]=json.loads(buf)
                 else:
                     self.dml[s][k]=_sec[k]
