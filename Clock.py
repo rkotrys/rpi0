@@ -8,6 +8,7 @@ import LCD_Config
 
 from PIL import Image,ImageDraw,ImageFont,ImageColor,ImageFilter
 import Menu, Appconfig
+import helper as hlp
 
 class clock:
     images = ""
