@@ -68,7 +68,7 @@ def pr5( label, menu ):
 
 def main():
     m = menuload( 'menu.csv' )
-    kbd = Kbd2.Kbd()
+    kbd = Kbd2.Kbd2()
     clk = Clock.clock(kbd)
     for item in m:
         if item[1] == 'f':
