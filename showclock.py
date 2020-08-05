@@ -1,7 +1,7 @@
 import time, math, sys, csv
 import subprocess as proc
 from functools import partial
-import Kbd, Clock
+import Kbd2, Clock
 
 #def sinfo(name, state):
 #    print(u'Showinfo')
@@ -68,7 +68,7 @@ def pr5( label, menu ):
 
 def main():
     m = menuload( 'menu.csv' )
-    kbd = Kbd.Kbd()
+    kbd = Kbd2.Kbd()
     clk = Clock.clock(kbd)
     for item in m:
         if item[1] == 'f':
