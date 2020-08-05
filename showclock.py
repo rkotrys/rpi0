@@ -84,7 +84,7 @@ def main():
 
     kbd.sethanddle( 'k3', clk.nextbk )
     kbd.sethanddle( 'k2', clk.sinfo )
-    kbd.sethanddle( 'k1', clk.sysexit )
+    #kbd.sethanddle( 'k1', clk.sysexit )
     kbd.sethanddle( 'left', clk.menu.start )
     kbd.sethanddle( 'right', clk.menu.stop )
     kbd.sethanddle( 'enter', clk.menu.run )
