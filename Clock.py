@@ -190,29 +190,28 @@ class clock:
 
 
     """  buttons on right callbaks """
-    def nextbk( self, name, state ):
-        """ KEY1 """
-        if state=='UP':
-            #print( "size:{} ind={}".format(len(clock.baks), self.ind) )
-            ind = [*clock.backs].index(self.cnf["global"]["theme"])
-            if ind == len(clock.backs)-1:
-                ind = 0
-            else:
-                ind += 1
-            self.cnf["global"]["theme"]=[*clock.backs][ind]
-            clock.cnf.save()
-
-    def sysexit( self, name, state ):
+    def nextbk( self, pin ):
         """ KEY3 """
-        if state=='UP':
-            print("EXIT!")
-            self.go = False
+        #print( "size:{} ind={}".format(len(clock.baks), self.ind) )
+        ind = [*clock.backs].index(self.cnf["global"]["theme"])
+        if ind == len(clock.backs)-1:
+            ind = 0
+        else:
+            ind += 1
+        self.cnf["global"]["theme"]=[*clock.backs][ind]
+        clock.cnf.save()
 
-    def sinfo(self, name, state ):
+    def sysexit( self, pin ):
+        """ KEY1 """
+        print("EXIT!")
+        self.go = False
+
+    def sinfo(self, pin ):
         """ KEY2 """
-        if state == "UP":
+        if self.showinfo==True:
             self.showinfo = False
         else:
+            self.showinfo=True
             wlan1ip = str(proc.check_output(['./showip', 'wlan1'] ), encoding='utf-8').strip()
             self.info = u'hostname: ' + str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
             self.info = self.info + u'\neth0:\n' + str(proc.check_output(['./showip', 'eth0'] ), encoding='utf-8').strip()
