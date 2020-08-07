@@ -43,7 +43,7 @@ class Kbd2:
     def keyhandle( self, pin  ):
         print( u'{} is pressed'.format( self.keynames[ pin ]  ) )
 
-    def sethanddle( self, name, handle ):
+    def sethanddle( self, name, handle ):  
         GPIO.remove_event_detect( Kbd2.keyid[name] )
         self.handler[name] = handle
         GPIO.add_event_detect(Kbd2.keyid[name], GPIO.RISING, callback=self.handler[name], bouncetime=200)
