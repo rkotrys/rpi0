@@ -161,16 +161,6 @@ class clock:
            drawtext.rectangle([0,0,127,127], fill=tuple(self.cnf["clock"]["self_info_fill"]), outline=tuple(self.cnf["clock"]["self_info_outline"]), width=2)
            drawtext.multiline_text( (1,1), self.info, font=self.font12, fill=tuple(self.cnf["clock"]["self_info_font_fill"]) )
 
-        """ KEY3 - buttons action """
-        if self.kbd.buttons['k3'] and self.kbd.buttons['enter']:
-            draw.rectangle([0,0,127,127], fill=(0,0,0,255), outline=(50,50,50,255), width=3)
-            draw.text( (30,50), 'DOWN', font=self.font, fill=(255,0,0,255) )
-            self.LCD.LCD_ShowImage( Image.alpha_composite(im,imtext),0,0)
-            time.sleep(3)
-            self.LCD.LCD_Clear()
-            proc.run(["shutdown", "now"])
-            time.sleep(3)
-
         """ menu images overlay """
         menu = self.menu.show()
         if menu:
