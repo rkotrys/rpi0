@@ -46,5 +46,5 @@ class Kbd2:
     def sethanddle( self, name, handle ):
 		GPIO.remove_event_detect( Kbd2.keyid[name] )
         self.handler[name] = handle
-        GPIO.add_event_detect(Kbd2.keyid[k], GPIO.RISING, callback=self.handler[k], bouncetime=200)
+        GPIO.add_event_detect(Kbd2.keyid[name], GPIO.RISING, callback=self.handler[name], bouncetime=200)
 
