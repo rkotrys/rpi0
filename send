@@ -3,6 +3,9 @@
 #  rpi03 sync from home PC
 #  sync local /home/wlan/pr/rpi0/ do <deviceIP>:rpi0/
 #
-DEVICE = 192.168.1.40
+DEF_DEVICE=192.168.1.40
+if [ -z "$DEVICE" ]; then
+    DEVICE=$DEV_DEVICE
+fi
 rsync -av --exclude "__pycache__" --delete -e "ssh -l pi -i /home/wlan/.ssh/id_rsa" /home/wlan/pr/rpi0/ pi@$DEVICE:rpi0/
 ssh -l pi $DEVICE ./run_rpi0
