@@ -38,19 +38,19 @@ class Menu:
         else:
             return False
 
-    def run(self,name,state):
-        if state == 'UP' and self.active:
+    def run(self,name):
+        if self.active:
             self.state[self.selected]['action']( label=self.state[self.selected]['label'], menu=self )
 
-    def next(self,name,state):
-        if state == 'UP' and self.active:
+    def next(self,name):
+        if self.active:
             if self.selected < len(self.state)-1:
                 self.selected += 1
             else:
                 self.selected = 0
 
-    def previous(self,name,state):
-        if state == 'UP' and self.active:
+    def previous(self,name):
+        if self.active:
             if self.selected > 0:
                 self.selected -= 1
             else:
@@ -58,10 +58,10 @@ class Menu:
 
     def start(self,name):
         if not self.active:
-            print( "start" )
+            #print( "start" )
             self.active = True
         else:
-            print( "stop" )
+            #print( "stop" )
             self.active = False
 
 
