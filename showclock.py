@@ -74,6 +74,8 @@ def main():
         if item[1] == 'f':
             clk.menu.add(item[0], partial( myexec, arg=item[2] ) )
 #            print( 'menu: ', item[2] )
+        if item[1] == 'p':
+            clk.menu.add(item[0], item[2] )
 
 #    clk.menu.add('INFO', pr0 )
 #    clk.menu.add('SET: dhcpcd', pr1 )
