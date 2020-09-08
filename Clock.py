@@ -191,7 +191,7 @@ class clock:
         self.cnf["global"]["theme"]=[*clock.backs][ind]
         clock.cnf.save()
 
-    def sysexit( self, pin ):
+    def sysexit( self=None, pin=None ):
         """ KEY1 """
         print("EXIT!")
         self.go = False
