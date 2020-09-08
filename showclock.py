@@ -67,8 +67,7 @@ def pr5( label, menu ):
 
 def py_call( toexec=None, label="label", menu=None ):
     print( label )
-    if toexec != None:
-        exec( toexec )
+    exec( toexec )
     
 
 
