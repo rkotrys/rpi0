@@ -9,4 +9,4 @@ eth0 UP,f,ifconfig eth0 up
 eth0 DOWN,f,ifconfig eth0 down
 REBOOT,f,reboot now
 DOWN,f,shutdown now
-EXIT,p,exit
+EXIT,p,clk.sysexit()
