@@ -60,7 +60,7 @@ class Menu:
         if not self.active:
             print( "start" )
             self.active = True
-        else
+        else:
             print( "stop" )
             self.active = False
 
