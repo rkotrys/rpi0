@@ -65,7 +65,7 @@ def pr5( label, menu ):
     proc.run(['shutdown','now'])
     time.sleep(3)
 
-def py_call( toexec=None, label="label", self=None ):
+def py_call( toexec=None, label="label", menu=None ):
     if toexec!=None:
         exec( toexec )
     print( label )
