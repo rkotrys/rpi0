@@ -56,13 +56,13 @@ class Menu:
             else:
                 self.selected = len(self.state)-1
 
-    def start(self,name,state):
+    def start(self,name):
         print( "start" )
-        if state == 'UP':
+        if not self.active:
             self.active = True
 
-    def stop(self,name,state):
+    def stop(self,name):
         print( "stop" )
-        if state == 'UP' and self.active:
+        if self.active:
             self.active = False
 
