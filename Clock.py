@@ -40,7 +40,7 @@ class clock:
         self.arrowsize_h = self.cnf["clock"]["h_arrowsize"]
         self.arrowsize_m = self.cnf["clock"]["m_arrowsize"]
         self.arrowsize_s = self.cnf["clock"]["s_arrowsize"]
-        self.menu = Menu.Menu( (128,128), [(3,63-12),(125,63+12)], self )
+        self.menu = Menu.Menu( (128,128), [(3,63-12),(125,63+15)], self )
 
         for n in self.cnf["clock"]["faces"]:
             clock.backs[n] = Image.open( self.cnf["global"]["images"] + self.cnf["clock"]["faces"][n] ).resize( (128,128),Image.BICUBIC)
