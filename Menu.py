@@ -36,8 +36,8 @@ class Menu:
                 txtsize = dr.textsize( self.state[self.selected]['label'], font=self.font )
                 txtsizep = dr.textsize( self.state[previousitem]['label'], font=self.font )
                 txtsizen = dr.textsize( self.state[nextitem]['label'], font=self.font )
-                dr.text( ((self.size[0]-txtsizep[0])/2, (self.size[1]-txtsizep[1]*2)), self.state[previousitem]['label'], fill=self.fontcolor, font=self.font )
-                dr.text( ((self.size[0]-txtsizen[0])/2, (self.size[1]+txtsizen[1]*2)), self.state[nextitem]['label'], fill=self.fontcolor, font=self.font )
+                dr.text( ((self.size[0]-txtsizep[0])/2, (self.size[1]-txtsize[1])/2)-20, self.state[previousitem]['label'], fill=self.fontcolor, font=self.font )
+                dr.text( ((self.size[0]-txtsizen[0])/2, (self.size[1]-txtsize[1])/2)+20, self.state[nextitem]['label'], fill=self.fontcolor, font=self.font )
                 dr.text( ((self.size[0]-txtsize[0])/2, (self.size[1]-txtsize[1])/2), self.state[self.selected]['label'], fill=self.fontcolor, font=self.font )
                 #print( previousitem, nextitem, self.state[previousitem]['label'], self.state[nextitem]['label'] )
             else:
