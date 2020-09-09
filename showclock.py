@@ -66,11 +66,7 @@ def pr5( label, menu ):
     time.sleep(3)
 
 def py_call( toexec=None, label="label", menu=None ):
-    if( len( toexec > 0 )):
-        exec( toexec )
-    else:
-        print( "ERROR! on menu label '{}' : no commad to exec".format(label) )    
-    
+    exec( toexec )
 
 
 def main():
