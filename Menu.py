@@ -17,7 +17,7 @@ class Menu:
         self.fill = tuple(self.cnf["menu"]["fill_color"])
         self.outline = tuple(self.cnf["menu"]["outline_color"])
         self.fontcolor = tuple(self.cnf["menu"]["font_color"])
-        self.fontdark = tuple(self.cnf["menu"]["fontdatk_color"])
+        self.fontdark = tuple(self.cnf["menu"]["fontdark_color"])
         self.font = ImageFont.truetype( self.cnf["global"]["fonts"]+self.cnf["menu"]["font"], self.cnf["menu"]["font_size"] )
 
     def add(self,label,action):
