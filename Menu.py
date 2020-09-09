@@ -17,6 +17,7 @@ class Menu:
         self.fill = tuple(self.cnf["menu"]["fill_color"])
         self.outline = tuple(self.cnf["menu"]["outline_color"])
         self.fontcolor = tuple(self.cnf["menu"]["font_color"])
+        self.fontdark = tuple(self.cnf["menu"]["fontdatk_color"])
         self.font = ImageFont.truetype( self.cnf["global"]["fonts"]+self.cnf["menu"]["font"], self.cnf["menu"]["font_size"] )
 
     def add(self,label,action):
@@ -36,8 +37,8 @@ class Menu:
                 txtsize = dr.textsize( self.state[self.selected]['label'], font=self.font )
                 txtsizep = dr.textsize( self.state[previousitem]['label'], font=self.font )
                 txtsizen = dr.textsize( self.state[nextitem]['label'], font=self.font )
-                dr.text( ((self.size[0]-txtsizep[0])/2, (self.size[1]-txtsize[1])/2-25), self.state[previousitem]['label'], fill=self.fill, font=self.font )
-                dr.text( ((self.size[0]-txtsizen[0])/2, (self.size[1]-txtsize[1])/2+25), self.state[nextitem]['label'], fill=self.fill, font=self.font )
+                dr.text( ((self.size[0]-txtsizep[0])/2, (self.size[1]-txtsize[1])/2-25), self.state[previousitem]['label'], fill=self.fontdark, font=self.font )
+                dr.text( ((self.size[0]-txtsizen[0])/2, (self.size[1]-txtsize[1])/2+25), self.state[nextitem]['label'], fill=self.fontdark, font=self.font )
                 dr.text( ((self.size[0]-txtsize[0])/2, (self.size[1]-txtsize[1])/2), self.state[self.selected]['label'], fill=self.fontcolor, font=self.font )
                 #print( previousitem, nextitem, self.state[previousitem]['label'], self.state[nextitem]['label'] )
             else:
