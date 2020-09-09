@@ -67,7 +67,9 @@ def pr5( label, menu ):
 
 def py_call( toexec=None, label="label", menu=None ):
     print( label )
-    exec( toexec )
+    print( toexec )
+    print( menu.state )
+    #exec( toexec )
     
 
 
