@@ -29,7 +29,15 @@ class Menu:
 
             dr.rectangle( self.box,fill=self.fill, outline=self.outline)
             if len(self.state)>0:
+                nextitem = (self.selected+1) % len(self.state )
+                previousitem = self.selected-1
+                if previousitem < 0:
+                    previousitem = len(self.state )-1
                 txtsize = dr.textsize( self.state[self.selected]['label'], font=self.font )
+                txtsizep = dr.textsize( self.state[previousitem]['label'], font=self.font )
+                txtsizen = dr.textsize( self.state[nextitem]['label'], font=self.font )
+                dr.text( ((self.size[0]-txtsizep[0])/2, (self.size[1]-txtsizep[1])*2), self.state[previousitem]['label'], fill=self.fontcolor, font=self.font )
+                dr.text( ((self.size[0]-txtsizen[0])/2, (self.size[1]+txtsizen[1])*2), self.state[nextitem]['label'], fill=self.fontcolor, font=self.font )
                 dr.text( ((self.size[0]-txtsize[0])/2, (self.size[1]-txtsize[1])/2), self.state[self.selected]['label'], fill=self.fontcolor, font=self.font )
             else:
                 txtsize = dr.textsize( '- no items -', font=self.font )
