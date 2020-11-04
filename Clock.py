@@ -194,7 +194,7 @@ class clock:
         if self.btscan:
             self.btscan = False
         else:
-            self.btscan = TRUE
+            self.btscan = True
 
     def btscan_run(self):
        if self.btscan_count > 0:
