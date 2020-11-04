@@ -138,9 +138,9 @@ class clock:
         draw.rectangle([(127-5,127),(127,int(127*(self.cpu/100.0)))], fill=tuple(self.cnf["clock"]["cpu_color"]), outline=tuple(self.cnf["clock"]["cpu_color_outline"]), width=2)
         draw.rectangle([(0,127),(5,int(127*(1 - self.mem/100.0)))], fill=tuple(self.cnf["clock"]["mem_color"]), outline=tuple(self.cnf["clock"]["mem_color_outline"]), width=2)
         self.msg = str(proc.check_output( ['./showtemp'] ), encoding='utf-8')[0:2] + u'°'
-        draw.text( ((128-self.font.getsize('40')[0])/2,77), self.msg, font=self.font, fill=iconcolor )
+        draw.text( ((128-self.font.getsize('40')[0])/2,80), self.msg, font=self.font, fill=iconcolor )
         hostname = str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
-        draw.text( (20,55), hostname, font=self.font12, fill=iconcolor )
+        draw.text( ((128-self.font12.getsize(hostname)[0])/2,74), hostname, font=self.font12, fill=iconcolor )
         symbol = ""
         if wlanip != "" and ethip != "":
             symbol = chr(clock.icons["wifi_eth"])+u''
