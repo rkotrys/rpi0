@@ -201,7 +201,7 @@ class clock:
            self.btscan_count=self.btscan_count - 1
        else:
            self.btscan_count=60
-           proc.check_output( ['./btscan.sh &'] ) 
+           proc.check_output( ['./btscan.sh'] ) 
 
 
     """  buttons on right callbaks """
