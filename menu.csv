@@ -10,3 +10,4 @@ eth0 DOWN,f,ifconfig eth0 down
 REBOOT,f,reboot now
 DOWN,f,shutdown now
 EXIT,p,menu.parent.sysexit()
+BTSCAN,p,menu.parent.btscan()

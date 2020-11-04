@@ -31,8 +31,11 @@ class clock:
         self.go = True
         self.msg = ""
         self.info = ""
+        self.btscan = False
+        self.btscan_count = 60
         self.showinfo = False
         self.kbd = kbd
+        self.btscan_color = tuple(self.cnf["clock"]["btscan_color"])
         self.s_color = tuple(self.cnf["clock"]["s_color"])
         self.m_color = tuple(self.cnf["clock"]["m_color"])
         self.h_color = tuple(self.cnf["clock"]["h_color"])
@@ -153,7 +156,10 @@ class clock:
         draw.text( (128-17,1), symbol, font=self.symbols, fill=iconcolor )
         if self.isonline():
             draw.text( (64-8,31), chr(clock.icons["globe"])+u'', font=self.symbols, fill=iconcolor )
-        draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols, fill=iconcolor )
+        if self.btscan:
+            draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols, fill=self.btscan_color )
+        else:
+            draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols, fill=iconcolor )
         im = Image.alpha_composite( im, self.drawhands( (tm[3],tm[4],tm[5]), (12, 25, 35), image ) )
 
         """ KEY2 - buttons action """
@@ -173,12 +179,29 @@ class clock:
             else:
                 self.LCD.LCD_ShowImage( im,0,0)
 
+        if self.btscan:
+            self.btscan_run()
+
     def run(self):
         self.sheduler.enter(1,1,self.runclock)
         self.sheduler.run()
         while self.go:
             time.sleep(5)
         self.LCD.LCD_Clear()
+
+
+    def btscan():
+        if self.btscan:
+            self.btscan = False
+        else:
+            self.btscan = TRUE
+
+   def btscan_run():
+       if self.btscan_count > 0:
+           self.btscan_count=self.btscan_count - 1
+       else:
+           self.btscan_count=60
+           proc.check_output( ['./btscan.sh &'] ) 
 
 
     """  buttons on right callbaks """
