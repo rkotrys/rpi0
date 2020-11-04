@@ -190,13 +190,13 @@ class clock:
         self.LCD.LCD_Clear()
 
 
-    def btscan_flag():
+    def btscan_flag(self):
         if self.btscan:
             self.btscan = False
         else:
             self.btscan = TRUE
 
-    def btscan_run():
+    def btscan_run(self):
        if self.btscan_count > 0:
            self.btscan_count=self.btscan_count - 1
        else:
