@@ -117,7 +117,7 @@ class clock:
         wlan0 = False
         wlan1 = False
         ethip = ""
-        wlan1ip = ""
+        wlanip = ""
         with open('/proc/net/dev','r') as f:
             dev = f.read()
             if dev.find('eth0') > -1:
@@ -179,9 +179,6 @@ class clock:
             else:
                 self.LCD.LCD_ShowImage( im,0,0)
 
-        if self.btscan:
-            self.btscan_run()
-
     def run(self):
         self.sheduler.enter(1,1,self.runclock)
         self.sheduler.run()
@@ -195,13 +192,17 @@ class clock:
             self.btscan = False
         else:
             self.btscan = True
+            self.btscan_run()
 
     def btscan_run(self):
-       if self.btscan_count > 0:
-           self.btscan_count=self.btscan_count - 1
-       else:
-           self.btscan_count=60
-           proc.check_output( ['./btscan.sh'] ) 
+        if self.btscan:
+            self.sheduler.enter(60,100,self.btscan_run )
+        self.bt_th = threading.Thread( name='btscan', target=self.btscan_exec, args=(), daemon=True)
+        self.bt_th.start()
+
+    def btscan_exec(self):
+        output=str(proc.check_output(['sudo hcitool scan --length=15'] ), encoding='utf-8').strip()
+        print( output )
 
 
     """  buttons on right callbaks """
