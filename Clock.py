@@ -203,7 +203,7 @@ class clock:
 
     def btscan_exec(self):
         output=str(proc.check_output(['./btscan.sh'] ), encoding='utf-8').strip()
-        print( output )
+        #print( output )
 
 
     """  buttons on right callbaks """
