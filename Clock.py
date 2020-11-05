@@ -192,8 +192,8 @@ class clock:
             self.btscan = False
         else:
             self.btscan = True
-            self.menu.active=False
             self.btscan_run()
+        self.menu.active=False    
 
     def btscan_run(self):
         if self.btscan:
