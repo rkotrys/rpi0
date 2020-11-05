@@ -201,7 +201,7 @@ class clock:
         self.bt_th.start()
 
     def btscan_exec(self):
-        output=str(proc.check_output(['sudo hcitool scan --length=15'] ), encoding='utf-8').strip()
+        output=str(proc.check_output(['./btscan.sh'] ), encoding='utf-8').strip()
         print( output )
 
 
