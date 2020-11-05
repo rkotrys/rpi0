@@ -76,7 +76,7 @@ class Menu:
 
 
     def stop(self,name):
-        print( "stop" )
+        #print( "stop" )
         if self.active:
             self.active = False
 
