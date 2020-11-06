@@ -207,10 +207,15 @@ class clock:
         for line in output:
             if line.find("Scanning")==-1:
                 btid=line.strip().split()
-                if self.btdev.get(btid[0])==None: 
-                    self.btdev[btid[0]]=btid[1]
-        for item in self.btdev.items():
-            print( "{} {}".format(item[0],item[1]) )            
+                if self.btdev.get(btid[0])==None:
+                    btname=""
+                    if len(btid)>1:
+                        btname = " ".join(btid[1:])
+                    self.btdev[btid[0]]=btname
+                    with open('btdev.txt', 'w+') as f:
+                        f.write( "{} {}\n".format(btid[0], btname) )
+        #for item in self.btdev.items():
+        #    print( "{} {}".format(item[0],item[1]) )            
         #print( output )
 
 
