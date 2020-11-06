@@ -212,7 +212,7 @@ class clock:
                     if len(btid)>1:
                         btname = " ".join(btid[1:])
                     self.btdev[btid[0]]=btname
-                    with open('btdev.txt', 'w+') as f:
+                    with open('btdev.txt', 'a') as f:
                         f.write( "{} {}\n".format(btid[0], btname) )
         #for item in self.btdev.items():
         #    print( "{} {}".format(item[0],item[1]) )            
