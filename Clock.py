@@ -34,6 +34,7 @@ class clock:
         self.btscan = False
         self.btscan_count = 60
         self.showinfo = False
+        self.btdev = {}
         self.kbd = kbd
         self.btscan_color = tuple(self.cnf["clock"]["btscan_color"])
         self.s_color = tuple(self.cnf["clock"]["s_color"])
@@ -202,7 +203,14 @@ class clock:
         self.bt_th.start()
 
     def btscan_exec(self):
-        output=str(proc.check_output(['./btscan.sh'] ), encoding='utf-8').strip()
+        output=str(proc.check_output(['./btscan.sh'] ), encoding='utf-8').strip().splitlines()
+        for line in output:
+            if line.find("Scanning")==-1:
+                btid=line.strip().split()
+                if self.btdev.get(btid[0])==None: 
+                    self.btdev[btid[0]]=btid[1]
+        for item in self.btdev.items():
+            print( "{} {}".format(item[0],item[1]) )            
         #print( output )
 
 
