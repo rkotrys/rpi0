@@ -136,7 +136,7 @@ class clock:
         draw.rectangle([(0,127),(3,int(127*(1 - self.mem/100.0)))], fill=tuple(self.cnf["clock"]["mem_color"]), outline=tuple(self.cnf["clock"]["mem_color_outline"]), width=1)
         with open('/sys/class/thermal/thermal_zone0/temp','r') as f:
             tempraw = f.read()
-        self.msg = u"{}.{}".format(tempraw[0:2],tempraw[3]) + u'°'
+        self.msg = u"{}".format(tempraw[0:2]) + u'°'
         draw.text( ((128-self.font.getsize('40')[0])/2,82), self.msg, font=self.font, fill=iconcolor )
         hostname = str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
         draw.text( ((128-self.font12.getsize(hostname)[0])/2,72), hostname, font=self.font12, fill=iconcolor )
