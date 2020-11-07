@@ -144,11 +144,12 @@ class clock:
         wififlag=False
         ethflag=False
         for dev in self.netdev:
-            if( dev[0][0:4]=='wlan' and dev[1]!="" ):
+            print( self.netdev[dev] )
+            if( dev[0:4]=='wlan' and self.netdev[dev][1]!="" ):
                 symbol = chr(clock.icons["wifi"])+u''
                 wififlag=True
                 break
-            if( dev[0][0:3]=='eth' and dev[1]!="" ):
+            if( dev[0:3]=='eth' and self.netdev[dev][1]!="" ):
                 symbol = chr(clock.icons["eth"])+u''
                 ethflag=True
                 break
@@ -170,7 +171,6 @@ class clock:
             self.sheduler.enter(1,1,self.runclock)
 
         self.netdev = self.getnetdev()
-        print(self.netdev)
         im = self.drowclockface()
 
         """ KEY2 - buttons action """
