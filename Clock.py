@@ -144,7 +144,6 @@ class clock:
         wififlag=False
         ethflag=False
         for dev in self.netdev:
-            print( self.netdev[dev] )
             if( dev[0:4]=='wlan' and self.netdev[dev][1]!="" ):
                 symbol = chr(clock.icons["wifi"])+u''
                 wififlag=True
