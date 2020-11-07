@@ -144,6 +144,7 @@ class clock:
         wififlag=False
         ethflag=False
         for dev in self.netdev:
+            print(dev)
             if( dev[0][0:4]=='wlan' and dev[1]!="" ):
                 symbol = chr(clock.icons["wifi"])+u''
                 wififlag=True
@@ -159,7 +160,7 @@ class clock:
         if self.isonline:
             draw.text( (64-8,31), chr(clock.icons["globe"])+u'', font=self.symbols, fill=iconcolor )
         if self.btscan:
-            draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols, fill=self.btscan_color )
+            draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols_large, fill=self.btscan_color )
         else:
             draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols, fill=iconcolor )
         im = Image.alpha_composite( im, self.drawhands( (tm[3],tm[4],tm[5]), (12, 25, 35), image ) )
