@@ -61,7 +61,7 @@ class clock:
         self.LCD.LCD_Clear()
         self.x_cpuload = threading.Thread( name='cpuload', target=self.runcpu, args=(), daemon=True)
         self.x_cpuload.start()
-        self.x_isonlinecheck = threading.Thread( name='isonlinecheck', target=self.isonlinecheck, args=('8.8.8.8'), daemon=True)
+        self.x_isonlinecheck = threading.Thread( name='isonlinecheck', target=self.isonlinecheck, args=(), daemon=True)
         self.x_isonlinecheck.start()
 
     def drawhands( self, t, r, image ):
