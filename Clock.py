@@ -253,14 +253,7 @@ class clock:
             self.showinfo=True
             wlan1ip = str(proc.check_output(['./showip', 'wlan1'] ), encoding='utf-8').strip()
             self.info = u'hostname: ' + str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
-            self.info = self.info + u'\neth0:\n' + str(proc.check_output(['./showip', 'eth0'] ), encoding='utf-8').strip()
-            self.info = self.info + u'\n' + str(proc.check_output(['./showmac', 'eth0'] ), encoding='utf-8').strip()
-            self.info = self.info + u'\nwlan0:' + (u', wlan1:\n' if wlan1ip != '' else u'\n') + str(proc.check_output(['./showip', 'wlan0'] ), encoding='utf-8').strip()
-            self.info = self.info + u'\n' + str(proc.check_output(['./showmac', 'wlan0'] ), encoding='utf-8').strip()
-            if wlan1ip != '':
-                self.info = self.info + u'\n' + wlan1ip
-                self.info = self.info + u'\n' + str(proc.check_output(['./showmac', 'wlan1'] ), encoding='utf-8').strip()
-
+            for dev in self.netdev:
+                self.info = self.info + u"\n{}\n{}\n{}".format( dev, self.netdev[dev][1], self.netdev[dev][2] )
             self.showinfo = True
-            self.isonline()
             #print(self.info)
