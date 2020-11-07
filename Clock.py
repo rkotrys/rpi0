@@ -109,11 +109,24 @@ class clock:
             self.mem = (100.0 * int(r[2])) / int(r[1]);
             time.sleep(2)
 
+    def getnetdev(self):
+        netdev={}
+        with open('/proc/net/dev','r') as f:
+            dev = f.read()
+            for dev in ['eth0', 'eth1', 'wlan0', 'wlan1']:
+                if dev.find(dev) > -1:
+                    ip=str(proc.check_output([ 'ip', '-4', 'address', 'show', 'dev', dev ]), encoding='utf-8').strip().splitline()[1].split()[1]
+                    mac=str(proc.check_output([ 'ip', 'link', 'show', 'dev', dev ]), encoding='utf-8').strip().splitline()[1].split()[1]
+                    netdev[dev]=(dev,ip,mac)
+        return netdev            
+        
+
     def runclock(self):
         if self.go:
             self.sheduler.enter(1,1,self.runclock)
 
         iconcolor = tuple(self.cnf["clock"]["icons_color"])
+        btscan_color = tuple(self.cnf["clock"]["btscan_color"])
         eth0 = False
         wlan0 = False
         wlan1 = False
@@ -183,6 +196,7 @@ class clock:
     def run(self):
         self.sheduler.enter(1,1,self.runclock)
         self.sheduler.run()
+        print(self.getnetdev())
         while self.go:
             time.sleep(5)
         self.LCD.LCD_Clear()
