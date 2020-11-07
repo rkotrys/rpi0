@@ -196,7 +196,8 @@ class clock:
     def run(self):
         self.sheduler.enter(1,1,self.runclock)
         self.sheduler.run()
-        print(self.getnetdev())
+        netdev = self.getnetdev()
+        print(netdev)
         while self.go:
             time.sleep(5)
         self.LCD.LCD_Clear()
