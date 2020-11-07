@@ -251,9 +251,8 @@ class clock:
             self.showinfo = False
         else:
             self.showinfo=True
-            wlan1ip = str(proc.check_output(['./showip', 'wlan1'] ), encoding='utf-8').strip()
-            self.info = u'hostname: ' + str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
+            self.info = u'host: ' + str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
             for dev in self.netdev:
-                self.info = self.info + u"\n{}\n{}\n{}".format( dev, self.netdev[dev][1], self.netdev[dev][2] )
+                self.info = self.info + u"\n{}:\n{}\n{}".format( dev, self.netdev[dev][1], self.netdev[dev][2] )
             self.showinfo = True
             #print(self.info)
