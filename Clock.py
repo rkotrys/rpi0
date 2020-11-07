@@ -36,6 +36,7 @@ class clock:
         self.showinfo = False
         self.btdev = {}
         self.kbd = kbd
+        self.isonline = False
         self.btscan_color = tuple(self.cnf["clock"]["btscan_color"])
         self.s_color = tuple(self.cnf["clock"]["s_color"])
         self.m_color = tuple(self.cnf["clock"]["m_color"])
@@ -52,16 +53,16 @@ class clock:
         self.font = ImageFont.truetype( self.cnf["global"]["fonts"]+self.cnf["clock"]["font_bold"], self.cnf["clock"]["font_bold_size"] )
         self.font12 = ImageFont.truetype(self.cnf["global"]["fonts"]+self.cnf["clock"]["font_mono"], self.cnf["clock"]["font_mono_size"])
         self.symbols = ImageFont.truetype(self.cnf["global"]["fonts"]+self.cnf["clock"]["font_symbol"], self.cnf["clock"]["font_symbol_size"])
-
+        self.symbols_large = ImageFont.truetype(self.cnf["global"]["fonts"]+self.cnf["clock"]["font_symbol"], self.cnf["clock"]["font_symbol_large_size"])
 
         self.LCD = LCD_1in44.LCD()
         Lcd_ScanDir = LCD_1in44.SCAN_DIR_DFT  #SCAN_DIR_DFT = D2U_L2R
         self.LCD.LCD_Init(Lcd_ScanDir)
         self.LCD.LCD_Clear()
-        self.x = threading.Thread( name='cpuload', target=self.runcpu, args=(), daemon=True)
-        self.x.start()
-
-
+        self.x_cpuload = threading.Thread( name='cpuload', target=self.runcpu, args=(), daemon=True)
+        self.x_cpuload.start()
+        self.x_isonlinecheck = threading.Thread( name='isonlinecheck', target=self.isonlinecheck, args=('8.8.8.8'), daemon=True)
+        self.x_isonlinecheck.start()
 
     def drawhands( self, t, r, image ):
         x = int(image.size[0]/2)
@@ -82,16 +83,18 @@ class clock:
         dr.ellipse([x-7,y-7,x+7,y+7],fill=self.s_color,outline='#777')
         return Image.alpha_composite( hmim, im.rotate( -(360*t[2])/60, Image.BICUBIC ) )
 
-    def isonline(self, ip='8.8.8.8'):
-        try:
-            r = str(proc.check_output(['/bin/ping', '-c', '3', '-i', '0.2', '-w', '1', '-q', ip] ), encoding='utf-8').strip()
-        except proc.CalledProcessError:
-            r = '0 received'
-        ind = int(r.find(' received'))
-        if( int(r[ind-1:ind]) > 0 ):
-            return True
-        else:
-            return False
+    def isonlinecheck(self, ip='8.8.8.8'):
+        while self.go:
+            try:
+                r = str(proc.check_output(['/bin/ping', '-c', '3', '-i', '0.2', '-w', '1', '-q', ip] ), encoding='utf-8').strip()
+            except proc.CalledProcessError:
+                r = '0 received'
+            ind = int(r.find(' received'))
+            if( int(r[ind-1:ind]) > 0 ):
+                self.isonline=True
+            else:
+                self.isonline=False
+            time.sleep(2)
 
     def runcpu(self):
         while self.go:
@@ -119,66 +122,59 @@ class clock:
                     mac=str(proc.check_output([ 'ip', 'link', 'show', 'dev', devname ]), encoding='utf-8').strip().splitlines()[1].split()[1]
                     netdev[devname]=(devname,ip,mac)
         return netdev            
-        
 
-    def runclock(self):
-        if self.go:
-            self.sheduler.enter(1,1,self.runclock)
-
+    def drowclockface(self):        
         iconcolor = tuple(self.cnf["clock"]["icons_color"])
         btscan_color = tuple(self.cnf["clock"]["btscan_color"])
-        eth0 = False
-        wlan0 = False
-        wlan1 = False
-        ethip = ""
-        wlanip = ""
-        with open('/proc/net/dev','r') as f:
-            dev = f.read()
-            if dev.find('eth0') > -1:
-                eth0 = True
-            if dev.find('wlan0') > -1:
-                wlan0 = True
-            if dev.find('wlan1') > -1:
-                wlan1 = True
-        if eth0:
-            ethip = str(proc.check_output(['./showip', 'eth0'] ), encoding='utf-8').strip()
-        if wlan0:
-            wlanip = str(proc.check_output(['./showip', 'wlan0'] ), encoding='utf-8').strip()
-        if wlan1:
-            wlan1ip = str(proc.check_output(['./showip', 'wlan1'] ), encoding='utf-8').strip()
-
         tm = time.localtime()
         image = clock.backs[self.cnf["global"]["theme"]].copy()
+        self.clock_image = image
         im = Image.new( "RGBA", image.size, (0,0,0,255) )
         im.paste(image)
         draw = ImageDraw.Draw(im)
-        draw.rectangle([(127-5,127),(127,int(127*(self.cpu/100.0)))], fill=tuple(self.cnf["clock"]["cpu_color"]), outline=tuple(self.cnf["clock"]["cpu_color_outline"]), width=2)
-        draw.rectangle([(0,127),(5,int(127*(1 - self.mem/100.0)))], fill=tuple(self.cnf["clock"]["mem_color"]), outline=tuple(self.cnf["clock"]["mem_color_outline"]), width=2)
-        self.msg = str(proc.check_output( ['./showtemp'] ), encoding='utf-8')[0:2] + u'°'
+        draw.rectangle([(127-3,127),(127,int(127*(self.cpu/100.0)))], fill=tuple(self.cnf["clock"]["cpu_color"]), outline=tuple(self.cnf["clock"]["cpu_color_outline"]), width=1)
+        draw.rectangle([(0,127),(3,int(127*(1 - self.mem/100.0)))], fill=tuple(self.cnf["clock"]["mem_color"]), outline=tuple(self.cnf["clock"]["mem_color_outline"]), width=1)
+        with open('/sys/class/thermal/thermal_zone0/temp','r') as f:
+            tempraw = f.read()
+        self.msg = u"{}.{}".format(tempraw[0:2],tempraw[3]) + u'°'
         draw.text( ((128-self.font.getsize('40')[0])/2,82), self.msg, font=self.font, fill=iconcolor )
         hostname = str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
         draw.text( ((128-self.font12.getsize(hostname)[0])/2,72), hostname, font=self.font12, fill=iconcolor )
-        symbol = ""
-        if wlanip != "" and ethip != "":
+        symbol = chr(clock.icons["wifi_off"])+u''
+        wififlag=False
+        ethflag=False
+        for dev in self.netdev:
+            if( dev[0][0:4]=='wlan' and dev[1]!="" ):
+                symbol = chr(clock.icons["wifi"])+u''
+                wififlag=True
+                break
+            if( dev[0][0:3]=='eth' and dev[1]!="" ):
+                symbol = chr(clock.icons["eth"])+u''
+                ethflag=True
+                break
+        if wififlag and ethflag:
             symbol = chr(clock.icons["wifi_eth"])+u''
-        elif wlanip != "" and ethip == "":
-            symbol = chr(clock.icons["wifi"])+u''
-        elif wlanip == "" and ethip != "":
-            symbol = chr(clock.icons["eth"])+u''
-        else:
-            symbol = chr(clock.icons["wifi_off"])+u''
+            
         draw.text( (128-17,1), symbol, font=self.symbols, fill=iconcolor )
-        if self.isonline():
+        if self.isonline:
             draw.text( (64-8,31), chr(clock.icons["globe"])+u'', font=self.symbols, fill=iconcolor )
         if self.btscan:
             draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols, fill=self.btscan_color )
         else:
             draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols, fill=iconcolor )
         im = Image.alpha_composite( im, self.drawhands( (tm[3],tm[4],tm[5]), (12, 25, 35), image ) )
+        return im
+
+    def runclock(self):
+        if self.go:
+            self.sheduler.enter(1,1,self.runclock)
+
+        self.netdev = self.getnetdev()
+        im = self.drowclockface()
 
         """ KEY2 - buttons action """
         if self.showinfo:
-           imtext = Image.new( "RGBA", image.size, (0,0,0,0) )
+           imtext = Image.new( "RGBA", self.clock_image.size, (0,0,0,0) )
            drawtext = ImageDraw.Draw(imtext)
            drawtext.rectangle([0,0,127,127], fill=tuple(self.cnf["clock"]["self_info_fill"]), outline=tuple(self.cnf["clock"]["self_info_outline"]), width=2)
            drawtext.multiline_text( (1,1), self.info, font=self.font12, fill=tuple(self.cnf["clock"]["self_info_font_fill"]) )
@@ -196,8 +192,6 @@ class clock:
     def run(self):
         self.sheduler.enter(1,1,self.runclock)
         self.sheduler.run()
-        netdev = self.getnetdev()
-        print(netdev)
         while self.go:
             time.sleep(5)
         self.LCD.LCD_Clear()
