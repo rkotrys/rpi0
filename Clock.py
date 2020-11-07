@@ -113,11 +113,11 @@ class clock:
         netdev={}
         with open('/proc/net/dev','r') as f:
             dev = f.read()
-            for dev in ['eth0', 'eth1', 'wlan0', 'wlan1']:
-                if dev.find(dev) > -1:
-                    ip=str(proc.check_output([ 'ip', '-4', 'address', 'show', 'dev', dev ]), encoding='utf-8').strip().splitline()[1].split()[1]
-                    mac=str(proc.check_output([ 'ip', 'link', 'show', 'dev', dev ]), encoding='utf-8').strip().splitline()[1].split()[1]
-                    netdev[dev]=(dev,ip,mac)
+            for devname in ['eth0', 'eth1', 'wlan0', 'wlan1']:
+                if dev.find(devname) > -1:
+                    ip=str(proc.check_output([ 'ip', '-4', 'address', 'show', 'dev', devname ]), encoding='utf-8').strip().splitline()[1].split()[1]
+                    mac=str(proc.check_output([ 'ip', 'link', 'show', 'dev', devname ]), encoding='utf-8').strip().splitline()[1].split()[1]
+                    netdev[devname]=(devname,ip,mac)
         return netdev            
         
 
