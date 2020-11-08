@@ -1,6 +1,7 @@
-import time, math,sys,sched
+import time, math, sys, sched, csv
 import subprocess as proc
 import threading
+from functools import partial
 from PIL import Image,ImageDraw,ImageFont,ImageColor,ImageFilter
 
 class Menu:
@@ -20,8 +21,46 @@ class Menu:
         self.fontdark = tuple(self.cnf["menu"]["fontdark_color"])
         self.font = ImageFont.truetype( self.cnf["global"]["fonts"]+self.cnf["menu"]["font"], self.cnf["menu"]["font_size"] )
 
+    def myexec( self, label='', menu=False, arg=False ):
+        if arg==False:
+            return
+        a = []
+        for item in arg.split(' '):
+            if item != '':
+                a.append(item)
+        r = str(proc.check_output( a ), encoding='utf-8').strip()
+        #print( label, r, '\n' )
+        menu.active = False
+        #return r
+
+    def py_call( self, toexec=None, label="label", menu=None ):
+        exec( toexec )
+
     def add(self,label,action):
         self.state.append({'label':label, 'action':action })
+
+    def load(self, filename):
+        menucontent = []
+        with open(filename) as csvfile:
+            r = csv.reader( csvfile )
+            first = True
+            for row in r:
+                if first:
+                    first = False
+                    continue
+                if row[0][0] == '#':
+                    continue
+                row[0] = row[0].replace(u'|',u'\n')
+                menucontent.append( row )
+            if len(menucontent)==0:  
+                return False
+            for item in menucontent:
+                if item[1] == 'f':
+                    self.add(item[0], partial( self.myexec, arg=item[2] ) )
+                    #print( 'menu: ', item[2] )
+                if item[1] == 'p':
+                    self.add(item[0], partial( self.py_call, toexec=item[2] ) )
+            return True
 
     def show(self):
         if self.active:
@@ -47,11 +86,13 @@ class Menu:
             return im
         else:
             return False
-
+    
+    """ run key handler (activete/exec the menu action command)"""
     def run(self,name):
         if self.active:
             self.state[self.selected]['action']( label=self.state[self.selected]['label'], menu=self )
 
+    """ next item key handler """
     def next(self,name):
         if self.active:
             if self.selected < len(self.state)-1:
@@ -59,6 +100,7 @@ class Menu:
             else:
                 self.selected = 0
 
+    """ previous item key handler """
     def previous(self,name):
         if self.active:
             if self.selected > 0:
@@ -66,6 +108,7 @@ class Menu:
             else:
                 self.selected = len(self.state)-1
 
+    """ start/stop (activete or deactivate menu visibility) item key handler """
     def start(self,name):
         if not self.active:
             #print( "start" )
@@ -75,6 +118,7 @@ class Menu:
             self.active = False
 
 
+    """ stop (switcg off and deactivate menu visibility) item key handler """
     def stop(self,name):
         #print( "stop" )
         if self.active:
