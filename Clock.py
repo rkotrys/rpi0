@@ -32,12 +32,12 @@ class clock:
         self.msg = ""
         self.info = ""
         self.btscan = False
-        self.btscan_count = 60
+        self.btscan_show = False
         self.showinfo = False
         self.btdev = {}
         self.kbd = kbd
         self.isonline = False
-        self.btscan_color = tuple(self.cnf["clock"]["btscan_color"])
+        self.btscan_color = tuple(self.cnf["btscan"]["btscan_color"])
         self.s_color = tuple(self.cnf["clock"]["s_color"])
         self.m_color = tuple(self.cnf["clock"]["m_color"])
         self.h_color = tuple(self.cnf["clock"]["h_color"])
@@ -158,7 +158,7 @@ class clock:
         draw.text( (128-17,1), symbol, font=self.symbols, fill=iconcolor )
         if self.isonline:
             draw.text( (64-8,31), chr(clock.icons["globe"])+u'', font=self.symbols, fill=iconcolor )
-        if self.btscan:
+        if self.btscan_show:
             draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols_large, fill=self.btscan_color )
         else:
             draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols, fill=iconcolor )
@@ -207,12 +207,15 @@ class clock:
 
     def btscan_run(self):
         if self.btscan:
-            self.sheduler.enter(60,100,self.btscan_run )
-        self.bt_th = threading.Thread( name='btscan', target=self.btscan_exec, args=(), daemon=True)
+            self.sheduler.enter( self.cnf["btscan"]["btscan_period"],100,self.btscan_run )
+        self.bt_th = threading.Thread( name='btscan_exec', target=self.btscan_exec, args=(), daemon=True)
         self.bt_th.start()
 
     def btscan_exec(self):
-        output=str(proc.check_output(['./btscan.sh'] ), encoding='utf-8').strip().splitlines()
+        #output=str(proc.check_output(['./btscan.sh'] ), encoding='utf-8').strip().splitlines()
+        self.scann_show=True
+        output=str(proc.check_output(['sudo', 'hcitool', 'scan', '--length={}'.format( (self.cnf["btscan"]["btscan_time"] ) ) ] ), encoding='utf-8').strip().splitlines()
+        self.scann_show=False
         for line in output:
             if line.find("Scanning")==-1:
                 btid=line.strip().split()
