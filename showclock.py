@@ -41,7 +41,7 @@ def py_call( toexec=None, label="label", menu=None ):
 """
 
 def main():
-    m = menuload( 'menu.csv' )
+    #m = menuload( 'menu.csv' )
     kbd = Kbd2.Kbd2()
     clk = Clock.clock(kbd)
     clk.menu.load("menu.csv")
