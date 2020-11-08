@@ -37,7 +37,6 @@ class clock:
         self.btdev = {}
         self.kbd = kbd
         self.isonline = False
-        self.btscan_color = tuple(self.cnf["btscan"]["btscan_color"])
         self.s_color = tuple(self.cnf["clock"]["s_color"])
         self.m_color = tuple(self.cnf["clock"]["m_color"])
         self.h_color = tuple(self.cnf["clock"]["h_color"])
@@ -83,6 +82,7 @@ class clock:
         dr.ellipse([x-7,y-7,x+7,y+7],fill=self.s_color,outline='#777')
         return Image.alpha_composite( hmim, im.rotate( -(360*t[2])/60, Image.BICUBIC ) )
 
+    """ thread """
     def isonlinecheck(self, ip='8.8.8.8'):
         while self.go:
             try:
@@ -96,6 +96,7 @@ class clock:
                 self.isonline=False
             time.sleep(2)
 
+    """ thread """
     def runcpu(self):
         while self.go:
             memlines = str(proc.check_output(['free']), encoding='utf-8').strip().split('\n')
@@ -125,7 +126,7 @@ class clock:
 
     def drowclockface(self):        
         iconcolor = tuple(self.cnf["clock"]["icons_color"])
-        btscan_color = tuple(self.cnf["clock"]["btscan_color"])
+        btscan_color = tuple(self.cnf["btscan"]["btscan_color"])
         tm = time.localtime()
         image = clock.backs[self.cnf["global"]["theme"]].copy()
         self.clock_image = image
@@ -159,7 +160,7 @@ class clock:
         if self.isonline:
             draw.text( (64-8,31), chr(clock.icons["globe"])+u'', font=self.symbols, fill=iconcolor )
         if self.btscan_show:
-            draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols_large, fill=self.btscan_color )
+            draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols_large, fill=btscan_color )
         else:
             draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols, fill=iconcolor )
         im = Image.alpha_composite( im, self.drawhands( (tm[3],tm[4],tm[5]), (12, 25, 35), image ) )
@@ -196,21 +197,25 @@ class clock:
             time.sleep(5)
         self.LCD.LCD_Clear()
 
-
+    """ btscan key/menu handle """
     def btscan_flag(self):
         if self.btscan:
             self.btscan = False
         else:
             self.btscan = True
+            with open('btdev.txt', 'w') as f:
+                f.write( "" )
             self.btscan_run()
         self.menu.active=False    
 
+    """ thread sheduler for 'btscan_exec' """
     def btscan_run(self):
         if self.btscan:
             self.sheduler.enter( self.cnf["btscan"]["btscan_period"],100,self.btscan_run )
         self.bt_th = threading.Thread( name='btscan_exec', target=self.btscan_exec, args=(), daemon=True)
         self.bt_th.start()
 
+    """ thread """
     def btscan_exec(self):
         #output=str(proc.check_output(['./btscan.sh'] ), encoding='utf-8').strip().splitlines()
         self.scann_show=True
