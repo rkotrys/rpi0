@@ -218,9 +218,9 @@ class clock:
     """ thread """
     def btscan_exec(self):
         #output=str(proc.check_output(['./btscan.sh'] ), encoding='utf-8').strip().splitlines()
-        self.scann_show=True
+        self.btscan_show=True
         output=str(proc.check_output(['sudo', 'hcitool', 'scan', '--length={}'.format( (self.cnf["btscan"]["btscan_time"] ) ) ] ), encoding='utf-8').strip().splitlines()
-        self.scann_show=False
+        self.btscan_show=False
         for line in output:
             if line.find("Scanning")==-1:
                 btid=line.strip().split()
