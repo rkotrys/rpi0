@@ -1,6 +1,7 @@
 import time, math, sys, csv
 import subprocess as proc
 from functools import partial
+import RPi.GPIO as GPIO
 import Kbd2, Clock
 
 def main():
