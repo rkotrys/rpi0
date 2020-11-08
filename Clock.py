@@ -37,6 +37,7 @@ class clock:
         self.btdev = {}
         self.kbd = kbd
         self.isonline = False
+        self.hostinfo = hlp.hostinfo()
         self.s_color = tuple(self.cnf["clock"]["s_color"])
         self.m_color = tuple(self.cnf["clock"]["m_color"])
         self.h_color = tuple(self.cnf["clock"]["h_color"])
@@ -62,6 +63,7 @@ class clock:
         self.x_cpuload.start()
         self.x_isonlinecheck = threading.Thread( name='isonlinecheck', target=self.isonlinecheck, args=(), daemon=True)
         self.x_isonlinecheck.start()
+        print( self.hostinfo )
 
     def drawhands( self, t, r, image ):
         x = int(image.size[0]/2)
