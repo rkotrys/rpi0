@@ -43,13 +43,17 @@ def main():
     m = menuload( 'menu.csv' )
     kbd = Kbd2.Kbd2()
     clk = Clock.clock(kbd)
+    clk.menu.load("menu.csv")
+
+    """
     for item in m:
         if item[1] == 'f':
             clk.menu.add(item[0], partial( myexec, arg=item[2] ) )
 #            print( 'menu: ', item[2] )
         if item[1] == 'p':
             clk.menu.add(item[0], partial( py_call, toexec=item[2] ) )
-
+    """
+    
     kbd.sethanddle( 'k3', clk.nextbk )
     kbd.sethanddle( 'k2', clk.sinfo )
     kbd.sethanddle( 'k1', clk.sysexit )
