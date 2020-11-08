@@ -35,36 +35,6 @@ def myexec( label='', menu=False, arg=False ):
     menu.active = False
 #    return r
 
-
-def pr0( label, menu ):
-    if menu.parent.showinfo:
-        menu.parent.sinfo('k2','UP')
-    else:
-        menu.parent.sinfo('k2','Down')
-    menu.active = False
-
-def pr1( label, menu ):
-    proc.run(['/etc/netconf/setdhcpcd'])
-    menu.active = False
-
-def pr2( label, menu ):
-    proc.run(['/etc/netconf/set_eth0_20.22'])
-    menu.active = False
-
-def pr3( label, menu ):
-    proc.run(['/etc/netconf/set_eth0_40.22'])
-    menu.active = False
-
-def pr4( label, menu ):
-    menu.active = False
-    proc.run(['reboot','now'])
-    time.sleep(3)
-
-def pr5( label, menu ):
-    menu.active = False
-    proc.run(['shutdown','now'])
-    time.sleep(3)
-
 def py_call( toexec=None, label="label", menu=None ):
     exec( toexec )
 
@@ -79,13 +49,6 @@ def main():
 #            print( 'menu: ', item[2] )
         if item[1] == 'p':
             clk.menu.add(item[0], partial( py_call, toexec=item[2] ) )
-
-#    clk.menu.add('INFO', pr0 )
-#    clk.menu.add('SET: dhcpcd', pr1 )
-#    clk.menu.add('192.168.20.22', pr2 )
-#    clk.menu.add('192.168.40.22', pr3 )
-#    clk.menu.add('REBOOT', pr4 )
-#    clk.menu.add('SHUTDOWN', pr5 )
 
     kbd.sethanddle( 'k3', clk.nextbk )
     kbd.sethanddle( 'k2', clk.sinfo )
