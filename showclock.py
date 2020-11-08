@@ -8,6 +8,7 @@ import Kbd2, Clock
 
 
 #try:
+"""
 def menuload(filename):
     menucontent = []
     with open('menu.csv') as csvfile:
@@ -37,7 +38,7 @@ def myexec( label='', menu=False, arg=False ):
 
 def py_call( toexec=None, label="label", menu=None ):
     exec( toexec )
-
+"""
 
 def main():
     m = menuload( 'menu.csv' )
@@ -53,7 +54,7 @@ def main():
         if item[1] == 'p':
             clk.menu.add(item[0], partial( py_call, toexec=item[2] ) )
     """
-    
+
     kbd.sethanddle( 'k3', clk.nextbk )
     kbd.sethanddle( 'k2', clk.sinfo )
     kbd.sethanddle( 'k1', clk.sysexit )
