@@ -88,8 +88,9 @@ class clock:
         return Image.alpha_composite( hmim, im.rotate( -(360*t[2])/60, Image.BICUBIC ) )
 
     def isonline(self, ip='8.8.8.8'):
+        print( "IsOnLine 0 : {}\n".format(self.isonline_flag) )
         while self.go:
-            print( "IsOnLine: {}".format(self.isonline_flag) )
+            print( "IsOnLine 1 : {}\n".format(self.isonline_flag) )
             try:
                 r = str(proc.check_output(['/bin/ping', '-c', '3', '-i', '0.2', '-w', '1', '-q', ip] ), encoding='utf-8').strip()
             except proc.CalledProcessError:
@@ -99,7 +100,7 @@ class clock:
                 self.isonline_flag = True
             else:
                 self.isonline_flag = False
-            print( "IsOnLine: {}".format(self.isonline_flag) )    
+            print( "IsOnLine 2 : {}".format(self.isonline_flag) )    
             time.sleep(2)    
 
     """ thread """
