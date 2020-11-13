@@ -31,6 +31,7 @@ class clock:
         self.go = True
         self.msg = ""
         self.info = ""
+        self.isonline_flag = False
         self.btscan = False
         self.btscan_count = 60
         self.showinfo = False
@@ -58,8 +59,10 @@ class clock:
         Lcd_ScanDir = LCD_1in44.SCAN_DIR_DFT  #SCAN_DIR_DFT = D2U_L2R
         self.LCD.LCD_Init(Lcd_ScanDir)
         self.LCD.LCD_Clear()
-        self.x = threading.Thread( name='cpuload', target=self.runcpu, args=(), daemon=True)
-        self.x.start()
+        self.x_cpuload = threading.Thread( name='cpuload', target=self.runcpu, args=(), daemon=True)
+        self.x_cpuload.start()
+        self.x_isonline = threading.Thread( name='isonline', target=self.isonline, args=(), daemon=True)
+        self.x_isonline.start()
 
 
 
@@ -83,15 +86,17 @@ class clock:
         return Image.alpha_composite( hmim, im.rotate( -(360*t[2])/60, Image.BICUBIC ) )
 
     def isonline(self, ip='8.8.8.8'):
-        try:
-            r = str(proc.check_output(['/bin/ping', '-c', '3', '-i', '0.2', '-w', '1', '-q', ip] ), encoding='utf-8').strip()
-        except proc.CalledProcessError:
-            r = '0 received'
-        ind = int(r.find(' received'))
-        if( int(r[ind-1:ind]) > 0 ):
-            return True
-        else:
-            return False
+        while self.go:
+            try:
+                r = str(proc.check_output(['/bin/ping', '-c', '3', '-i', '0.2', '-w', '1', '-q', ip] ), encoding='utf-8').strip()
+            except proc.CalledProcessError:
+                r = '0 received'
+            ind = int(r.find(' received'))
+            if( int(r[ind-1:ind]) > 0 ):
+                self.isonline_flag = True
+            else:
+                self.isonline_flag = False
+            time.sleep(2)    
 
     def runcpu(self):
         while self.go:
@@ -155,7 +160,7 @@ class clock:
         else:
             symbol = chr(clock.icons["wifi_off"])+u''
         draw.text( (128-17,1), symbol, font=self.symbols, fill=iconcolor )
-        if self.isonline():
+        if self.self.isonline_flag:
             draw.text( (64-8,31), chr(clock.icons["globe"])+u'', font=self.symbols, fill=iconcolor )
         if self.btscan:
             draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols, fill=self.btscan_color )
@@ -251,7 +256,5 @@ class clock:
             if wlan1ip != '':
                 self.info = self.info + u'\n' + wlan1ip
                 self.info = self.info + u'\n' + str(proc.check_output(['./showmac', 'wlan1'] ), encoding='utf-8').strip()
-
             self.showinfo = True
-            self.isonline()
             #print(self.info)
