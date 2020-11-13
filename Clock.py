@@ -89,6 +89,7 @@ class clock:
 
     def isonline(self, ip='8.8.8.8'):
         while self.go:
+            print( "IsOnLine: {}".format(self.isonline_flag) )
             try:
                 r = str(proc.check_output(['/bin/ping', '-c', '3', '-i', '0.2', '-w', '1', '-q', ip] ), encoding='utf-8').strip()
             except proc.CalledProcessError:
