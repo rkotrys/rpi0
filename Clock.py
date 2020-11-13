@@ -86,7 +86,8 @@ class clock:
         dr.ellipse([x-7,y-7,x+7,y+7],fill=self.s_color,outline='#777')
         return Image.alpha_composite( hmim, im.rotate( -(360*t[2])/60, Image.BICUBIC ) )
 
-    def isonline(self, ip='8.8.8.8'):
+    """ thread """
+    def isonline(self, ip='8.8.8.8', period=3):
         while self.go:
             try:
                 r = str(proc.check_output(['/bin/ping', '-c', '3', '-i', '0.2', '-w', '1', '-q', ip] ), encoding='utf-8').strip()
@@ -97,8 +98,7 @@ class clock:
                 self.isonline_flag = True
             else:
                 self.isonline_flag = False
-            print( "IsOnLine 2 : {}".format(self.isonline_flag) )    
-            time.sleep(2)    
+            time.sleep(period)    
 
     """ thread """
     def runcpu(self):
