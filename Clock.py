@@ -98,6 +98,7 @@ class clock:
                 self.isonline_flag = True
             else:
                 self.isonline_flag = False
+            print( "IsOnLine: {}".format(self.isonline_flag) )    
             time.sleep(2)    
 
     """ thread """
@@ -159,14 +160,16 @@ class clock:
                 break
         if wififlag and ethflag:
             symbol = chr(clock.icons["wifi_eth"])+u''
-            
         draw.text( (128-17,1), symbol, font=self.symbols, fill=iconcolor )
+        
         if self.isonline_flag:
             draw.text( (64-8,31), chr(clock.icons["globe"])+u'', font=self.symbols, fill=iconcolor )
+            
         if self.btscan_show:
             draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols_large, fill=btscan_color )
         else:
             draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols, fill=iconcolor )
+        
         im = Image.alpha_composite( im, self.drawhands( (tm[3],tm[4],tm[5]), (12, 25, 35), image ) )
         return im
 
