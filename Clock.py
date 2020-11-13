@@ -67,27 +67,6 @@ class clock:
         self.x_isonline = threading.Thread( name='isonline', target=self.isonline, args=(), daemon=True)
         self.x_isonline.start()
 
-
-
-    def drawhands( self, t, r, image ):
-        x = int(image.size[0]/2)
-        y = int(image.size[1]/2)
-        im = Image.new( "RGBA", image.size, (255,255,255,0) )
-        dr = ImageDraw.Draw( im )
-        dr.polygon( [(x-3,y), (x+3,y), (x+3,r[2]), (x+6,r[2]),(x,r[2]-self.arrowsize_h),(x-6,r[2]),(x-3,r[2])], fill=self.h_color, outline=self.outline_color )
-        h = t[0] if t[0]<13 else t[0]-12
-        him = im.rotate( -(h*30+t[1]*0.5), Image.BICUBIC )
-        im = Image.new( "RGBA", image.size, (255,255,255,0) )
-        dr = ImageDraw.Draw( im )
-        dr.polygon( [(x-2,y), (x+2,y), (x+2,r[1]),(x+5,r[1]),(x,r[1]-self.arrowsize_m),(x-5,r[1]), (x-2,r[1])], fill = self.h_color, outline=self.outline_color )
-        hmim =Image.alpha_composite( him, im.rotate( -(360*t[1])/60, Image.BICUBIC ) )
-        im = Image.new( "RGBA", image.size, (255,255,255,0) )
-        dr = ImageDraw.Draw( im )
-        dr.line([ ( x, y+20 ), ( x, r[0]+self.arrowsize_h)], fill = self.s_color, width = 2 )
-        dr.line([ ( x-3, r[0]+self.arrowsize_s ), ( x, r[0]), ( x+3, r[0]+self.arrowsize_s ), ( x-3, r[0]+self.arrowsize_s )], fill = self.s_color, width = 2 )
-        dr.ellipse([x-7,y-7,x+7,y+7],fill=self.s_color,outline='#777')
-        return Image.alpha_composite( hmim, im.rotate( -(360*t[2])/60, Image.BICUBIC ) )
-
     """ thread """
     def isonline(self, ip='8.8.8.8', period=3):
         while self.go:
@@ -160,56 +139,51 @@ class clock:
         if wififlag and ethflag:
             symbol = chr(clock.icons["wifi_eth"])+u''
         draw.text( (128-17,1), symbol, font=self.symbols, fill=tuple(self.cnf["clock"]["icons_color"]) )
-        
+
+    def drawbt(self,draw):        
+        if self.btscan_show:
+            draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols_large, fill=tuple(self.cnf["btscan"]["btscan_color"]) )
+        else:
+            draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols, fill=tuple(self.cnf["clock"]["icons_color"]) )
+
+    def drawonline(self, draw):
+        if self.isonline_flag:
+            draw.text( (64-8,31), chr(clock.icons["globe"])+u'', font=self.symbols, fill=tuple(self.cnf["clock"]["icons_color"]) )
+
+    def drawhands( self, t, r, image ):
+        x = int(image.size[0]/2)
+        y = int(image.size[1]/2)
+        im = Image.new( "RGBA", image.size, (255,255,255,0) )
+        dr = ImageDraw.Draw( im )
+        dr.polygon( [(x-3,y), (x+3,y), (x+3,r[2]), (x+6,r[2]),(x,r[2]-self.arrowsize_h),(x-6,r[2]),(x-3,r[2])], fill=self.h_color, outline=self.outline_color )
+        h = t[0] if t[0]<13 else t[0]-12
+        him = im.rotate( -(h*30+t[1]*0.5), Image.BICUBIC )
+        im = Image.new( "RGBA", image.size, (255,255,255,0) )
+        dr = ImageDraw.Draw( im )
+        dr.polygon( [(x-2,y), (x+2,y), (x+2,r[1]),(x+5,r[1]),(x,r[1]-self.arrowsize_m),(x-5,r[1]), (x-2,r[1])], fill = self.h_color, outline=self.outline_color )
+        hmim =Image.alpha_composite( him, im.rotate( -(360*t[1])/60, Image.BICUBIC ) )
+        im = Image.new( "RGBA", image.size, (255,255,255,0) )
+        dr = ImageDraw.Draw( im )
+        dr.line([ ( x, y+20 ), ( x, r[0]+self.arrowsize_h)], fill = self.s_color, width = 2 )
+        dr.line([ ( x-3, r[0]+self.arrowsize_s ), ( x, r[0]), ( x+3, r[0]+self.arrowsize_s ), ( x-3, r[0]+self.arrowsize_s )], fill = self.s_color, width = 2 )
+        dr.ellipse([x-7,y-7,x+7,y+7],fill=self.s_color,outline='#777')
+        return Image.alpha_composite( hmim, im.rotate( -(360*t[2])/60, Image.BICUBIC ) )
 
     def drowclockface(self):        
-        iconcolor = tuple(self.cnf["clock"]["icons_color"])
-        btscan_color = tuple(self.cnf["btscan"]["btscan_color"])
-        tm = time.localtime()
         image = clock.backs[self.cnf["global"]["theme"]].copy()
         self.clock_image = image
         im = Image.new( "RGBA", image.size, (0,0,0,255) )
         im.paste(image)
         draw = ImageDraw.Draw(im)
+        
         self.drawcpu(draw)       
         self.drawtemp(draw)
         self.drawhostname(draw)
         self.drawnetwork(draw)
-        #draw.rectangle([(127-3,127),(127,int(127*(self.cpu/100.0)))], fill=tuple(self.cnf["clock"]["cpu_color"]), outline=tuple(self.cnf["clock"]["cpu_color_outline"]), width=1)
-        #draw.rectangle([(0,127),(3,int(127*(1 - self.mem/100.0)))], fill=tuple(self.cnf["clock"]["mem_color"]), outline=tuple(self.cnf["clock"]["mem_color_outline"]), width=1)
-        
-        #with open('/sys/class/thermal/thermal_zone0/temp','r') as f:
-        #    tempraw = f.read()
-        #self.msg = u"{}".format(tempraw[0:2]) + u'°'
-        #draw.text( ((128-self.font.getsize('40')[0])/2,82), self.msg, font=self.font, fill=iconcolor )
+        self.drawbt(draw)
+        self.drawonline(draw)
 
-        #hostname = str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
-        #draw.text( ((128-self.font12.getsize(hostname)[0])/2,72), hostname, font=self.font12, fill=iconcolor )
-        
-        #symbol = chr(clock.icons["wifi_off"])+u''
-        #wififlag=False
-        #ethflag=False
-        #for dev in self.netdev:
-        #    if( dev[0:4]=='wlan' and self.netdev[dev][1]!="" ):
-        #        symbol = chr(clock.icons["wifi"])+u''
-        #        wififlag=True
-        #        break
-        #    if( dev[0:3]=='eth' and self.netdev[dev][1]!="" ):
-        #        symbol = chr(clock.icons["eth"])+u''
-        #        ethflag=True
-        #        break
-        #if wififlag and ethflag:
-        #    symbol = chr(clock.icons["wifi_eth"])+u''
-        #draw.text( (128-17,1), symbol, font=self.symbols, fill=iconcolor )
-        
-        if self.isonline_flag:
-            draw.text( (64-8,31), chr(clock.icons["globe"])+u'', font=self.symbols, fill=iconcolor )
-            
-        if self.btscan_show:
-            draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols_large, fill=btscan_color )
-        else:
-            draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols, fill=iconcolor )
-        
+        tm = time.localtime()
         im = Image.alpha_composite( im, self.drawhands( (tm[3],tm[4],tm[5]), (12, 25, 35), image ) )
         return im
 
