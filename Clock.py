@@ -1,6 +1,8 @@
 import time, math,sys,sched
 import subprocess as proc
 import threading
+
+from PIL.ImageDraw import Draw
 #import numpy as np
 #import tr
 import LCD_1in44
@@ -128,23 +130,21 @@ class clock:
                     netdev[devname]=(devname,ip,mac)
         return netdev            
 
-    def drowclockface(self):        
-        iconcolor = tuple(self.cnf["clock"]["icons_color"])
-        btscan_color = tuple(self.cnf["btscan"]["btscan_color"])
-        tm = time.localtime()
-        image = clock.backs[self.cnf["global"]["theme"]].copy()
-        self.clock_image = image
-        im = Image.new( "RGBA", image.size, (0,0,0,255) )
-        im.paste(image)
-        draw = ImageDraw.Draw(im)
+    def drawcpu(self,draw):
         draw.rectangle([(127-3,127),(127,int(127*(self.cpu/100.0)))], fill=tuple(self.cnf["clock"]["cpu_color"]), outline=tuple(self.cnf["clock"]["cpu_color_outline"]), width=1)
         draw.rectangle([(0,127),(3,int(127*(1 - self.mem/100.0)))], fill=tuple(self.cnf["clock"]["mem_color"]), outline=tuple(self.cnf["clock"]["mem_color_outline"]), width=1)
+
+    def drawtemp(self,draw):
         with open('/sys/class/thermal/thermal_zone0/temp','r') as f:
             tempraw = f.read()
         self.msg = u"{}".format(tempraw[0:2]) + u'°'
-        draw.text( ((128-self.font.getsize('40')[0])/2,82), self.msg, font=self.font, fill=iconcolor )
+        draw.text( ((128-self.font.getsize('40')[0])/2,82), self.msg, font=self.font, fill=tuple(self.cnf["clock"]["icons_color"]) )
+
+    def drawhostname(self,draw):
         hostname = str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
-        draw.text( ((128-self.font12.getsize(hostname)[0])/2,72), hostname, font=self.font12, fill=iconcolor )
+        draw.text( ((128-self.font12.getsize(hostname)[0])/2,72), hostname, font=self.font12, fill=tuple(self.cnf["clock"]["icons_color"]) )
+
+    def drawnetwork(self,draw):
         symbol = chr(clock.icons["wifi_off"])+u''
         wififlag=False
         ethflag=False
@@ -159,7 +159,48 @@ class clock:
                 break
         if wififlag and ethflag:
             symbol = chr(clock.icons["wifi_eth"])+u''
-        draw.text( (128-17,1), symbol, font=self.symbols, fill=iconcolor )
+        draw.text( (128-17,1), symbol, font=self.symbols, fill=tuple(self.cnf["clock"]["icons_color"]) )
+        
+
+    def drowclockface(self):        
+        iconcolor = tuple(self.cnf["clock"]["icons_color"])
+        btscan_color = tuple(self.cnf["btscan"]["btscan_color"])
+        tm = time.localtime()
+        image = clock.backs[self.cnf["global"]["theme"]].copy()
+        self.clock_image = image
+        im = Image.new( "RGBA", image.size, (0,0,0,255) )
+        im.paste(image)
+        draw = ImageDraw.Draw(im)
+        self.drawcpu(draw)       
+        self.drawtemp(draw)
+        self.drawhostname(draw)
+        self.drawnetwork(draw)
+        #draw.rectangle([(127-3,127),(127,int(127*(self.cpu/100.0)))], fill=tuple(self.cnf["clock"]["cpu_color"]), outline=tuple(self.cnf["clock"]["cpu_color_outline"]), width=1)
+        #draw.rectangle([(0,127),(3,int(127*(1 - self.mem/100.0)))], fill=tuple(self.cnf["clock"]["mem_color"]), outline=tuple(self.cnf["clock"]["mem_color_outline"]), width=1)
+        
+        #with open('/sys/class/thermal/thermal_zone0/temp','r') as f:
+        #    tempraw = f.read()
+        #self.msg = u"{}".format(tempraw[0:2]) + u'°'
+        #draw.text( ((128-self.font.getsize('40')[0])/2,82), self.msg, font=self.font, fill=iconcolor )
+
+        #hostname = str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
+        #draw.text( ((128-self.font12.getsize(hostname)[0])/2,72), hostname, font=self.font12, fill=iconcolor )
+        
+        #symbol = chr(clock.icons["wifi_off"])+u''
+        #wififlag=False
+        #ethflag=False
+        #for dev in self.netdev:
+        #    if( dev[0:4]=='wlan' and self.netdev[dev][1]!="" ):
+        #        symbol = chr(clock.icons["wifi"])+u''
+        #        wififlag=True
+        #        break
+        #    if( dev[0:3]=='eth' and self.netdev[dev][1]!="" ):
+        #        symbol = chr(clock.icons["eth"])+u''
+        #        ethflag=True
+        #        break
+        #if wififlag and ethflag:
+        #    symbol = chr(clock.icons["wifi_eth"])+u''
+        #draw.text( (128-17,1), symbol, font=self.symbols, fill=iconcolor )
         
         if self.isonline_flag:
             draw.text( (64-8,31), chr(clock.icons["globe"])+u'', font=self.symbols, fill=iconcolor )
