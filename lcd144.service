@@ -1,0 +1,16 @@
+[Unit]
+Description=LCD 1.44" display module
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+PIDFile=/run/lcd144.pid
+Restart=always
+RestartSec=5
+User=root
+ExecStart=/root/lcd144/showclock
+ExecStop=/bin/kill -s QUIT $MAINPID
+
+[Install]
+WantedBy=multi-user.target

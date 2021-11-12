@@ -104,7 +104,11 @@ class clock:
             dev = f.read()
             for devname in ['eth0', 'eth1', 'wlan0', 'wlan1']:
                 if dev.find(devname) > -1:
-                    ip=str(proc.check_output([ 'ip', '-4', 'address', 'show', 'dev', devname ]), encoding='utf-8').strip().splitlines()[1].split()[1]
+                    buf = str(proc.check_output([ 'ip', '-4', 'address', 'show', 'dev', devname ]), encoding='utf-8')
+                    if len(buf)>1: 
+                        ip=buf.strip().splitlines()[1].split()[1]
+                    else:
+                        ip='--'
                     mac=str(proc.check_output([ 'ip', 'link', 'show', 'dev', devname ]), encoding='utf-8').strip().splitlines()[1].split()[1]
                     netdev[devname]=(devname,ip,mac)
         return netdev            
