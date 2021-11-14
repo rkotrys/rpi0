@@ -279,13 +279,20 @@ class clock:
             self.showinfo = False
         else:
             serial='--'
+            chip='--'
+            relice=str(proc.check_output(['uname','-r'] ), encoding='utf-8').strip()
+            machine=str(proc.check_output(['uname','-m'] ), encoding='utf-8').strip()
+            buf=str(proc.check_output(['blkid','/dev/mmcblk0'] ), encoding='utf-8').strip().split()[1]
+            puuid=buf[8:16]
             with open('/proc/cpuinfo','r') as f:
-                output=str(f.read()).strip().splitline()
+                output=str(f.read()).strip().splitlines()
             for line in output:
                 l=str(line).strip().split()
                 if len(l)>0 and l[0]=='Serial':
-                    serial=l[0][8:]
-            self.info = u'SN: ' + str( serial, encoding='utf-8').strip()
+                    serial=l[2][8:]
+                if len(l)>0 and l[0]=='Hardware':
+                    chip=l[2]
+            self.info = u'SN: ' + serial + u'\nChip: ' + chip + u'\nArch: ' + machine + u'\nCore: ' + relice + u'\nPTUUID: ' + puuid
 #            for dev in self.netdev:
 #                self.info = self.info + u"\n{}:\n{}\n{}".format( dev, self.netdev[dev][1], self.netdev[dev][2] )
             self.showinfo = True
