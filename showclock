@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 #
+settime
 LCD144=/root/lcd144
 cd $LCD144
 python3 $LCD144/showclock.py >/dev/null 2>&1

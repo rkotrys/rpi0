@@ -1,11 +1,10 @@
 [Unit]
 Description=LCD 1.44" display module
-After=network.target
+After=network.target time-sync.target
 StartLimitIntervalSec=0
 
 [Service]
 Type=simple
-PIDFile=/run/lcd144.pid
 Restart=always
 RestartSec=5
 User=root

@@ -71,7 +71,7 @@ class clock:
     def isonline(self, ip='8.8.8.8', period=3):
         while self.go:
             try:
-                r = str(proc.check_output(['/bin/ping', '-c', '3', '-i', '0.2', '-w', '1', '-q', ip] ), encoding='utf-8').strip()
+                r = str(proc.check_output(['/bin/ping', '-4', '-c', '3', '-i', '0', '-f', '-q', ip] ), encoding='utf-8').strip()
             except proc.CalledProcessError:
                 r = '0 received'
             ind = int(r.find(' received'))
@@ -273,17 +273,30 @@ class clock:
         self.cnf["global"]["theme"]=[*clock.backs][ind]
         clock.cnf.save()
 
-    def sysexit( self=None, pin=None ):
+    def sinfo2( self=None, pin=None ):
         """ KEY1 """
-        print("EXIT!")
-        self.go = False
+        if self.showinfo==True:
+            self.showinfo = False
+        else:
+            serial='--'
+            with open('/proc/cpuinfo','r') as f:
+                output=str(f.read()).strip().splitline()
+            for line in output:
+                l=str(line).strip().split()
+                if len(l)>0 and l[0]=='Serial':
+                    serial=l[0][8:]
+            self.info = u'SN: ' + str( serial, encoding='utf-8').strip()
+#            for dev in self.netdev:
+#                self.info = self.info + u"\n{}:\n{}\n{}".format( dev, self.netdev[dev][1], self.netdev[dev][2] )
+            self.showinfo = True
+        #print("EXIT!")
+        #self.go = False
 
     def sinfo(self, pin ):
         """ KEY2 """
         if self.showinfo==True:
             self.showinfo = False
         else:
-            self.showinfo=True
             self.info = u'host: ' + str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
             for dev in self.netdev:
                 self.info = self.info + u"\n{}:\n{}\n{}".format( dev, self.netdev[dev][1], self.netdev[dev][2] )
