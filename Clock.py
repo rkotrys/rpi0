@@ -309,3 +309,6 @@ class clock:
                 self.info = self.info + u"\n{}:\n{}\n{}".format( dev, self.netdev[dev][1], self.netdev[dev][2] )
             self.showinfo = True
             #print(self.info)
+
+    def getinfo(self, key ):
+        return "info"
