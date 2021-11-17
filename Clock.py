@@ -49,6 +49,15 @@ class clock:
         self.arrowsize_m = self.cnf["clock"]["m_arrowsize"]
         self.arrowsize_s = self.cnf["clock"]["s_arrowsize"]
         self.menu = Menu.Menu( (128,128), [(3,63-12),(125,63+15)], self )
+        with open('/proc/cpuinfo','r') as f:
+            output=str(f.read()).strip().splitlines()
+        for line in output:
+            l=str(line).strip().split()
+            if len(l)>0 and l[0]=='Serial':
+                self.serial=l[2][8:]
+            if len(l)>0 and l[0]=='Hardware':
+                self.chip=l[2]
+
 
         for n in self.cnf["clock"]["faces"]:
             clock.backs[n] = Image.open( self.cnf["global"]["images"] + self.cnf["clock"]["faces"][n] ).resize( (128,128),Image.BICUBIC)
@@ -280,20 +289,12 @@ class clock:
         else:
             serial='--'
             chip='--'
-            relice=str(proc.check_output(['uname','-r'] ), encoding='utf-8').strip()
+            release=str(proc.check_output(['uname','-r'] ), encoding='utf-8').strip()
             machine=str(proc.check_output(['uname','-m'] ), encoding='utf-8').strip()
             buf=str(proc.check_output(['blkid','/dev/mmcblk0'] ), encoding='utf-8').strip().split()[1]
             puuid=buf[8:16]
-            with open('/proc/cpuinfo','r') as f:
-                output=str(f.read()).strip().splitlines()
-            for line in output:
-                l=str(line).strip().split()
-                if len(l)>0 and l[0]=='Serial':
-                    serial=l[2][8:]
-                if len(l)>0 and l[0]=='Hardware':
-                    chip=l[2]
             buf=str(proc.check_output(['df','-h'] ), encoding='utf-8').strip().splitlines()[1].strip().split()
-            self.info = u'SN: ' + serial + u'\nChip: ' + chip + u'\nArch: ' + machine + u'\nCore: ' + relice + u'\nPTUUID: ' + puuid + '\nFS: ' + buf[1] + ', ' + buf[3] + ' free'
+            self.info = u'SN: ' + self.serial + u'\nChip: ' + self.chip + u'\nArch: ' + machine + u'\nCore: ' + release + u'\nPTUUID: ' + puuid + '\nFS: ' + buf[1] + ', ' + buf[3] + ' free'
 #            for dev in self.netdev:
 #                self.info = self.info + u"\n{}:\n{}\n{}".format( dev, self.netdev[dev][1], self.netdev[dev][2] )
             self.showinfo = True
@@ -311,5 +312,5 @@ class clock:
             self.showinfo = True
             #print(self.info)
 
-    def getinfo(self, key ):
+    def getselfinfo(self):
         return "info"
