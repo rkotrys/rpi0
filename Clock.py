@@ -292,7 +292,7 @@ class clock:
                     serial=l[2][8:]
                 if len(l)>0 and l[0]=='Hardware':
                     chip=l[2]
-            buf=str(proc.check_output(['df','-h'] ), encoding='utf-8').strip().splitlines()[1].strep().split()
+            buf=str(proc.check_output(['df','-h'] ), encoding='utf-8').strip().splitlines()[1].strip().split()
             self.info = u'SN: ' + serial + u'\nChip: ' + chip + u'\nArch: ' + machine + u'\nCore: ' + relice + u'\nPTUUID: ' + puuid
 #            for dev in self.netdev:
 #                self.info = self.info + u"\n{}:\n{}\n{}".format( dev, self.netdev[dev][1], self.netdev[dev][2] )
