@@ -57,7 +57,9 @@ class clock:
                 self.serial=l[2][8:]
             if len(l)>0 and l[0]=='Hardware':
                 self.chip=l[2]
-
+        with open('/proc/meminfo','r') as f:
+            output=str(f.readline()).strip().split()
+        self.memtotal= u'{:05} GB'.format( float(output[1]) / 1000000.0 )    
 
         for n in self.cnf["clock"]["faces"]:
             clock.backs[n] = Image.open( self.cnf["global"]["images"] + self.cnf["clock"]["faces"][n] ).resize( (128,128),Image.BICUBIC)
@@ -294,7 +296,7 @@ class clock:
             buf=str(proc.check_output(['blkid','/dev/mmcblk0'] ), encoding='utf-8').strip().split()[1]
             puuid=buf[8:16]
             buf=str(proc.check_output(['df','-h'] ), encoding='utf-8').strip().splitlines()[1].strip().split()
-            self.info = u'SN: ' + self.serial + u'\nChip: ' + self.chip + u'\nArch: ' + machine + u'\nRaspberry Pi OS' + u'\nCore: ' + release + u'\nPTUUID: ' + puuid + '\nFS: ' + buf[1] + ', ' + buf[3] + ' free'
+            self.info = u'SN: ' + self.serial + u'\nChip: ' + self.chip + u'\nArch: ' + machine + u'\nRaspberry Pi OS' + u'\nCore: ' + release + u'\nPTUUID: ' + puuid + '\nFS: ' + buf[1] + ', ' + buf[3] + ' free' + u'\nRAM: ' + self.memtotal
 #            for dev in self.netdev:
 #                self.info = self.info + u"\n{}:\n{}\n{}".format( dev, self.netdev[dev][1], self.netdev[dev][2] )
             self.showinfo = True
