@@ -60,6 +60,9 @@ class clock:
         with open('/proc/meminfo','r') as f:
             output=str(f.readline()).strip().split()
         self.memtotal= u'{:05} GB'.format( float(output[1]) / 1000000.0 )    
+        self.release=str(proc.check_output(['uname','-r'] ), encoding='utf-8').strip()
+        self.machine=str(proc.check_output(['uname','-m'] ), encoding='utf-8').strip()
+        self.hostname=str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
 
         for n in self.cnf["clock"]["faces"]:
             clock.backs[n] = Image.open( self.cnf["global"]["images"] + self.cnf["clock"]["faces"][n] ).resize( (128,128),Image.BICUBIC)
@@ -296,7 +299,7 @@ class clock:
             buf=str(proc.check_output(['blkid','/dev/mmcblk0'] ), encoding='utf-8').strip().split()[1]
             puuid=buf[8:16]
             buf=str(proc.check_output(['df','-h'] ), encoding='utf-8').strip().splitlines()[1].strip().split()
-            self.info = u'SN: ' + self.serial + u'\nChip: ' + self.chip + u'\nArch: ' + machine + u'\nRaspberry Pi OS' + u'\nCore: ' + release + u'\nPTUUID: ' + puuid + '\nFS: ' + buf[1] + ', ' + buf[3] + ' free' + u'\nRAM: ' + self.memtotal
+            self.info = u'SN: ' + self.serial + u'\nChip: ' + self.chip + u'\nArch: ' + machine + ' ' + self.hostinfo['processor'] + '-CPU' u'\nRaspberry Pi OS' + u'\nCore: ' + release + u'\nPTUUID: ' + puuid + '\nFS: ' + buf[1] + ', ' + buf[3] + ' free' + u'\nRAM: ' + self.memtotal
 #            for dev in self.netdev:
 #                self.info = self.info + u"\n{}:\n{}\n{}".format( dev, self.netdev[dev][1], self.netdev[dev][2] )
             self.showinfo = True
@@ -308,7 +311,7 @@ class clock:
         if self.showinfo==True:
             self.showinfo = False
         else:
-            self.info = u'host: ' + str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
+            self.info = u'host: ' + self.hostname
             for dev in self.netdev:
                 self.info = self.info + u"\n{}:\n{}\n{}".format( dev, self.netdev[dev][1], self.netdev[dev][2] )
             self.showinfo = True
