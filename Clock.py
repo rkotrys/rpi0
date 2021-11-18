@@ -315,5 +315,5 @@ class clock:
             #print(self.info)
 
     def getselfinfo(self):
-        print("Info")
+        print("Info 2")
         return "info"
