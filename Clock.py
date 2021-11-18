@@ -149,11 +149,11 @@ class clock:
             if( dev[0:4]=='wlan' and self.netdev[dev][1]!="--" ):
                 symbol = chr(clock.icons["wifi"])+u''
                 wififlag=True
-                break
+                #break
             if( dev[0:3]=='eth' and self.netdev[dev][1]!="--" ):
                 symbol = chr(clock.icons["eth"])+u''
                 ethflag=True
-                break
+                #break
         if wififlag and ethflag:
             symbol = chr(clock.icons["wifi_eth"])+u''
         draw.text( (128-17,1), symbol, font=self.symbols, fill=tuple(self.cnf["clock"]["icons_color"]) )
