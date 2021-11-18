@@ -146,11 +146,11 @@ class clock:
         wififlag=False
         ethflag=False
         for dev in self.netdev:
-            if( dev[0:4]=='wlan' and self.netdev[dev][1]!="" ):
+            if( dev[0:4]=='wlan' and self.netdev[dev][1]!="--" ):
                 symbol = chr(clock.icons["wifi"])+u''
                 wififlag=True
                 break
-            if( dev[0:3]=='eth' and self.netdev[dev][1]!="" ):
+            if( dev[0:3]=='eth' and self.netdev[dev][1]!="--" ):
                 symbol = chr(clock.icons["eth"])+u''
                 ethflag=True
                 break
@@ -300,8 +300,6 @@ class clock:
             puuid=buf[8:16]
             buf=str(proc.check_output(['df','-h'] ), encoding='utf-8').strip().splitlines()[1].strip().split()
             self.info = u'SN: ' + self.serial + u'\nChip: ' + self.chip + u'\nArch: ' + machine + ' ' + self.hostinfo['processor'] + '-CPU' u'\nRaspberry Pi OS' + u'\nCore: ' + release + u'\nPTUUID: ' + puuid + '\nFS: ' + buf[1] + ', ' + buf[3] + ' free' + u'\nRAM: ' + self.memtotal
-#            for dev in self.netdev:
-#                self.info = self.info + u"\n{}:\n{}\n{}".format( dev, self.netdev[dev][1], self.netdev[dev][2] )
             self.showinfo = True
         #print("EXIT!")
         #self.go = False
