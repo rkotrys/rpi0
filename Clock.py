@@ -103,7 +103,7 @@ class clock:
             r = []
             if cpulines[0].split()[4].strip()=='_armv6l_':
                 print( 'ARMv61')
-            for l in cpulines[7].split(' '):
+            for l in cpulines[8].split(' '):
                 if l == '': continue
                 r.append(int(l))
             self.cpu = r[5]
