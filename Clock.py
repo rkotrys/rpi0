@@ -101,6 +101,8 @@ class clock:
             memlines = str(proc.check_output(['free']), encoding='utf-8').strip().split('\n')
             cpulines = str(proc.check_output(['iostat','-c', '--dec=0', '1', '2']), encoding='utf-8').strip().split('\n')
             r = []
+            if cpulines[0].split()[4].strip()=='_armv6l_':
+                print( 'ARMv61')
             for l in cpulines[7].split(' '):
                 if l == '': continue
                 r.append(int(l))
