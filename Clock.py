@@ -198,12 +198,12 @@ class clock:
         im.paste(image)
         draw = ImageDraw.Draw(im)
         
+        self.drawnetwork(draw)
+        self.drawbt(draw)
         self.drawcpu(draw)       
         self.drawtemp(draw)
         self.drawhostname(draw)
         self.drawonline(draw)
-        self.drawnetwork(draw)
-        self.drawbt(draw)
 
         tm = time.localtime()
         im = Image.alpha_composite( im, self.drawhands( (tm[3],tm[4],tm[5]), (12, 25, 35), image ) )
