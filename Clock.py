@@ -161,10 +161,11 @@ class clock:
         if wififlag and ethflag:
             symbol = chr(clock.icons["wifi_eth"])+u''
         #draw.text( (128-17,1), symbol, font=self.symbols, fill=tuple(self.cnf["clock"]["icons_color"]) )
-        draw.rectangle([(128-18,1),(128,18)], fill='#00000011', outline='#00000011', width=1)
-        draw.text( (128-18,1), symbol, font=self.symbols, fill=tuple(self.cnf["clock"]["icons_color"]) )
+        draw.rectangle([(128-17,1),(128,18)], fill='#00000011', outline='#00000011', width=1)
+        draw.text( (128-17,1), symbol, font=self.symbols, fill=tuple(self.cnf["clock"]["icons_color"]) )
 
     def drawbt(self,draw):        
+        draw.rectangle([(1,1),(17,17)], fill='#00000011', outline='#00000011', width=1)
         if self.btscan_show:
             draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols_large, fill=tuple(self.cnf["btscan"]["btscan_color"]) )
         else:
