@@ -160,8 +160,7 @@ class clock:
                 #break
         if wififlag and ethflag:
             symbol = chr(clock.icons["wifi_eth"])+u''
-        #draw.text( (128-17,1), symbol, font=self.symbols, fill=tuple(self.cnf["clock"]["icons_color"]) )
-        draw.text( (128-17,1), u'w', font=self.font, fill=tuple(self.cnf["clock"]["icons_color"]) )
+        draw.text( (128-17,1), symbol, font=self.symbols, fill=tuple(self.cnf["clock"]["icons_color"]) )
 
     def drawbt(self,draw):        
         if self.btscan_show:
@@ -202,9 +201,9 @@ class clock:
         self.drawcpu(draw)       
         self.drawtemp(draw)
         self.drawhostname(draw)
+        self.drawonline(draw)
         self.drawnetwork(draw)
         self.drawbt(draw)
-        self.drawonline(draw)
 
         tm = time.localtime()
         im = Image.alpha_composite( im, self.drawhands( (tm[3],tm[4],tm[5]), (12, 25, 35), image ) )
