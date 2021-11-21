@@ -306,7 +306,7 @@ class clock:
             buf=str(proc.check_output(['blkid','/dev/mmcblk0'] ), encoding='utf-8').strip().split()[1]
             puuid=buf[8:16]
             buf=str(proc.check_output(['df','-h'] ), encoding='utf-8').strip().splitlines()[1].strip().split()
-            self.info = u'SN: ' + self.serial + u'\nChip: ' + self.chip + u'\nArch: ' + machine + ' ' + self.hostinfo['processor'] + '-CPU' u'\nRaspberry Pi OS' + u'\nCore: ' + release + u'\nPTUUID: ' + puuid + '\nFS: ' + buf[1] + ', ' + buf[3] + ' free' + u'\nRAM: {:4.2f}'.format(self.memtotal)
+            self.info = u'SN: ' + self.serial + u'\nChip: ' + self.chip + u'\nArch: ' + machine + ' ' + self.hostinfo['processor'] + '-CPU' u'\nRaspberry Pi OS' + u'\nCore: ' + release + u'\nPTUUID: ' + puuid + '\nFS: ' + buf[1] + ', ' + buf[3] + ' free' + u'\nRAM: {:4.2f}'.format(float(self.memtotal))
             self.showinfo = True
         #print("EXIT!")
         #self.go = False
