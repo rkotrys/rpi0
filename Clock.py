@@ -104,7 +104,7 @@ class clock:
             if cpulines[0].split()[4].strip()=='_armv6l_':
                 lno=8
             else:
-                lno=7
+                lno=8
             for l in cpulines[lno].split(' '):
                 if l == '': continue
                 r.append(int(l))
