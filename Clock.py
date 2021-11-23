@@ -101,10 +101,7 @@ class clock:
             memlines = str(proc.check_output(['free']), encoding='utf-8').strip().split('\n')
             cpulines = str(proc.check_output(['iostat','-c', '--dec=0', '1', '2']), encoding='utf-8').strip().split('\n')
             r = []
-            if cpulines[0].split()[4].strip()=='_armv6l_':
-                lno=8
-            else:
-                lno=8
+            lno=8
             for l in cpulines[lno].split(' '):
                 if l == '': continue
                 r.append(int(l))
