@@ -65,10 +65,13 @@ class clock:
         self.hostname=str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
         buf=str(proc.check_output(['blkid','/dev/mmcblk0'] ), encoding='utf-8').strip().split()[1]
         self.puuid=buf[8:16]
+        self.version='???'
         with open('/etc/os-release','r') as f:
             output=str(f.readlines())
         for line in output:
+            print( line )
             l=line.strip().split('=')
+            print(l)
             if l[0]!='VERSION':
                 continue
             else:
