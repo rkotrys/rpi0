@@ -310,7 +310,7 @@ class clock:
             self.showinfo = False
         else:
             buf=str(proc.check_output(['df','-h'] ), encoding='utf-8').strip().splitlines()[1].strip().split()
-            self.info = u'SN: ' + self.serial + u'\nChip: ' + self.chip + u'\nArch: ' + self.machine + ' ' + self.hostinfo['processor'] + '-CPU' u'\nRaspberry Pi OS' + u'\nCore: ' + release + u'\nPTUUID: ' + self.puuid + '\nFS: ' + buf[1] + ', ' + buf[3] + ' free' + u'\nRAM: {:4.2f} GB'.format(float(self.memtotal))
+            self.info = u'SN: ' + self.serial + u'\nChip: ' + self.chip + u'\nArch: ' + self.machine + ' ' + self.hostinfo['processor'] + '-CPU' u'\nRaspberry Pi OS' + u'\nCore: ' + self.release + u'\nPTUUID: ' + self.puuid + '\nFS: ' + buf[1] + ', ' + buf[3] + ' free' + u'\nRAM: {:4.2f} GB'.format(float(self.memtotal))
             self.showinfo = True
         #print("EXIT!")
         #self.go = False
