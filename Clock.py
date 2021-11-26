@@ -84,11 +84,11 @@ class clock:
         self.x_isonline.start()
 
     """ thread """
-    def isonline(self, ip='rpi.ontime24.pl', period=3):
+    def isonline(self, pingip='rpi.ontime24.pl', period=3):
         while self.go:
             time.sleep(period)    
             try:
-                r = str(proc.check_output(['/bin/ping', '-4', '-c', '3', '-i', '0', '-f', '-q', ip] ), encoding='utf-8').strip()
+                r = str(proc.check_output(['/bin/ping', '-4', '-c', '3', '-i', '0', '-f', '-q', pingip] ), encoding='utf-8').strip()
             except proc.CalledProcessError:
                 r = '0 received'
             ind = int(r.find(' received'))
