@@ -67,10 +67,10 @@ class clock:
         self.puuid=buf[8:16]
         self.version='???'
         with open('/etc/os-release','r') as f:
-            output=str(f.readlines())
+            output=f.readlines()
         for line in output:
             print( line )
-            l=line.strip().split('=')
+            l=line.split('=')
             print(l)
             if l[0]!='VERSION':
                 continue
