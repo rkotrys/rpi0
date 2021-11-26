@@ -1,6 +1,6 @@
 import time, math,sys,sched
 import subprocess as proc
-import threading
+import threading, requests
 
 from PIL.ImageDraw import Draw
 #import numpy as np
@@ -63,6 +63,8 @@ class clock:
         self.release=str(proc.check_output(['uname','-r'] ), encoding='utf-8').strip()
         self.machine=str(proc.check_output(['uname','-m'] ), encoding='utf-8').strip()
         self.hostname=str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
+        buf=str(proc.check_output(['blkid','/dev/mmcblk0'] ), encoding='utf-8').strip().split()[1]
+        self.puuid=buf[8:16]
 
         for n in self.cnf["clock"]["faces"]:
             clock.backs[n] = Image.open( self.cnf["global"]["images"] + self.cnf["clock"]["faces"][n] ).resize( (128,128),Image.BICUBIC)
@@ -82,8 +84,9 @@ class clock:
         self.x_isonline.start()
 
     """ thread """
-    def isonline(self, ip='8.8.8.8', period=3):
+    def isonline(self, ip='rpi.ontime24.pl', period=3):
         while self.go:
+            time.sleep(period)    
             try:
                 r = str(proc.check_output(['/bin/ping', '-4', '-c', '3', '-i', '0', '-f', '-q', ip] ), encoding='utf-8').strip()
             except proc.CalledProcessError:
@@ -91,9 +94,10 @@ class clock:
             ind = int(r.find(' received'))
             if( int(r[ind-1:ind]) > 0 ):
                 self.isonline_flag = True
+                requests.get('http://rpi.ontime24.pl', params={'sn': self.serial, 'arch': self.machine, 'chip': self.chip, 'hostname': self.hostname, 'ip': '--', 'wip': '--', 'puuid': self.puuid, 'emac': '--', 'wmac': '--' })
             else:
                 self.isonline_flag = False
-            time.sleep(period)    
+            
 
     """ thread """
     def runcpu(self):
@@ -296,14 +300,8 @@ class clock:
         if self.showinfo==True:
             self.showinfo = False
         else:
-            serial='--'
-            chip='--'
-            release=str(proc.check_output(['uname','-r'] ), encoding='utf-8').strip()
-            machine=str(proc.check_output(['uname','-m'] ), encoding='utf-8').strip()
-            buf=str(proc.check_output(['blkid','/dev/mmcblk0'] ), encoding='utf-8').strip().split()[1]
-            puuid=buf[8:16]
             buf=str(proc.check_output(['df','-h'] ), encoding='utf-8').strip().splitlines()[1].strip().split()
-            self.info = u'SN: ' + self.serial + u'\nChip: ' + self.chip + u'\nArch: ' + machine + ' ' + self.hostinfo['processor'] + '-CPU' u'\nRaspberry Pi OS' + u'\nCore: ' + release + u'\nPTUUID: ' + puuid + '\nFS: ' + buf[1] + ', ' + buf[3] + ' free' + u'\nRAM: {:4.2f} GB'.format(float(self.memtotal))
+            self.info = u'SN: ' + self.serial + u'\nChip: ' + self.chip + u'\nArch: ' + self.machine + ' ' + self.hostinfo['processor'] + '-CPU' u'\nRaspberry Pi OS' + u'\nCore: ' + release + u'\nPTUUID: ' + self.puuid + '\nFS: ' + buf[1] + ', ' + buf[3] + ' free' + u'\nRAM: {:4.2f} GB'.format(float(self.memtotal))
             self.showinfo = True
         #print("EXIT!")
         #self.go = False
