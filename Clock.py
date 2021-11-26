@@ -67,7 +67,13 @@ class clock:
         self.puuid=buf[8:16]
         with open('/etc/os-release','r') as f:
             output=str(f.readlines())
-        print(output)
+        for line in output:
+            l=line.strip().split('=')
+            if l[0]!='VERSION':
+                continue
+            else:
+                self.version=l[1]    
+        print(self.version)
 
         for n in self.cnf["clock"]["faces"]:
             clock.backs[n] = Image.open( self.cnf["global"]["images"] + self.cnf["clock"]["faces"][n] ).resize( (128,128),Image.BICUBIC)
