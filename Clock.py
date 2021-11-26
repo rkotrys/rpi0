@@ -75,7 +75,8 @@ class clock:
             if l[0]!='VERSION':
                 continue
             else:
-                self.version=l[1]    
+                self.version=l[1] 
+                break   
         print(self.version)
 
         for n in self.cnf["clock"]["faces"]:
