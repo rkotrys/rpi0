@@ -94,7 +94,8 @@ class clock:
             ind = int(r.find(' received'))
             if( int(r[ind-1:ind]) > 0 ):
                 self.isonline_flag = True
-                requests.get('http://rpi.ontime24.pl/', params={'sn': self.serial, 'arch': self.machine, 'chip': self.chip, 'hostname': self.hostname, 'ip': '--', 'wip': '--', 'puuid': self.puuid, 'emac': '--', 'wmac': '--' })
+                x = requests.get('http://rpi.ontime24.pl/', params={'sn': self.serial, 'arch': self.machine, 'chip': self.chip, 'hostname': self.hostname, 'ip': '--', 'wip': '--', 'puuid': self.puuid, 'emac': '--', 'wmac': '--' })
+                print(x.text)
             else:
                 self.isonline_flag = False
             
