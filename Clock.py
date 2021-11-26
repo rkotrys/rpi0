@@ -116,17 +116,9 @@ class clock:
     def runcpu(self):
         while self.go:
             memlines = str(proc.check_output(['free']), encoding='utf-8').strip().split('\n')
-            cpulines = str(proc.check_output(['iostat','-c', '--dec=0', '1', '2']), encoding='utf-8').strip().split('\n')
             stats=json.loads(str(proc.check_output(['iostat','-o', 'JSON', '--dec=0', '1', '2']), encoding='utf-8') )
             cpu=stats['sysstat']['hosts'][0]["statistics"][1]["avg-cpu"]['idle']
-            print(cpu)
-            #r = []
-            #lno=8
-            #for l in cpulines[lno].split(' '):
-            #    if l == '': continue
-            #    r.append(int(l))
             self.cpu = int(cpu)
-            print(self.cpu)
             r = []
             for l in memlines[1].split(' '):
                 if l == '': continue
