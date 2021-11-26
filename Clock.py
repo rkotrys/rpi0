@@ -65,6 +65,9 @@ class clock:
         self.hostname=str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
         buf=str(proc.check_output(['blkid','/dev/mmcblk0'] ), encoding='utf-8').strip().split()[1]
         self.puuid=buf[8:16]
+        with open('/etc/os-release','r') as f:
+            output=str(f.readlines())
+        print(output)
 
         for n in self.cnf["clock"]["faces"]:
             clock.backs[n] = Image.open( self.cnf["global"]["images"] + self.cnf["clock"]["faces"][n] ).resize( (128,128),Image.BICUBIC)
