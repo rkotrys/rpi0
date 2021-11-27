@@ -161,7 +161,6 @@ class clock:
         df['hostname']=self.hostname
         df['puuid']=self.puuid
         df['version']=self.version
-        netdev=self.netdev()
         return df
 
     def getnetdev(self):
