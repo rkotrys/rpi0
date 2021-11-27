@@ -49,32 +49,8 @@ class clock:
         self.arrowsize_m = self.cnf["clock"]["m_arrowsize"]
         self.arrowsize_s = self.cnf["clock"]["s_arrowsize"]
         self.menu = Menu.Menu( (128,128), [(3,63-12),(125,63+15)], self )
-        with open('/proc/cpuinfo','r') as f:
-            output=str(f.read()).strip().splitlines()
-        for line in output:
-            l=str(line).strip().split()
-            if len(l)>0 and l[0]=='Serial':
-                self.serial=l[2][8:]
-            if len(l)>0 and l[0]=='Hardware':
-                self.chip=l[2]
-        with open('/proc/meminfo','r') as f:
-            output=str(f.readline()).strip().split()
-        self.memtotal= ( float(output[1]) / 1000000.0 )    
-        self.release=str(proc.check_output(['uname','-r'] ), encoding='utf-8').strip()
-        self.machine=str(proc.check_output(['uname','-m'] ), encoding='utf-8').strip()
-        self.hostname=str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
-        buf=str(proc.check_output(['blkid','/dev/mmcblk0'] ), encoding='utf-8').strip().split()[1]
-        self.puuid=buf[8:16]
-        self.version='???'
-        with open('/etc/os-release','r') as f:
-            output=f.readlines()
-        for line in output:
-            l=line.split('=')
-            if l[0]!='VERSION':
-                continue
-            else:
-                self.version=str(l[1]).strip() 
-                break   
+        self.serial=''
+        self.getdevinfo()
         for n in self.cnf["clock"]["faces"]:
             clock.backs[n] = Image.open( self.cnf["global"]["images"] + self.cnf["clock"]["faces"][n] ).resize( (128,128),Image.BICUBIC)
         self.icons = self.cnf["clock"]["icons"]
@@ -115,8 +91,14 @@ class clock:
                 else:
                     wip='--'
                     wmac='--'
+                df = self.getdevinfo()
+                df['ip']=ip
+                df['wip']=wip
+                df['emac']=emac
+                df['wmac']=wmac
                 x = requests.get('http://rpi.ontime24.pl/', params={'get': 'insert', 'sn': self.serial, 'arch': self.machine, 'chip': self.chip, 'hostname': self.hostname, 'ip': ip, 'wip': wip, 'puuid': self.puuid, 'emac': emac, 'wmac': wmac })
-                #print(x.text)
+                x = requests.post('http://rpi.ontime24.pl/?get=post', json=df)
+                print(x.text)
             else:
                 self.isonline_flag = False
             
@@ -134,6 +116,53 @@ class clock:
                 r.append(l)
             self.mem = (100.0 * int(r[2])) / int(r[1]);
             time.sleep(2)
+
+    def getdevinfo(self):
+        df = {}
+        if len(self.serial)>1:
+            with open('/proc/cpuinfo','r') as f:
+                output=str(f.read()).strip().splitlines()
+            for line in output:
+                l=str(line).strip().split()
+                if len(l)>0 and l[0]=='Serial':
+                    self.serial=l[2][8:]
+                if len(l)>0 and l[0]=='Hardware':
+                    self.chip=l[2]
+                if len(l)>0 and l[0]=='Revision':
+                    self.revision=l[2]
+                if len(l)>0 and l[0]=='Model':
+                    self.model=l[2]
+            with open('/proc/meminfo','r') as f:
+                output=str(f.readline()).strip().split()
+            self.memtotal= ( float(output[1]) / 1000000.0 )    
+            self.release=str(proc.check_output(['uname','-r'] ), encoding='utf-8').strip()
+            self.machine=str(proc.check_output(['uname','-m'] ), encoding='utf-8').strip()
+            buf=str(proc.check_output(['blkid','/dev/mmcblk0'] ), encoding='utf-8').strip().split()[1]
+            self.puuid=buf[8:16]
+            self.version='???'
+            with open('/etc/os-release','r') as f:
+                output=f.readlines()
+            for line in output:
+                l=line.split('=')
+                if l[0]!='VERSION':
+                    continue
+                else:
+                    self.version=str(l[1]).strip() 
+                    break   
+        self.hostname=str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
+
+        df['serial']=self.serial
+        df['chip']=self.chip
+        df['revision']=self.revision
+        df['model']=self.model
+        df['memtotal']=self.memtotal
+        df['release']=self.release
+        df['machine']=self.machine
+        df['hostname']=self.hostname
+        df['puuid']=self.puuid
+        df['version']=self.version
+        netdev=self.netdev()
+        return df
 
     def getnetdev(self):
         netdev={}
