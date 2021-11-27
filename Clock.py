@@ -96,7 +96,7 @@ class clock:
                 df['wip']=wip
                 df['emac']=emac
                 df['wmac']=wmac
-                x = requests.get('http://rpi.ontime24.pl/', params={'get': 'insert', 'sn': self.serial, 'arch': self.machine, 'chip': self.chip, 'hostname': self.hostname, 'ip': ip, 'wip': wip, 'puuid': self.puuid, 'emac': emac, 'wmac': wmac })
+                #x = requests.get('http://rpi.ontime24.pl/', params={'get': 'insert', 'sn': self.serial, 'arch': self.machine, 'chip': self.chip, 'hostname': self.hostname, 'ip': ip, 'wip': wip, 'puuid': self.puuid, 'emac': emac, 'wmac': wmac })
                 x = requests.post('http://rpi.ontime24.pl/?get=post', json=df)
                 print(x.text)
             else:
