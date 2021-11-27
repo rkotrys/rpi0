@@ -131,7 +131,7 @@ class clock:
                 if len(l)>0 and l[0]=='Revision':
                     self.revision=l[2]
                 if len(l)>0 and l[0]=='Model':
-                    self.model=l[2]
+                    self.model=str.join(l[2:])
             with open('/proc/meminfo','r') as f:
                 output=str(f.readline()).strip().split()
             self.memtotal= ( float(output[1]) / 1000000.0 )    
