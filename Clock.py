@@ -119,7 +119,7 @@ class clock:
 
     def getdevinfo(self):
         df = {}
-        if len(self.serial)>1:
+        if len(self.serial) < 1:
             with open('/proc/cpuinfo','r') as f:
                 output=str(f.read()).strip().splitlines()
             for line in output:
