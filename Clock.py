@@ -103,7 +103,7 @@ class clock:
                 #print(json.loads(base64.standard_b64decode(x.text)))
                 #x = requests.get('http://rpi.ontime24.pl/')
                 print(x.status_code)
-                print(x.text)
+                print(base64.standard_b64decode(x.text))
             else:
                 self.isonline_flag = False
             
