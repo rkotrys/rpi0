@@ -54,7 +54,6 @@ class clock:
         self.themes={}
         for n in self.cnf["clock"]["faces"]:
             clock.backs[n] = Image.open( self.cnf["global"]["images"] + self.cnf["clock"]["faces"][n] ).resize( (128,128),Image.BICUBIC)
-            self.themes[self.cnf["clock"]["faces"][n]] = n
         self.icons = self.cnf["clock"]["icons"]
         self.font = ImageFont.truetype( self.cnf["global"]["fonts"]+self.cnf["clock"]["font_bold"], self.cnf["clock"]["font_bold_size"] )
         self.font12 = ImageFont.truetype(self.cnf["global"]["fonts"]+self.cnf["clock"]["font_mono"], self.cnf["clock"]["font_mono_size"])
@@ -99,12 +98,13 @@ class clock:
                 df['emac']=emac
                 df['wmac']=wmac
                 df['theme']=self.cnf["global"]["theme"]
-                #x = requests.get('http://rpi.ontime24.pl/', params={'get': 'insert', 'sn': self.serial, 'arch': self.machine, 'chip': self.chip, 'hostname': self.hostname, 'ip': ip, 'wip': wip, 'puuid': self.puuid, 'emac': emac, 'wmac': wmac })
                 x = requests.post('http://rpi.ontime24.pl/?get=post', json=df)
                 # TODO: read respoce
                 r=json.loads(base64.standard_b64decode(x.text))
                 if r['status']=='OK':
-                    print(r['cmd'])
+                    if r['cmd']['name']=='theme':
+                        self.cnf["global"]["theme"]=r['cmd']['value']
+                        clock.cnf.save()
                 else:
                     print( 'ERROR:' + r['status'] )    
             else:
