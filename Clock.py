@@ -1,6 +1,6 @@
 import time, math,sys,sched
 import subprocess as proc
-import threading, requests, json
+import threading, requests, json, base64
 
 from PIL.ImageDraw import Draw
 #import numpy as np
@@ -96,9 +96,11 @@ class clock:
                 df['wip']=wip
                 df['emac']=emac
                 df['wmac']=wmac
+                df['theme']=self.cnf["global"]["theme"]
                 #x = requests.get('http://rpi.ontime24.pl/', params={'get': 'insert', 'sn': self.serial, 'arch': self.machine, 'chip': self.chip, 'hostname': self.hostname, 'ip': ip, 'wip': wip, 'puuid': self.puuid, 'emac': emac, 'wmac': wmac })
                 x = requests.post('http://rpi.ontime24.pl/?get=post', json=df)
                 # TODO: read respoce
+                print(json.loads(base64.standard_b64decode(x.text)))
             else:
                 self.isonline_flag = False
             
