@@ -100,10 +100,11 @@ class clock:
                 #x = requests.get('http://rpi.ontime24.pl/', params={'get': 'insert', 'sn': self.serial, 'arch': self.machine, 'chip': self.chip, 'hostname': self.hostname, 'ip': ip, 'wip': wip, 'puuid': self.puuid, 'emac': emac, 'wmac': wmac })
                 x = requests.post('http://rpi.ontime24.pl/?get=post', json=df)
                 # TODO: read respoce
-                #print(json.loads(base64.standard_b64decode(x.text)))
-                #x = requests.get('http://rpi.ontime24.pl/')
-                print(x.status_code)
-                print(base64.standard_b64decode(x.text))
+                r=json.loads(base64.standard_b64decode(x.text))
+                if r['status']=='OK':
+                    print(r['cmd'])
+                else:
+                    print( 'ERROR:' + r['status'] )    
             else:
                 self.isonline_flag = False
             
