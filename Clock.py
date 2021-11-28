@@ -51,8 +51,10 @@ class clock:
         self.menu = Menu.Menu( (128,128), [(3,63-12),(125,63+15)], self )
         self.serial=''
         self.getdevinfo()
+        self.themes={}
         for n in self.cnf["clock"]["faces"]:
             clock.backs[n] = Image.open( self.cnf["global"]["images"] + self.cnf["clock"]["faces"][n] ).resize( (128,128),Image.BICUBIC)
+            self.themes[self.cnf["clock"]["faces"][n]] = n
         self.icons = self.cnf["clock"]["icons"]
         self.font = ImageFont.truetype( self.cnf["global"]["fonts"]+self.cnf["clock"]["font_bold"], self.cnf["clock"]["font_bold_size"] )
         self.font12 = ImageFont.truetype(self.cnf["global"]["fonts"]+self.cnf["clock"]["font_mono"], self.cnf["clock"]["font_mono_size"])
