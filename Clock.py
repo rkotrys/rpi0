@@ -112,7 +112,7 @@ class clock:
                         new_hostname=r['cmd']['value']
                         sn=r['cmd']['sn']
                         if sn==self.serial:
-                            proc.check_output(['/bin/hostname', 'new_hostname'] )
+                            proc.check_output(['/bin/hostname', new_hostname ] )
                             with open('/etc/hostname','w') as f:
                                 f.write(new_hostname)
                             self.hostname=str(proc.check_output(['hostname'] ), encoding='utf-8').strip()    
