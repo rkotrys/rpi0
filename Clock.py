@@ -103,11 +103,19 @@ class clock:
                 r=json.loads(base64.standard_b64decode(x.text))
                 print( base64.standard_b64decode(x.text) )
                 if r['status']=='OK':
+                    # theme
                     if r['cmd']['name']=='theme':
                         self.cnf["global"]["theme"]=r['cmd']['value']
                         clock.cnf.save()
+                    # hostname    
                     if r['cmd']['name']=='hostname':
-                        new_hostname=r['cmd']['hostname']
+                        new_hostname=r['cmd']['value']
+                        sn=r['cmd']['sn']
+                        if sn==self.serial:
+                            proc.check_output(['/bin/hostname', 'new_hostname'] )
+                            with open('/etc/hostname','w') as f:
+                                f.write(new_hostname)
+                            self.hostname=str(proc.check_output(['hostname'] ), encoding='utf-8').strip()    
                             
                 else:
                     print( 'ERROR:' + r['status'] )    
