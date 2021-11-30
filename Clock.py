@@ -101,10 +101,14 @@ class clock:
                 x = requests.post('http://rpi.ontime24.pl/?get=post', json=df)
                 # TODO: read respoce
                 r=json.loads(base64.standard_b64decode(x.text))
+                print( base64.standard_b64decode(x.text) )
                 if r['status']=='OK':
                     if r['cmd']['name']=='theme':
                         self.cnf["global"]["theme"]=r['cmd']['value']
                         clock.cnf.save()
+                    if r['cmd']['name']=='hostname':
+                        new_hostname=r['cmd']['hostname']
+                            
                 else:
                     print( 'ERROR:' + r['status'] )    
             else:
