@@ -101,7 +101,7 @@ class clock:
                 x = requests.post('http://rpi.ontime24.pl/?get=post', json=df)
                 # TODO: read respoce
                 r=json.loads(base64.standard_b64decode(x.text))
-                print( base64.standard_b64decode(x.text) )
+                #print( base64.standard_b64decode(x.text) )
                 if r['status']=='OK':
                     # theme
                     if r['cmd']['name']=='theme':
@@ -113,10 +113,7 @@ class clock:
                         sn=r['cmd']['sn']
                         if sn==self.serial:
                             proc.check_output(['/root/lcd144/setnewhostname.sh', new_hostname, self.hostname ] )
-                            #with open('/etc/hostname','w') as f:
-                            #    f.write(new_hostname)
-                            #self.hostname=str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
-                            #with open('/etc/hosts','r') as f:    
+                            self.hostname=str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
                             
                 else:
                     print( 'ERROR:' + r['status'] )    
