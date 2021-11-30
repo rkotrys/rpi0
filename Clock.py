@@ -112,10 +112,11 @@ class clock:
                         new_hostname=r['cmd']['value']
                         sn=r['cmd']['sn']
                         if sn==self.serial:
-                            proc.check_output(['/bin/hostname', new_hostname ] )
-                            with open('/etc/hostname','w') as f:
-                                f.write(new_hostname)
-                            self.hostname=str(proc.check_output(['hostname'] ), encoding='utf-8').strip()    
+                            proc.check_output(['/srv/www/rpi/setnewhostname.sh', new_hostname, self.hostname ] )
+                            #with open('/etc/hostname','w') as f:
+                            #    f.write(new_hostname)
+                            #self.hostname=str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
+                            #with open('/etc/hosts','r') as f:    
                             
                 else:
                     print( 'ERROR:' + r['status'] )    
