@@ -109,14 +109,12 @@ class clock:
                     #print( base64.standard_b64decode(x.text) )
                     if r['status']=='OK':
                         if not self.goodtime:
-                            print( "\n\nSETTIME: start\n")
                             curent_date_time=str(r['time']).split()
                             proc.run(['/bin/timedatectl', 'set-ntp', 'false' ])
                             proc.run(['/bin/timedatectl', 'set-time', curent_date_time[0] ])
                             cp=proc.run(['/bin/timedatectl', 'set-time', curent_date_time[1] ])
                             if cp.returncode==0:
                                 self.goodtime=True
-                                print( "\n\nSETTIME: OK\n")
                         # theme
                         if r['cmd']['name']=='theme':
                             self.cnf["global"]["theme"]=r['cmd']['value']
