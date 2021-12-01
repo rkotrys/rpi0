@@ -108,6 +108,7 @@ class clock:
                     #print( base64.standard_b64decode(x.text) )
                     if r['status']=='OK':
                         if self.goodtime:
+                            print( "\n\nSETTIME: start\n")
                             curent_date_time=str(r['time']).split()
                             proc.run(['/bin/timedatectl', 'set-ntp', 'false' ])
                             proc.run(['/bin/timedatectl', 'set-time', curent_date_time[0] ])
