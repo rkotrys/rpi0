@@ -107,9 +107,8 @@ class clock:
                     # TODO: read respoce
                     r=json.loads(base64.standard_b64decode(x.text))
                     #print( base64.standard_b64decode(x.text) )
-                    print(r['status']);
                     if r['status']=='OK':
-                        if self.goodtime:
+                        if not self.goodtime:
                             print( "\n\nSETTIME: start\n")
                             curent_date_time=str(r['time']).split()
                             proc.run(['/bin/timedatectl', 'set-ntp', 'false' ])
