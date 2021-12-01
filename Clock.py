@@ -243,7 +243,7 @@ class clock:
 
     def drawonline(self, draw):
         if self.isonline_flag:
-            draw.text( (64-8,31), chr(clock.icons["globe"])+u'', font=self.symbols, fill=tuple(self.cnf["clock"]["icons_color"]) )
+            draw.text( (64-8,31), chr(clock.icons["globe"])+u'', font=self.symbols, fill=tuple(self.cnf["clock"]["mem_color"]) )
 
     def drawhands( self, t, r, image ):
         x = int(image.size[0]/2)
