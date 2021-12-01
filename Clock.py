@@ -51,6 +51,7 @@ class clock:
         self.menu = Menu.Menu( (128,128), [(3,63-12),(125,63+15)], self )
         self.serial=''
         self.rpihub=False
+        self.goodtime=False
         self.getdevinfo()
         self.themes={}
         for n in self.cnf["clock"]["faces"]:
@@ -104,8 +105,15 @@ class clock:
                     self.rpihub=True
                     # TODO: read respoce
                     r=json.loads(base64.standard_b64decode(x.text))
-                    print( base64.standard_b64decode(x.text) )
+                    #print( base64.standard_b64decode(x.text) )
                     if r['status']=='OK':
+                        if self.goodtime:
+                            curent_date_time=str(r['time']).split()
+                            proc.run(['/bin/timedatectl', 'set-ntp', 'false' ])
+                            proc.run(['/bin/timedatectl', 'set-time', curent_date_time[0] ])
+                            cp=proc.run(['/bin/timedatectl', 'set-time', curent_date_time[1] ])
+                            if cp.returncode==0:
+                                self.goodtime=True
                         # theme
                         if r['cmd']['name']=='theme':
                             self.cnf["global"]["theme"]=r['cmd']['value']
