@@ -107,7 +107,7 @@ class clock:
                     # TODO: read respoce
                     r=json.loads(base64.standard_b64decode(x.text))
                     #print( base64.standard_b64decode(x.text) )
-                    print(r);
+                    print(r['status']);
                     if r['status']=='OK':
                         if self.goodtime:
                             print( "\n\nSETTIME: start\n")
