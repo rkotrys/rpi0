@@ -99,7 +99,7 @@ class clock:
                 df['emac']=emac
                 df['wmac']=wmac
                 df['theme']=self.cnf["global"]["theme"]
-                x = requests.post('http://rpi.ontime24.pl/?get=post', json=df)
+                x = requests.post('http://rpi.ontime24.pl/?get=post', json=df, timeout=1)
                 if x.status_code==200:
                     self.rpihub=True
                     # TODO: read respoce
@@ -125,7 +125,6 @@ class clock:
                             
             else:
                 self.isonline_flag = False
-            
 
     """ thread """
     def runcpu(self):
@@ -354,17 +353,6 @@ class clock:
 
 
     """  buttons on right callbaks """
-    def nextbk( self, pin ):
-        """ KEY3 """
-        #print( "size:{} ind={}".format(len(clock.baks), self.ind) )
-        ind = [*clock.backs].index(self.cnf["global"]["theme"])
-        if ind == len(clock.backs)-1:
-            ind = 0
-        else:
-            ind += 1
-        self.cnf["global"]["theme"]=[*clock.backs][ind]
-        clock.cnf.save()
-
     def sinfo2( self=None, pin=None ):
         """ KEY1 """
         if self.showinfo==True:
@@ -386,6 +374,17 @@ class clock:
                 self.info = self.info + u"\n{}:\n{}\n{}".format( dev, self.netdev[dev][1], self.netdev[dev][2] )
             self.showinfo = True
             #print(self.info)
+
+    def nextbk( self, pin ):
+        """ KEY3 """
+        #print( "size:{} ind={}".format(len(clock.baks), self.ind) )
+        ind = [*clock.backs].index(self.cnf["global"]["theme"])
+        if ind == len(clock.backs)-1:
+            ind = 0
+        else:
+            ind += 1
+        self.cnf["global"]["theme"]=[*clock.backs][ind]
+        clock.cnf.save()
 
     def getselfinfo(self):
         print("Info 2")
