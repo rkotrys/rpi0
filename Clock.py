@@ -50,6 +50,7 @@ class clock:
         self.arrowsize_s = self.cnf["clock"]["s_arrowsize"]
         self.menu = Menu.Menu( (128,128), [(3,63-12),(125,63+15)], self )
         self.serial=''
+        self.rpihub=False
         self.getdevinfo()
         self.themes={}
         for n in self.cnf["clock"]["faces"]:
@@ -99,24 +100,29 @@ class clock:
                 df['wmac']=wmac
                 df['theme']=self.cnf["global"]["theme"]
                 x = requests.post('http://rpi.ontime24.pl/?get=post', json=df)
-                # TODO: read respoce
-                r=json.loads(base64.standard_b64decode(x.text))
-                #print( base64.standard_b64decode(x.text) )
-                if r['status']=='OK':
-                    # theme
-                    if r['cmd']['name']=='theme':
-                        self.cnf["global"]["theme"]=r['cmd']['value']
-                        clock.cnf.save()
-                    # hostname    
-                    if r['cmd']['name']=='hostname':
-                        new_hostname=r['cmd']['value']
-                        sn=r['cmd']['sn']
-                        if sn==self.serial:
-                            proc.check_output(['/root/lcd144/setnewhostname.sh', new_hostname, self.hostname ] )
-                            self.hostname=str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
-                            
+                if x.status_code==200:
+                    self.rpihub=True
+                    # TODO: read respoce
+                    r=json.loads(base64.standard_b64decode(x.text))
+                    #print( base64.standard_b64decode(x.text) )
+                    if r['status']=='OK':
+                        # theme
+                        if r['cmd']['name']=='theme':
+                            self.cnf["global"]["theme"]=r['cmd']['value']
+                            clock.cnf.save()
+                        # hostname    
+                        if r['cmd']['name']=='hostname':
+                            new_hostname=r['cmd']['value']
+                            sn=r['cmd']['sn']
+                            if sn==self.serial:
+                                proc.check_output(['/root/lcd144/setnewhostname.sh', new_hostname, self.hostname ] )
+                                self.hostname=str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
+                                
+                    else:
+                        print( 'ERROR:' + r['status'] )    
                 else:
-                    print( 'ERROR:' + r['status'] )    
+                    self.rpihub=False
+                            
             else:
                 self.isonline_flag = False
             
