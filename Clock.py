@@ -102,6 +102,7 @@ class clock:
                 df['theme']=self.cnf["global"]["theme"]
                 x = requests.post('http://rpi.ontime24.pl/?get=post', json=df, timeout=1)
                 if x.status_code==200:
+                    print( "\n\nPOST: status==200\n" )
                     self.rpihub=True
                     # TODO: read respoce
                     r=json.loads(base64.standard_b64decode(x.text))
