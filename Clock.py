@@ -134,9 +134,9 @@ class clock:
                             proc.run(['/bin/systemctl', 'poweroff']);
                         # update agent software (LCD144)
                         if r['cmd']['name']=='update':
-                            result = proc.run(['/bin/git', 'pull'], cwd='/root/lcd144', shell=True, capture_output=True, text=True);
-                            print("stdout:", result.stdout)
-                            print("stderr:", result.stderr)
+                            result = proc.run(['/bin/git', 'pull'], cwd='/root/'+r['cmd']['service'], shell=True, capture_output=True, text=True);
+                            print("stdout: ", result.stdout)
+                            print("stderr: ", result.stderr)
                                 
                     else:
                         print( 'ERROR:' + r['status'] )    
