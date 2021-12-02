@@ -127,10 +127,10 @@ class clock:
                                 proc.check_output(['/root/lcd144/setnewhostname.sh', new_hostname, self.hostname ] )
                                 self.hostname=str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
                         # reboot
-                        if r['cmd']['name']=='reboot':
+                        if r['cmd']['name']=='reboot' and r['cmd']['sn']==r['sn']:
                             proc.run(['/bin/systemctl', 'reboot']);
                         # poweroff
-                        if r['cmd']['name']=='poweroff':
+                        if r['cmd']['name']=='poweroff'  and r['cmd']['sn']==r['sn']:
                             proc.run(['/bin/systemctl', 'poweroff']);
                         # update agent software (LCD144)
                         if r['cmd']['name']=='update':
