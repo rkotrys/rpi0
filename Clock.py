@@ -40,6 +40,7 @@ class clock:
         self.rpilink_period = 3
         self.isonline_period = 1
         self.rpilink_address = 'rpi.ontime24.pl'
+        self.temp_cpu_alarm = 50
         self.btdev = {}
         self.kbd = kbd
         self.hostinfo = hlp.hostinfo()
@@ -238,7 +239,7 @@ class clock:
     def drawtemp(self,draw):
         with open('/sys/class/thermal/thermal_zone0/temp','r') as f:
             tempraw = f.read()
-        if (int)(tempraw[0:2])>42:
+        if (int)(tempraw[0:2])>self.temp_cpu_alarm:
             color=(255,0,0)
         else:
             color=tuple(self.cnf["clock"]["icons_color"])
