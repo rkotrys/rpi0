@@ -318,7 +318,7 @@ class clock:
         self.drawonline(draw)
 
         tm = time.localtime()
-        im = Image.alpha_composite( im, self.drawhands( (tm[3],tm[4],tm[5]), (12, 25, 35), image ) )
+        im = Image.alpha_composite( im, self.drawhands( (tm[3],tm[4],tm[5]), (12, 27, 35), image ) )
         return im
 
     def runclock(self):
