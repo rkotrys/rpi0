@@ -106,7 +106,7 @@ class clock:
                     self.rpihub=True
                     # TODO: read respoce
                     r=json.loads(base64.standard_b64decode(x.text))
-                    #print( base64.standard_b64decode(x.text) )
+                    print( base64.standard_b64decode(x.text) )
                     if r['status']=='OK':
                         if not self.goodtime:
                             curent_date_time=str(r['time']).split()
