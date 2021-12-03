@@ -37,6 +37,8 @@ class clock:
         self.btscan = False
         self.btscan_show = False
         self.showinfo = False
+        self.rpilink_period = 3
+        self.rpilink_address = 'http://rpi.ontime24.pl'
         self.btdev = {}
         self.kbd = kbd
         self.hostinfo = hlp.hostinfo()
@@ -70,18 +72,14 @@ class clock:
         self.x_cpuload.start()
         self.x_isonline = threading.Thread( name='isonline', target=self.isonline, args=(), daemon=True)
         self.x_isonline.start()
+        self.x_rplink = threading.Thread( name='rplink', target=self.rpilink, args=(), daemon=True)
+        self.x_rplink.start()
 
     """ thread """
-    def isonline(self, pingip='rpi.ontime24.pl', period=3):
+    def rpilink(self):
         while self.go:
-            time.sleep(period)    
-            try:
-                r = str(proc.check_output(['/bin/ping', '-4', '-c', '3', '-i', '0', '-f', '-q', pingip] ), encoding='utf-8').strip()
-            except proc.CalledProcessError:
-                r = '0 received'
-            ind = int(r.find(' received'))
-            if( int(r[ind-1:ind]) > 0 ):
-                self.isonline_flag = True
+            time.sleep(self.rpilink_period)    
+            if self.isonline:
                 if "eth0" in self.netdev.keys():
                     ip=self.netdev['eth0'][1]
                     emac=self.netdev['eth0'][2]
@@ -100,12 +98,12 @@ class clock:
                 df['emac']=emac
                 df['wmac']=wmac
                 df['theme']=self.cnf["global"]["theme"]
-                x = requests.post('http://rpi.ontime24.pl/?get=post', json=df, timeout=1)
+                x = requests.post( self.rpilink_address+'/?get=post', json=df, timeout=1)
                 if x.status_code==200:
                     self.rpihub=True
                     # TODO: read respoce
                     r=json.loads(base64.standard_b64decode(x.text))
-                    #print( base64.standard_b64decode(x.text) )
+                    print( base64.standard_b64decode(x.text) )
                     if r['status']=='OK':
                         if not self.goodtime:
                             curent_date_time=str(r['time']).split()
@@ -144,9 +142,22 @@ class clock:
                         print( 'ERROR:' + r['status'] )    
                 else:
                     self.rpihub=False
-                            
+    #end of rpilink()
+
+    """ thread """
+    def isonline(self, pingip='rpi.ontime24.pl', period=3):
+        while self.go:
+            time.sleep(period)    
+            try:
+                r = str(proc.check_output(['/bin/ping', '-4', '-c', '3', '-i', '0', '-f', '-q', pingip] ), encoding='utf-8').strip()
+            except proc.CalledProcessError:
+                r = '0 received'
+            ind = int(r.find(' received'))
+            if( int(r[ind-1:ind]) > 0 ):
+                self.isonline_flag = True
             else:
                 self.isonline_flag = False
+    #end of isonline()            
 
     """ thread """
     def runcpu(self):
