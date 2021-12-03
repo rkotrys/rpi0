@@ -131,12 +131,12 @@ class clock:
                             print("stdout: ", result.stdout)
                             print("stderr: ", result.stderr)
                         # poweroff
-                        if r['cmd']['name']=='poweroff'  and r['cmd']['sn']==self.serial:
+                        if r['cmd']['name']=='poweroff' and r['cmd']['sn']==self.serial:
                             result = proc.run(['/bin/systemctl', 'poweroff'],capture_output=True, text=True);
                             #print("stdout: ", result.stdout)
                             #print("stderr: ", result.stderr)
                         # update agent software (LCD144)
-                        if r['cmd']['name']=='update':
+                        if r['cmd']['name']=='update' and r['cmd']['sn']==self.serial:
                             result = proc.run(['/bin/git pull'], cwd='/root/'+r['cmd']['service'], shell=True, capture_output=True, text=True);
                             print("stdout: ", result.stdout)
                             print("stderr: ", result.stderr)
