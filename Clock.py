@@ -102,11 +102,10 @@ class clock:
                 df['theme']=self.cnf["global"]["theme"]
                 x = requests.post('http://rpi.ontime24.pl/?get=post', json=df, timeout=1)
                 if x.status_code==200:
-                    #print( "\n\nPOST: status==200\n" )
                     self.rpihub=True
                     # TODO: read respoce
                     r=json.loads(base64.standard_b64decode(x.text))
-                    print( base64.standard_b64decode(x.text) )
+                    #print( base64.standard_b64decode(x.text) )
                     if r['status']=='OK':
                         if not self.goodtime:
                             curent_date_time=str(r['time']).split()
@@ -120,7 +119,7 @@ class clock:
                             self.cnf["global"]["theme"]=r['cmd']['value']
                             clock.cnf.save()
                         # hostname    
-                        if r['cmd']['name']=='hostname':
+                        if r['cmd']['name']=='hostname' and r['cmd']['sn']==self.serial:
                             new_hostname=r['cmd']['value']
                             if r['cmd']['sn']==self.serial:
                                 proc.check_output(['/root/lcd144/setnewhostname.sh', new_hostname, self.hostname ] )
@@ -128,8 +127,8 @@ class clock:
                         # reboot
                         if r['cmd']['name']=='reboot' and r['cmd']['sn']==self.serial:
                             result = proc.run(['/bin/systemctl', 'reboot'],capture_output=True, text=True);
-                            print("stdout: ", result.stdout)
-                            print("stderr: ", result.stderr)
+                            #print("stdout: ", result.stdout)
+                            #print("stderr: ", result.stderr)
                         # poweroff
                         if r['cmd']['name']=='poweroff' and r['cmd']['sn']==self.serial:
                             result = proc.run(['/bin/systemctl', 'poweroff'],capture_output=True, text=True);
@@ -138,8 +137,8 @@ class clock:
                         # update agent software (LCD144)
                         if r['cmd']['name']=='update' and r['cmd']['sn']==self.serial:
                             result = proc.run(['/bin/git pull'], cwd='/root/'+r['cmd']['service'], shell=True, capture_output=True, text=True);
-                            print("stdout: ", result.stdout)
-                            print("stderr: ", result.stderr)
+                            #print("stdout: ", result.stdout)
+                            #print("stderr: ", result.stderr)
                                 
                     else:
                         print( 'ERROR:' + r['status'] )    
