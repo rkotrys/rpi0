@@ -238,8 +238,12 @@ class clock:
     def drawtemp(self,draw):
         with open('/sys/class/thermal/thermal_zone0/temp','r') as f:
             tempraw = f.read()
+        if (int)(tempraw[0:2])>42:
+            color=(255,0,0)
+        else:
+            color=tuple(self.cnf["clock"]["icons_color"])
         self.msg = u"{}".format(tempraw[0:2]) + u'°'
-        draw.text( ((128-self.font.getsize('40')[0])/2,82), self.msg, font=self.font, fill=tuple(self.cnf["clock"]["icons_color"]) )
+        draw.text( ((128-self.font.getsize('40')[0])/2,82), self.msg, font=self.font, fill=color )
 
     def drawhostname(self,draw):
         #hostname = str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
