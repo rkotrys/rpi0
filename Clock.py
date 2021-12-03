@@ -247,7 +247,6 @@ class clock:
         draw.text( ((128-self.font.getsize('40')[0])/2,82), self.msg, font=self.font, fill=color )
 
     def drawhostname(self,draw):
-        #hostname = str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
         draw.text( ((128-self.font12.getsize(self.hostname)[0])/2,72), self.hostname, font=self.font12, fill=tuple(self.cnf["clock"]["icons_color"]) )
 
     def drawnetwork(self,draw):
@@ -265,7 +264,6 @@ class clock:
                 #break
         if wififlag and ethflag:
             symbol = chr(clock.icons["wifi_eth"])+u''
-        #draw.text( (128-17,1), symbol, font=self.symbols, fill=tuple(self.cnf["clock"]["icons_color"]) )
         draw.rectangle([(128-17,1),(128,18)], fill='#00000011', outline='#00000011', width=1)
         draw.text( (128-17,1), symbol, font=self.symbols, fill=tuple(self.cnf["clock"]["icons_color"]) )
 
@@ -294,7 +292,8 @@ class clock:
         him = im.rotate( -(h*30+t[1]*0.5), Image.BICUBIC )
         im = Image.new( "RGBA", image.size, (255,255,255,0) )
         dr = ImageDraw.Draw( im )
-        dr.polygon( [(x-2,y), (x+2,y), (x+2,r[1]),(x+5,r[1]),(x,r[1]-self.arrowsize_m),(x-5,r[1]), (x-2,r[1])], fill = self.h_color, outline=self.outline_color )
+        dr.polygon( [(x-2,y), (x+2,y), (x+2,r[1]),(x+5,r[1]),(x,r[1]-self.arrowsize_m),(x-5,r[1]), (x-2,r[1])], fill = self.h_color, outline=(50,50,50) )
+        #dr.polygon( [(x-2,y), (x+2,y), (x+2,r[1]),(x+5,r[1]),(x,r[1]-self.arrowsize_m),(x-5,r[1]), (x-2,r[1])], fill = self.h_color, outline=self.outline_color )
         hmim =Image.alpha_composite( him, im.rotate( -(360*t[1])/60, Image.BICUBIC ) )
         im = Image.new( "RGBA", image.size, (255,255,255,0) )
         dr = ImageDraw.Draw( im )
