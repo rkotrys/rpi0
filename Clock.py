@@ -128,10 +128,14 @@ class clock:
                                 self.hostname=str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
                         # reboot
                         if r['cmd']['name']=='reboot' and r['cmd']['sn']==r['sn']:
-                            proc.run(['/bin/systemctl', 'reboot']);
+                            result = proc.run(['/bin/systemctl', 'reboot'],capture_output=True, text=True);
+                            print("stdout: ", result.stdout)
+                            print("stderr: ", result.stderr)
                         # poweroff
                         if r['cmd']['name']=='poweroff'  and r['cmd']['sn']==r['sn']:
-                            proc.run(['/bin/systemctl', 'poweroff']);
+                            result = proc.run(['/bin/systemctl', 'poweroff'],capture_output=True, text=True);
+                            #print("stdout: ", result.stdout)
+                            #print("stderr: ", result.stderr)
                         # update agent software (LCD144)
                         if r['cmd']['name']=='update':
                             result = proc.run(['/bin/git pull'], cwd='/root/'+r['cmd']['service'], shell=True, capture_output=True, text=True);
