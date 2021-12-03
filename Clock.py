@@ -122,17 +122,16 @@ class clock:
                         # hostname    
                         if r['cmd']['name']=='hostname':
                             new_hostname=r['cmd']['value']
-                            sn=r['cmd']['sn']
-                            if sn==self.serial:
+                            if r['cmd']['sn']==self.serial:
                                 proc.check_output(['/root/lcd144/setnewhostname.sh', new_hostname, self.hostname ] )
                                 self.hostname=str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
                         # reboot
-                        if r['cmd']['name']=='reboot' and r['cmd']['sn']==r['sn']:
+                        if r['cmd']['name']=='reboot' and r['cmd']['sn']==self.serial:
                             result = proc.run(['/bin/systemctl', 'reboot'],capture_output=True, text=True);
                             print("stdout: ", result.stdout)
                             print("stderr: ", result.stderr)
                         # poweroff
-                        if r['cmd']['name']=='poweroff'  and r['cmd']['sn']==r['sn']:
+                        if r['cmd']['name']=='poweroff'  and r['cmd']['sn']==self.serial:
                             result = proc.run(['/bin/systemctl', 'poweroff'],capture_output=True, text=True);
                             #print("stdout: ", result.stdout)
                             #print("stderr: ", result.stderr)
