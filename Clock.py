@@ -287,7 +287,8 @@ class clock:
         y = int(image.size[1]/2)
         im = Image.new( "RGBA", image.size, (255,255,255,0) )
         dr = ImageDraw.Draw( im )
-        dr.polygon( [(x-3,y), (x+3,y), (x+3,r[2]), (x+6,r[2]),(x,r[2]-self.arrowsize_h),(x-6,r[2]),(x-3,r[2])], fill=self.h_color, outline=self.outline_color )
+        dr.polygon( [(x-3,y), (x+3,y), (x+3,r[2]), (x+6,r[2]),(x,r[2]-self.arrowsize_h),(x-6,r[2]),(x-3,r[2])], fill=self.h_color, outline=(50,50,50) )
+        #dr.polygon( [(x-3,y), (x+3,y), (x+3,r[2]), (x+6,r[2]),(x,r[2]-self.arrowsize_h),(x-6,r[2]),(x-3,r[2])], fill=self.h_color, outline=self.outline_color )
         h = t[0] if t[0]<13 else t[0]-12
         him = im.rotate( -(h*30+t[1]*0.5), Image.BICUBIC )
         im = Image.new( "RGBA", image.size, (255,255,255,0) )
