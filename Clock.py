@@ -38,7 +38,8 @@ class clock:
         self.btscan_show = False
         self.showinfo = False
         self.rpilink_period = 3
-        self.rpilink_address = 'http://rpi.ontime24.pl'
+        self.isonline_period = 1
+        self.rpilink_address = 'rpi.ontime24.pl'
         self.btdev = {}
         self.kbd = kbd
         self.hostinfo = hlp.hostinfo()
@@ -98,7 +99,7 @@ class clock:
                 df['emac']=emac
                 df['wmac']=wmac
                 df['theme']=self.cnf["global"]["theme"]
-                x = requests.post( self.rpilink_address+'/?get=post', json=df, timeout=1)
+                x = requests.post( 'http://'+self.rpilink_address+'/?get=post', json=df, timeout=1)
                 if x.status_code==200:
                     self.rpihub=True
                     # TODO: read respoce
@@ -125,13 +126,9 @@ class clock:
                         # reboot
                         if r['cmd']['name']=='reboot' and r['cmd']['sn']==self.serial:
                             result = proc.run(['/bin/systemctl', 'reboot'],capture_output=True, text=True);
-                            #print("stdout: ", result.stdout)
-                            #print("stderr: ", result.stderr)
                         # poweroff
                         if r['cmd']['name']=='poweroff' and r['cmd']['sn']==self.serial:
                             result = proc.run(['/bin/systemctl', 'poweroff'],capture_output=True, text=True);
-                            #print("stdout: ", result.stdout)
-                            #print("stderr: ", result.stderr)
                         # update agent software (LCD144)
                         if r['cmd']['name']=='update' and r['cmd']['sn']==self.serial:
                             result = proc.run(['/bin/git pull'], cwd='/root/'+r['cmd']['service'], shell=True, capture_output=True, text=True);
@@ -145,11 +142,11 @@ class clock:
     #end of rpilink()
 
     """ thread """
-    def isonline(self, pingip='rpi.ontime24.pl', period=3):
+    def isonline(self):
         while self.go:
-            time.sleep(period)    
+            time.sleep(self.isonline_period)    
             try:
-                r = str(proc.check_output(['/bin/ping', '-4', '-c', '3', '-i', '0', '-f', '-q', pingip] ), encoding='utf-8').strip()
+                r = str(proc.check_output(['/bin/ping', '-4', '-c', '3', '-i', '0', '-f', '-q', self.rpilink_address] ), encoding='utf-8').strip()
             except proc.CalledProcessError:
                 r = '0 received'
             ind = int(r.find(' received'))
