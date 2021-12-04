@@ -41,6 +41,7 @@ class clock:
         self.isonline_period = 1
         self.rpilink_address = 'rpi.ontime24.pl'
         self.temp_cpu_alarm = 50
+        self.curent_date_time = False
         self.btdev = {}
         self.kbd = kbd
         self.hostinfo = hlp.hostinfo()
@@ -108,15 +109,15 @@ class clock:
                     #print( base64.standard_b64decode(x.text) )
                     if r['status']=='OK':
                         if not self.goodtime:
-                            curent_date_time=str(r['time']).split()
+                            self.curent_date_time=str(r['time']).split()
                             #proc.run(['/bin/timedatectl', 'set-ntp', 'false' ])
                             #print("STOP",curent_date_time[0]," ",curent_date_time[1],"\n");
                             #proc.run(['/bin/timedatectl', 'set-time', curent_date_time[0] ])
                             #print("date: "+curent_date_time[0]+"\n")
-                            cp=proc.run(['/bin/timedatectl', 'set-time', curent_date_time[1] ])
-                            print("time: "+curent_date_time[1]+"\n")
-                            if cp.returncode==0:
-                                self.goodtime=True
+                            #cp=proc.run(['/bin/timedatectl', 'set-time', curent_date_time[1] ])
+                            #print("time: "+curent_date_time[1]+"\n")
+                            #if cp.returncode==0:
+                            #    self.goodtime=True
                         # theme
                         if r['cmd']['name']=='theme':
                             self.cnf["global"]["theme"]=r['cmd']['value']
@@ -326,6 +327,17 @@ class clock:
         return im
 
     def runclock(self):
+        if not self.goodtime:
+            if self.curent_date_time != False:
+                proc.run(['/bin/timedatectl', 'set-ntp', 'false' ])
+                print("STOP",self.curent_date_time[0]," ",self.curent_date_time[1],"\n");
+                proc.run(['/bin/timedatectl', 'set-time', self.curent_date_time[0] ])
+                print("date: "+self.curent_date_time[0]+"\n")
+                cp=proc.run(['/bin/timedatectl', 'set-time', self.curent_date_time[1] ])
+                print("time: "+self.curent_date_time[1]+"\n")
+                if cp.returncode==0:
+                    self.goodtime=True
+                    time.sleep(3)
         if self.go:
             #print("runclock: \n")
             self.sheduler.enter(1,1,self.runclock)
