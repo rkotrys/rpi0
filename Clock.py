@@ -37,6 +37,10 @@ class clock:
         self.btscan = False
         self.btscan_show = False
         self.showinfo = False
+        self.rpilink_period = 3
+        self.isonline_period = 1
+        self.rpilink_address = 'rpi.ontime24.pl'
+        self.temp_cpu_alarm = 50
         self.btdev = {}
         self.kbd = kbd
         self.hostinfo = hlp.hostinfo()
@@ -50,6 +54,8 @@ class clock:
         self.arrowsize_s = self.cnf["clock"]["s_arrowsize"]
         self.menu = Menu.Menu( (128,128), [(3,63-12),(125,63+15)], self )
         self.serial=''
+        self.rpihub=False
+        self.goodtime=False
         self.getdevinfo()
         self.themes={}
         for n in self.cnf["clock"]["faces"]:
@@ -68,18 +74,14 @@ class clock:
         self.x_cpuload.start()
         self.x_isonline = threading.Thread( name='isonline', target=self.isonline, args=(), daemon=True)
         self.x_isonline.start()
+        self.x_rplink = threading.Thread( name='rplink', target=self.rpilink, args=(), daemon=True)
+        self.x_rplink.start()
 
     """ thread """
-    def isonline(self, pingip='rpi.ontime24.pl', period=3):
+    def rpilink(self):
         while self.go:
-            time.sleep(period)    
-            try:
-                r = str(proc.check_output(['/bin/ping', '-4', '-c', '3', '-i', '0', '-f', '-q', pingip] ), encoding='utf-8').strip()
-            except proc.CalledProcessError:
-                r = '0 received'
-            ind = int(r.find(' received'))
-            if( int(r[ind-1:ind]) > 0 ):
-                self.isonline_flag = True
+            time.sleep(self.rpilink_period)    
+            if self.isonline:
                 if "eth0" in self.netdev.keys():
                     ip=self.netdev['eth0'][1]
                     emac=self.netdev['eth0'][2]
@@ -98,28 +100,62 @@ class clock:
                 df['emac']=emac
                 df['wmac']=wmac
                 df['theme']=self.cnf["global"]["theme"]
-                x = requests.post('http://rpi.ontime24.pl/?get=post', json=df)
-                # TODO: read respoce
-                r=json.loads(base64.standard_b64decode(x.text))
-                #print( base64.standard_b64decode(x.text) )
-                if r['status']=='OK':
-                    # theme
-                    if r['cmd']['name']=='theme':
-                        self.cnf["global"]["theme"]=r['cmd']['value']
-                        clock.cnf.save()
-                    # hostname    
-                    if r['cmd']['name']=='hostname':
-                        new_hostname=r['cmd']['value']
-                        sn=r['cmd']['sn']
-                        if sn==self.serial:
-                            proc.check_output(['/root/lcd144/setnewhostname.sh', new_hostname, self.hostname ] )
-                            self.hostname=str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
-                            
+                x = requests.post( 'http://'+self.rpilink_address+'/?get=post', json=df, timeout=1)
+                if x.status_code==200:
+                    self.rpihub=True
+                    # TODO: read respoce
+                    r=json.loads(base64.standard_b64decode(x.text))
+                    #print( base64.standard_b64decode(x.text) )
+                    if r['status']=='OK':
+                        if not self.goodtime:
+                            curent_date_time=str(r['time']).split()
+                            proc.run(['/bin/timedatectl', 'set-ntp', 'false' ])
+                            proc.run(['/bin/timedatectl', 'set-time', curent_date_time[0] ])
+                            cp=proc.run(['/bin/timedatectl', 'set-time', curent_date_time[1] ])
+                            if cp.returncode==0:
+                                self.goodtime=True
+                        # theme
+                        if r['cmd']['name']=='theme':
+                            self.cnf["global"]["theme"]=r['cmd']['value']
+                            clock.cnf.save()
+                        # hostname    
+                        if r['cmd']['name']=='hostname' and r['cmd']['sn']==self.serial:
+                            new_hostname=r['cmd']['value']
+                            if r['cmd']['sn']==self.serial:
+                                proc.check_output(['/root/lcd144/setnewhostname.sh', new_hostname, self.hostname ] )
+                                self.hostname=str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
+                        # reboot
+                        if r['cmd']['name']=='reboot' and r['cmd']['sn']==self.serial:
+                            result = proc.run(['/bin/systemctl', 'reboot'],capture_output=True, text=True);
+                        # poweroff
+                        if r['cmd']['name']=='poweroff' and r['cmd']['sn']==self.serial:
+                            result = proc.run(['/bin/systemctl', 'poweroff'],capture_output=True, text=True);
+                        # update agent software (LCD144)
+                        if r['cmd']['name']=='update' and r['cmd']['sn']==self.serial:
+                            result = proc.run(['/bin/git pull'], cwd='/root/'+r['cmd']['service'], shell=True, capture_output=True, text=True);
+                            #print("stdout: ", result.stdout)
+                            #print("stderr: ", result.stderr)
+                                
+                    else:
+                        print( 'ERROR:' + r['status'] )    
                 else:
-                    print( 'ERROR:' + r['status'] )    
+                    self.rpihub=False
+    #end of rpilink()
+
+    """ thread """
+    def isonline(self):
+        while self.go:
+            time.sleep(self.isonline_period)    
+            try:
+                r = str(proc.check_output(['/bin/ping', '-4', '-c', '3', '-i', '0', '-f', '-q', self.rpilink_address] ), encoding='utf-8').strip()
+            except proc.CalledProcessError:
+                r = '0 received'
+            ind = int(r.find(' received'))
+            if( int(r[ind-1:ind]) > 0 ):
+                self.isonline_flag = True
             else:
                 self.isonline_flag = False
-            
+    #end of isonline()            
 
     """ thread """
     def runcpu(self):
@@ -203,11 +239,14 @@ class clock:
     def drawtemp(self,draw):
         with open('/sys/class/thermal/thermal_zone0/temp','r') as f:
             tempraw = f.read()
+        if (int)(tempraw[0:2])>self.temp_cpu_alarm:
+            color=(255,0,0)
+        else:
+            color=tuple(self.cnf["clock"]["icons_color"])
         self.msg = u"{}".format(tempraw[0:2]) + u'°'
-        draw.text( ((128-self.font.getsize('40')[0])/2,82), self.msg, font=self.font, fill=tuple(self.cnf["clock"]["icons_color"]) )
+        draw.text( ((128-self.font.getsize('40')[0])/2,82), self.msg, font=self.font, fill=color )
 
     def drawhostname(self,draw):
-        #hostname = str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
         draw.text( ((128-self.font12.getsize(self.hostname)[0])/2,72), self.hostname, font=self.font12, fill=tuple(self.cnf["clock"]["icons_color"]) )
 
     def drawnetwork(self,draw):
@@ -225,7 +264,6 @@ class clock:
                 #break
         if wififlag and ethflag:
             symbol = chr(clock.icons["wifi_eth"])+u''
-        #draw.text( (128-17,1), symbol, font=self.symbols, fill=tuple(self.cnf["clock"]["icons_color"]) )
         draw.rectangle([(128-17,1),(128,18)], fill='#00000011', outline='#00000011', width=1)
         draw.text( (128-17,1), symbol, font=self.symbols, fill=tuple(self.cnf["clock"]["icons_color"]) )
 
@@ -238,18 +276,24 @@ class clock:
 
     def drawonline(self, draw):
         if self.isonline_flag:
-            draw.text( (64-8,31), chr(clock.icons["globe"])+u'', font=self.symbols, fill=tuple(self.cnf["clock"]["icons_color"]) )
+            if self.rpihub:
+                globe_color=self.cnf["clock"]["mem_color"]
+            else:
+                globe_color=self.cnf["clock"]["icons_color"]
+            draw.text( (64-8,31), chr(clock.icons["globe"])+u'', font=self.symbols, fill=tuple(globe_color) )
 
     def drawhands( self, t, r, image ):
         x = int(image.size[0]/2)
         y = int(image.size[1]/2)
         im = Image.new( "RGBA", image.size, (255,255,255,0) )
         dr = ImageDraw.Draw( im )
+        #dr.polygon( [(x-3,y), (x+3,y), (x+3,r[2]), (x+6,r[2]),(x,r[2]-self.arrowsize_h),(x-6,r[2]),(x-3,r[2])], fill=self.h_color, outline=(50,50,50) )
         dr.polygon( [(x-3,y), (x+3,y), (x+3,r[2]), (x+6,r[2]),(x,r[2]-self.arrowsize_h),(x-6,r[2]),(x-3,r[2])], fill=self.h_color, outline=self.outline_color )
         h = t[0] if t[0]<13 else t[0]-12
         him = im.rotate( -(h*30+t[1]*0.5), Image.BICUBIC )
         im = Image.new( "RGBA", image.size, (255,255,255,0) )
         dr = ImageDraw.Draw( im )
+        #dr.polygon( [(x-2,y), (x+2,y), (x+2,r[1]),(x+5,r[1]),(x,r[1]-self.arrowsize_m),(x-5,r[1]), (x-2,r[1])], fill = self.h_color, outline=(50,50,50) )
         dr.polygon( [(x-2,y), (x+2,y), (x+2,r[1]),(x+5,r[1]),(x,r[1]-self.arrowsize_m),(x-5,r[1]), (x-2,r[1])], fill = self.h_color, outline=self.outline_color )
         hmim =Image.alpha_composite( him, im.rotate( -(360*t[1])/60, Image.BICUBIC ) )
         im = Image.new( "RGBA", image.size, (255,255,255,0) )
@@ -274,7 +318,7 @@ class clock:
         self.drawonline(draw)
 
         tm = time.localtime()
-        im = Image.alpha_composite( im, self.drawhands( (tm[3],tm[4],tm[5]), (12, 25, 35), image ) )
+        im = Image.alpha_composite( im, self.drawhands( (tm[3],tm[4],tm[5]), (12, 22, 35), image ) )
         return im
 
     def runclock(self):
@@ -348,17 +392,6 @@ class clock:
 
 
     """  buttons on right callbaks """
-    def nextbk( self, pin ):
-        """ KEY3 """
-        #print( "size:{} ind={}".format(len(clock.baks), self.ind) )
-        ind = [*clock.backs].index(self.cnf["global"]["theme"])
-        if ind == len(clock.backs)-1:
-            ind = 0
-        else:
-            ind += 1
-        self.cnf["global"]["theme"]=[*clock.backs][ind]
-        clock.cnf.save()
-
     def sinfo2( self=None, pin=None ):
         """ KEY1 """
         if self.showinfo==True:
@@ -380,6 +413,17 @@ class clock:
                 self.info = self.info + u"\n{}:\n{}\n{}".format( dev, self.netdev[dev][1], self.netdev[dev][2] )
             self.showinfo = True
             #print(self.info)
+
+    def nextbk( self, pin ):
+        """ KEY3 """
+        #print( "size:{} ind={}".format(len(clock.baks), self.ind) )
+        ind = [*clock.backs].index(self.cnf["global"]["theme"])
+        if ind == len(clock.backs)-1:
+            ind = 0
+        else:
+            ind += 1
+        self.cnf["global"]["theme"]=[*clock.backs][ind]
+        clock.cnf.save()
 
     def getselfinfo(self):
         print("Info 2")
