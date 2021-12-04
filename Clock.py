@@ -112,7 +112,7 @@ class clock:
                             proc.run(['/bin/timedatectl', 'set-ntp', 'false' ])
                             #print("STOP",curent_date_time[0]," ",curent_date_time[1],"\n");
                             proc.run(['/bin/timedatectl', 'set-time', curent_date_time[0] ])
-                            print("date: "+curent_date_time[0]+"\n")
+                            #print("date: "+curent_date_time[0]+"\n")
                             cp=proc.run(['/bin/timedatectl', 'set-time', curent_date_time[1] ])
                             print("time: "+curent_date_time[1]+"\n")
                             #if cp.returncode==0:
