@@ -313,12 +313,12 @@ class clock:
         im.paste(image)
         draw = ImageDraw.Draw(im)
         
-        #self.drawnetwork(draw)
-        #self.drawbt(draw)
-        #self.drawcpu(draw)       
-        #self.drawtemp(draw)
-        #self.drawhostname(draw)
-        #self.drawonline(draw)
+        self.drawnetwork(draw)
+        self.drawbt(draw)
+        self.drawcpu(draw)       
+        self.drawtemp(draw)
+        self.drawhostname(draw)
+        self.drawonline(draw)
 
         tm = time.localtime()
         print("time:",tm[3],tm[4],tm[5],"\n")
