@@ -324,11 +324,11 @@ class clock:
         if not self.goodtime:
             if self.curent_date_time != False:
                 proc.run(['/bin/timedatectl', 'set-ntp', 'false' ])
-                print("STOP",self.curent_date_time[0]," ",self.curent_date_time[1],"\n");
+                #print("STOP",self.curent_date_time[0]," ",self.curent_date_time[1],"\n");
                 proc.run(['/bin/timedatectl', 'set-time', self.curent_date_time[0] ])
-                print("DATE: "+self.curent_date_time[0]+"\n")
+                #print("DATE: "+self.curent_date_time[0]+"\n")
                 cp=proc.run(['/bin/timedatectl', 'set-time', self.curent_date_time[1] ])
-                print("TIME: "+self.curent_date_time[1]+"\n")
+                #print("TIME: "+self.curent_date_time[1]+"\n")
                 if cp.returncode==0:
                     self.goodtime=True
                     time.sleep(5)
