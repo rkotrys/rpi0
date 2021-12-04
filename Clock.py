@@ -105,16 +105,16 @@ class clock:
                     self.rpihub=True
                     # TODO: read respoce
                     r=json.loads(base64.standard_b64decode(x.text))
-                    print( base64.standard_b64decode(x.text) )
+                    #print( base64.standard_b64decode(x.text) )
                     if r['status']=='OK':
                         if not self.goodtime:
                             curent_date_time=str(r['time']).split()
                             proc.run(['/bin/timedatectl', 'set-ntp', 'false' ])
-                            print("STOP",curent_date_time[0]," ",curent_date_time[1],"\n");
+                            #print("STOP",curent_date_time[0]," ",curent_date_time[1],"\n");
                             proc.run(['/bin/timedatectl', 'set-time', curent_date_time[0] ])
-                            print("date: \n")
+                            #print("date: \n")
                             cp=proc.run(['/bin/timedatectl', 'set-time', curent_date_time[1] ])
-                            print("time: \n")
+                            #print("time: \n")
                             if cp.returncode==0:
                                 self.goodtime=True
                         # theme
@@ -326,6 +326,7 @@ class clock:
 
     def runclock(self):
         if self.go:
+            print("runclock: \n")
             self.sheduler.enter(1,1,self.runclock)
 
         self.netdev = self.getnetdev()
