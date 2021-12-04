@@ -319,6 +319,7 @@ class clock:
         im = Image.alpha_composite( im, self.drawhands( (tm[3],tm[4],tm[5]), (12, 22, 35), image ) )
         return im
 
+    """ thread """
     def runclock(self):
         if not self.goodtime:
             if self.curent_date_time != False:
@@ -334,17 +335,14 @@ class clock:
         if self.go:
             #print("runclock: \n")
             self.sheduler.enter(1,1,self.runclock)
-
         self.netdev = self.getnetdev()
         im = self.drowclockface()
-
         """ KEY2 - buttons action """
         if self.showinfo:
            imtext = Image.new( "RGBA", self.clock_image.size, (0,0,0,0) )
            drawtext = ImageDraw.Draw(imtext)
            drawtext.rectangle([0,0,127,127], fill=tuple(self.cnf["clock"]["self_info_fill"]), outline=tuple(self.cnf["clock"]["self_info_outline"]), width=2)
            drawtext.multiline_text( (1,1), self.info, font=self.font12, fill=tuple(self.cnf["clock"]["self_info_font_fill"]) )
-
         """ menu images overlay """
         menu = self.menu.show()
         if menu:
