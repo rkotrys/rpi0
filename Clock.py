@@ -115,8 +115,8 @@ class clock:
                             #print("date: \n")
                             #cp=proc.run(['/bin/timedatectl', 'set-time', curent_date_time[1] ])
                             #print("time: \n")
-                            if cp.returncode==0:
-                                self.goodtime=True
+                            #if cp.returncode==0:
+                            #    self.goodtime=True
                         # theme
                         if r['cmd']['name']=='theme':
                             self.cnf["global"]["theme"]=r['cmd']['value']
