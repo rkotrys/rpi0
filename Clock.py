@@ -321,6 +321,7 @@ class clock:
         self.drawonline(draw)
 
         tm = time.localtime()
+        print("time:",tm[3],tm[4],tm[5],"\n")
         im = Image.alpha_composite( im, self.drawhands( (tm[3],tm[4],tm[5]), (12, 22, 35), image ) )
         return im
 
