@@ -337,7 +337,7 @@ class clock:
                 print("time: "+self.curent_date_time[1]+"\n")
                 if cp.returncode==0:
                     self.goodtime=True
-                    time.sleep(3)
+                    time.sleep(5)
         if self.go:
             #print("runclock: \n")
             self.sheduler.enter(1,1,self.runclock)
