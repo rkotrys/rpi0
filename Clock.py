@@ -108,16 +108,9 @@ class clock:
                     r=json.loads(base64.standard_b64decode(x.text))
                     #print( base64.standard_b64decode(x.text) )
                     if r['status']=='OK':
+                        # set date and time
                         if not self.goodtime:
                             self.curent_date_time=str(r['time']).split()
-                            #proc.run(['/bin/timedatectl', 'set-ntp', 'false' ])
-                            #print("STOP",curent_date_time[0]," ",curent_date_time[1],"\n");
-                            #proc.run(['/bin/timedatectl', 'set-time', curent_date_time[0] ])
-                            #print("date: "+curent_date_time[0]+"\n")
-                            #cp=proc.run(['/bin/timedatectl', 'set-time', curent_date_time[1] ])
-                            #print("time: "+curent_date_time[1]+"\n")
-                            #if cp.returncode==0:
-                            #    self.goodtime=True
                         # theme
                         if r['cmd']['name']=='theme':
                             self.cnf["global"]["theme"]=r['cmd']['value']
@@ -322,7 +315,7 @@ class clock:
         self.drawonline(draw)
 
         tm = time.localtime()
-        print("time:",tm[3],tm[4],tm[5],"\n")
+        #print("time:",tm[3],tm[4],tm[5],"\n")
         im = Image.alpha_composite( im, self.drawhands( (tm[3],tm[4],tm[5]), (12, 22, 35), image ) )
         return im
 
@@ -332,9 +325,9 @@ class clock:
                 proc.run(['/bin/timedatectl', 'set-ntp', 'false' ])
                 print("STOP",self.curent_date_time[0]," ",self.curent_date_time[1],"\n");
                 proc.run(['/bin/timedatectl', 'set-time', self.curent_date_time[0] ])
-                print("date: "+self.curent_date_time[0]+"\n")
+                print("DATE: "+self.curent_date_time[0]+"\n")
                 cp=proc.run(['/bin/timedatectl', 'set-time', self.curent_date_time[1] ])
-                print("time: "+self.curent_date_time[1]+"\n")
+                print("TIME: "+self.curent_date_time[1]+"\n")
                 if cp.returncode==0:
                     self.goodtime=True
                     time.sleep(5)
