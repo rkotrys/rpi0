@@ -120,7 +120,7 @@ class clock:
                             new_hostname=r['cmd']['value']
                             if r['cmd']['sn']==self.serial:
                                 #proc.run(["chmod 0700 /root/lcd144/setnewhostname.sh"],shell=True)
-                                proc.run(['/bin/bsah /root/lcd144/setnewhostname.sh '+new_hostname+' '+self.hostname ], shell=True )
+                                proc.run(['/bin/bash /root/lcd144/setnewhostname.sh '+new_hostname+' '+self.hostname ], shell=True )
                                 self.hostname=str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
                         # reboot
                         if r['cmd']['name']=='reboot' and r['cmd']['sn']==self.serial:
