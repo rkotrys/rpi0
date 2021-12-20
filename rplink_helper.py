@@ -33,7 +33,7 @@ def gettemp():
     return tmp
 
 def hostname(name=None):
-    """ get system hostname od set 'name' as system hostname"""
+    """ get system hostname or set 'name' as system hostname"""
     oldhostname=str( subprocess.run(["/bin/hostname"], capture_output=True, text=True ).stdout ).strip()
     if name!=None:
         # set hostname to name
