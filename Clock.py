@@ -92,70 +92,7 @@ class clock:
         self.x_cpuload.start()
         self.x_isonline = threading.Thread( name='isonline', target=self.isonline, args=(), daemon=True)
         self.x_isonline.start()
-        #self.x_rplink = threading.Thread( name='rplink', target=self.rpilink, args=(), daemon=True)
-        #self.x_rplink.start()
 
-    """ thread """
-    def rpilink(self):
-        while self.go:
-            time.sleep(self.rpilink_period)    
-            if self.isonline:
-                if "eth0" in self.netdev.keys():
-                    ip=self.netdev['eth0'][1]
-                    emac=self.netdev['eth0'][2]
-                else:
-                    ip='--'
-                    emac='--'
-                if "wlan0" in self.netdev.keys():
-                    wip=self.netdev['wlan0'][1]
-                    wmac=self.netdev['wlan0'][2]
-                else:
-                    wip='--'
-                    wmac='--'
-                df = self.getdevinfo()
-                df['ip']=ip
-                df['wip']=wip
-                df['emac']=emac
-                df['wmac']=wmac
-                df['theme']=self.cnf["global"]["theme"]
-                x = requests.post( 'http://'+self.rpilink_address+'/?get=post', json=df, timeout=1)
-                if x.status_code==200:
-                    self.rpihub=True
-                    # TODO: read respoce
-                    r=json.loads(base64.standard_b64decode(x.text))
-                    #print( base64.standard_b64decode(x.text) )
-                    if r['status']=='OK':
-                        # set date and time
-                        if not self.goodtime:
-                            self.curent_date_time=str(r['time']).split()
-                        # theme
-                        if r['cmd']['name']=='theme':
-                            self.cnf["global"]["theme"]=r['cmd']['value']
-                            clock.cnf.save()
-                        # hostname    
-                        if r['cmd']['name']=='hostname' and r['cmd']['sn']==self.serial:
-                            new_hostname=r['cmd']['value']
-                            if r['cmd']['sn']==self.serial:
-                                #proc.run(["chmod 0700 /root/lcd144/setnewhostname.sh"],shell=True)
-                                proc.run(['/bin/bash /root/lcd144/setnewhostname.sh '+new_hostname+' '+self.hostname ], shell=True )
-                                self.hostname=str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
-                        # reboot
-                        if r['cmd']['name']=='reboot' and r['cmd']['sn']==self.serial:
-                            result = proc.run(['/bin/systemctl', 'reboot'],capture_output=True, text=True);
-                        # poweroff
-                        if r['cmd']['name']=='poweroff' and r['cmd']['sn']==self.serial:
-                            result = proc.run(['/bin/systemctl', 'poweroff'],capture_output=True, text=True);
-                        # update agent software (LCD144)
-                        if r['cmd']['name']=='update' and r['cmd']['sn']==self.serial:
-                            result = proc.run(['/bin/git pull'], cwd='/root/'+r['cmd']['service'], shell=True, capture_output=True, text=True);
-                            #print("stdout: ", result.stdout)
-                            #print("stderr: ", result.stderr)
-                                
-                    else:
-                        print( 'ERROR:' + r['status'] )    
-                else:
-                    self.rpihub=False
-    #end of rpilink()
 
     """ thread """
     def isonline(self):
