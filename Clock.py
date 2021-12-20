@@ -30,28 +30,40 @@ class clock:
             clock.icons[n] = int( self.cnf["clock"]["icons"][n], 16 )
         # sheduler    
         self.sheduler = sched.scheduler(time.time, time.sleep)
+        # keyboard driver
+        self.kbd = kbd
+        # menu driver
+        self.menu = Menu.Menu( (128,128), [(3,63-12),(125,63+15)], self )
+        # run flag
+        self.go = True
         # state data
         self.cpu = 0
         self.mem = 0
         self.ind = 0
         self.bcolor = []
         self.wifi = []
-        self.go = True
         self.msg = ""
         self.info = ""
-        self.isonline_flag = False
+        self.rpilink_address = 'rpi.ontime24.pl'
+        # get rpi info 
+        self.df=rph.getrpiinfo()
+        self.netdev=rph.getnetdev()
+        # set is on-line flag
+        self.isonline_flag = rph.online_status( address=self.rpilink_address )
+        # bluetooth params
         self.btscan = False
         self.btscan_show = False
+        self.btdev = {}
+        # show info flag
         self.showinfo = False
+        # threads periods
         self.rpilink_period = 3
         self.isonline_period = 1
-        self.rpilink_address = 'rpi.ontime24.pl'
+        # temperature alarm
         self.temp_cpu_alarm = 50
+        # set curent date time flag
         self.curent_date_time = False
-        self.btdev = {}
-        self.kbd = kbd
-        self.hostinfo = hlp.hostinfo()
-        self.mmcinfo = hlp.getmmcinfo()
+        # clock hands colors and size
         self.s_color = tuple(self.cnf["clock"]["s_color"])
         self.m_color = tuple(self.cnf["clock"]["m_color"])
         self.h_color = tuple(self.cnf["clock"]["h_color"])
@@ -59,21 +71,17 @@ class clock:
         self.arrowsize_h = self.cnf["clock"]["h_arrowsize"]
         self.arrowsize_m = self.cnf["clock"]["m_arrowsize"]
         self.arrowsize_s = self.cnf["clock"]["s_arrowsize"]
-        self.menu = Menu.Menu( (128,128), [(3,63-12),(125,63+15)], self )
-        self.serial=''
+        # flags
         self.rpihub=False
         self.goodtime=False
-        # scan network dev params
-        self.getdevinfo()
         # 'rplink' object create and init
         self.rplink=rplink.rplink(display='lcd144', rpilink_address='rpi.ontime24.pl', rpilink_period=2)
-        df=rph.getrpiinfo()
-        self.rplink.setlocaldata( {'msdid':df['msdid'], 'essid':df['essid'], 'coretemp':df['coretemp'], 'memavaiable':df['memavaiable']} )
+        self.rplink.setlocaldata( {'msdid':self.df['msdid'], 'essid':self.df['essid'], 'coretemp':self.df['coretemp'], 'memavaiable':self.df['memavaiable']} )
         self.rplink.setlocaldata( {'theme':self.cnf["global"]["theme"]} )
         # print('global->theme-> ',self.cnf["global"]["theme"])
+
         # clock face 'theme' 
         self.themes={}
-        
         for n in self.cnf["clock"]["faces"]:
             clock.backs[n] = Image.open( self.cnf["global"]["images"] + self.cnf["clock"]["faces"][n] ).resize( (128,128),Image.BICUBIC)
         # fonts     
@@ -92,21 +100,14 @@ class clock:
         self.x_cpuload.start()
         self.x_isonline = threading.Thread( name='isonline', target=self.isonline, args=(), daemon=True)
         self.x_isonline.start()
+        # end threads **************************
 
 
     """ thread """
     def isonline(self):
         while self.go:
             time.sleep(self.isonline_period)    
-            try:
-                r = str(proc.check_output(['/bin/ping', '-4', '-c', '3', '-i', '0', '-f', '-q', self.rpilink_address] ), encoding='utf-8').strip()
-            except proc.CalledProcessError:
-                r = '0 received'
-            ind = int(r.find(' received'))
-            if( int(r[ind-1:ind]) > 0 ):
-                self.isonline_flag = True
-            else:
-                self.isonline_flag = False
+            self.isonline_flag=rph.online_status(address=self.rpilink_address)
     #end of isonline()            
 
     """ thread """
@@ -123,67 +124,8 @@ class clock:
             self.mem = (100.0 * int(r[2])) / int(r[1]);
             time.sleep(2)
 
-    def getdevinfo(self):
-        df = {}
-        if len(self.serial) < 1:
-            with open('/proc/cpuinfo','r') as f:
-                output=str(f.read()).strip().splitlines()
-            for line in output:
-                l=str(line).strip().split()
-                if len(l)>0 and l[0]=='Serial':
-                    self.serial=l[2][8:]
-                if len(l)>0 and l[0]=='Hardware':
-                    self.chip=l[2]
-                if len(l)>0 and l[0]=='Revision':
-                    self.revision=l[2]
-                if len(l)>0 and l[0]=='Model':
-                    self.model=u' '.join(l[2:])
-            with open('/proc/meminfo','r') as f:
-                output=str(f.readline()).strip().split()
-            self.memtotal= ( float(output[1]) / 1000000.0 )    
-            self.release=str(proc.check_output(['uname','-r'] ), encoding='utf-8').strip()
-            self.machine=str(proc.check_output(['uname','-m'] ), encoding='utf-8').strip()
-            buf=str(proc.check_output(['blkid','/dev/mmcblk0'] ), encoding='utf-8').strip().split()[1]
-            self.puuid=buf[8:16]
-            self.version='???'
-            with open('/etc/os-release','r') as f:
-                output=f.readlines()
-            for line in output:
-                l=line.split('=')
-                if l[0]!='VERSION':
-                    continue
-                else:
-                    self.version=str(l[1]).strip() 
-                    break   
-        self.hostname=str(proc.check_output(['hostname'] ), encoding='utf-8').strip()
-
-        df['serial']=self.serial
-        df['chip']=self.chip
-        df['revision']=self.revision
-        df['model']=self.model
-        df['memtotal']=self.memtotal
-        df['release']=self.release
-        df['machine']=self.machine
-        df['hostname']=self.hostname
-        df['puuid']=self.puuid
-        df['version']=self.version
-        return df
-
-    def getnetdev(self):
-        netdev={}
-        with open('/proc/net/dev','r') as f:
-            dev = f.read()
-            for devname in ['eth0', 'eth1', 'wlan0', 'wlan1']:
-                if dev.find(devname) > -1:
-                    buf = str(proc.check_output([ 'ip', '-4', 'address', 'show', 'dev', devname ]), encoding='utf-8')
-                    if len(buf)>1: 
-                        ip=buf.strip().splitlines()[1].split()[1]
-                    else:
-                        ip='--'
-                    mac=str(proc.check_output([ 'ip', 'link', 'show', 'dev', devname ]), encoding='utf-8').strip().splitlines()[1].split()[1]
-                    netdev[devname]=(devname,ip,mac)
-        return netdev            
-
+    # **************************************
+    # drow methods
     def drawcpu(self,draw):
         draw.rectangle([(127-3,127),(127,int(127*(self.cpu/100.0)))], fill=tuple(self.cnf["clock"]["cpu_color"]), outline=tuple(self.cnf["clock"]["cpu_color_outline"]), width=1)
         draw.rectangle([(0,127),(3,int(127*(1 - self.mem/100.0)))], fill=tuple(self.cnf["clock"]["mem_color"]), outline=tuple(self.cnf["clock"]["mem_color_outline"]), width=1)
@@ -191,11 +133,12 @@ class clock:
     def drawtemp(self,draw):
         with open('/sys/class/thermal/thermal_zone0/temp','r') as f:
             tempraw = f.read()
-        if (int)(tempraw[0:2])>self.temp_cpu_alarm:
+        temp=rph.gettemp()    
+        if temp > self.temp_cpu_alarm:
             color=(255,0,0)
         else:
             color=tuple(self.cnf["clock"]["icons_color"])
-        self.msg = u"{}".format(tempraw[0:2]) + u'°'
+        self.msg = u"{:2.0f}".format(temp) + u'°'
         draw.text( ((128-self.font.getsize('40')[0])/2,82), self.msg, font=self.font, fill=color )
 
     def drawhostname(self,draw):
