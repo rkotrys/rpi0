@@ -314,7 +314,7 @@ class clock:
         if self.showinfo==True:
             self.showinfo = False
         else:
-            self.info = u'host: ' + self.hostname
+            self.info = u'host: ' + self.df['hostname']
             for dev in self.netdev:
                 self.info = self.info + u"\n{}:\n{}\n{}".format( dev, self.netdev[dev][1], self.netdev[dev][2] )
             self.showinfo = True
