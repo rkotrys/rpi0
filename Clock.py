@@ -233,7 +233,7 @@ class clock:
         if self.go:
             #print("runclock: \n")
             self.sheduler.enter(1,1,self.runclock)
-        self.netdev = self.getnetdev()
+        self.netdev = rph.getnetdev()
         im = self.drowclockface()
         """ KEY2 - buttons action """
         if self.showinfo:
