@@ -11,6 +11,7 @@ import LCD_Config
 from PIL import Image,ImageDraw,ImageFont,ImageColor,ImageFilter
 import Menu, Appconfig
 import helper as hlp
+import rplink as rplink
 
 class clock:
     images = ""
@@ -19,12 +20,16 @@ class clock:
     cnf = None
 
     def __init__(self,kbd):
+        #  config data
         clock.cnf = Appconfig.Appconfig("rpi0.ini")
         self.cnf = clock.cnf.dml
+        #  clock icons
         clock.images = self.cnf["global"]["images"]
         for n in self.cnf["clock"]["icons"]:
             clock.icons[n] = int( self.cnf["clock"]["icons"][n], 16 )
+        # sheduler    
         self.sheduler = sched.scheduler(time.time, time.sleep)
+        # state data
         self.cpu = 0
         self.mem = 0
         self.ind = 0
@@ -57,26 +62,34 @@ class clock:
         self.serial=''
         self.rpihub=False
         self.goodtime=False
+        # scan network dev params
         self.getdevinfo()
+        # 'rplink' object create and init
+        self.rplink=rplink.rplink(display='lcd144', rpilink_address='rpi.ontime24.pl', rpilink_period=2)
+        self.rplink.setlocaldata( {'theme':'mono'} )
+        # clock face 'theme' 
         self.themes={}
+        
         for n in self.cnf["clock"]["faces"]:
             clock.backs[n] = Image.open( self.cnf["global"]["images"] + self.cnf["clock"]["faces"][n] ).resize( (128,128),Image.BICUBIC)
+        # fonts     
         self.icons = self.cnf["clock"]["icons"]
         self.font = ImageFont.truetype( self.cnf["global"]["fonts"]+self.cnf["clock"]["font_bold"], self.cnf["clock"]["font_bold_size"] )
         self.font12 = ImageFont.truetype(self.cnf["global"]["fonts"]+self.cnf["clock"]["font_mono"], self.cnf["clock"]["font_mono_size"])
         self.symbols = ImageFont.truetype(self.cnf["global"]["fonts"]+self.cnf["clock"]["font_symbol"], self.cnf["clock"]["font_symbol_size"])
         self.symbols_large = ImageFont.truetype(self.cnf["global"]["fonts"]+self.cnf["clock"]["font_symbol"], self.cnf["clock"]["font_symbol_large_size"])
-
+        # display init
         self.LCD = LCD_1in44.LCD()
         Lcd_ScanDir = LCD_1in44.SCAN_DIR_DFT  #SCAN_DIR_DFT = D2U_L2R
         self.LCD.LCD_Init(Lcd_ScanDir)
         self.LCD.LCD_Clear()
+        # threads ******************************
         self.x_cpuload = threading.Thread( name='cpuload', target=self.runcpu, args=(), daemon=True)
         self.x_cpuload.start()
         self.x_isonline = threading.Thread( name='isonline', target=self.isonline, args=(), daemon=True)
         self.x_isonline.start()
-        self.x_rplink = threading.Thread( name='rplink', target=self.rpilink, args=(), daemon=True)
-        self.x_rplink.start()
+        #self.x_rplink = threading.Thread( name='rplink', target=self.rpilink, args=(), daemon=True)
+        #self.x_rplink.start()
 
     """ thread """
     def rpilink(self):
