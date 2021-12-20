@@ -66,7 +66,9 @@ class clock:
         self.getdevinfo()
         # 'rplink' object create and init
         self.rplink=rplink.rplink(display='lcd144', rpilink_address='rpi.ontime24.pl', rpilink_period=2)
+        self.rplink.setlocaldata( {'netdev':self.netdev, 'msdid':self.df['msdid'], 'essid':self.df['essid'], 'coretemp':self.df['coretemp'], 'memavaiable':self.df['memavaiable']} )
         self.rplink.setlocaldata( {'theme':self.cnf["global"]["theme"]} )
+        print('global->theme-> ',self.cnf["global"]["theme"])
         # clock face 'theme' 
         self.themes={}
         
