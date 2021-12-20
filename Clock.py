@@ -11,6 +11,7 @@ import LCD_Config
 from PIL import Image,ImageDraw,ImageFont,ImageColor,ImageFilter
 import Menu, Appconfig
 import helper as hlp
+import rplink_helper as rph
 import rplink as rplink
 
 class clock:
@@ -66,7 +67,8 @@ class clock:
         self.getdevinfo()
         # 'rplink' object create and init
         self.rplink=rplink.rplink(display='lcd144', rpilink_address='rpi.ontime24.pl', rpilink_period=2)
-        self.rplink.setlocaldata( {'netdev':self.netdev, 'msdid':self.df['msdid'], 'essid':self.df['essid'], 'coretemp':self.df['coretemp'], 'memavaiable':self.df['memavaiable']} )
+        df=rph.getrpiinfo()
+        self.rplink.setlocaldata( {'msdid':df['msdid'], 'essid':df['essid'], 'coretemp':df['coretemp'], 'memavaiable':df['memavaiable']} )
         self.rplink.setlocaldata( {'theme':self.cnf["global"]["theme"]} )
         print('global->theme-> ',self.cnf["global"]["theme"])
         # clock face 'theme' 
