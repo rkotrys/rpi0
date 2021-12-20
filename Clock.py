@@ -142,7 +142,7 @@ class clock:
         draw.text( ((128-self.font.getsize('40')[0])/2,82), self.msg, font=self.font, fill=color )
 
     def drawhostname(self,draw):
-        draw.text( ((128-self.font12.getsize(self.hostname)[0])/2,72), self.hostname, font=self.font12, fill=tuple(self.cnf["clock"]["icons_color"]) )
+        draw.text( ((128-self.font12.getsize(self.df['hostname'])[0])/2,72), self.df['hostname'], font=self.font12, fill=tuple(self.cnf["clock"]["icons_color"]) )
 
     def drawnetwork(self,draw):
         symbol = chr(clock.icons["wifi_off"])+u''
