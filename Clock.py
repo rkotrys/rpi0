@@ -70,7 +70,7 @@ class clock:
         df=rph.getrpiinfo()
         self.rplink.setlocaldata( {'msdid':df['msdid'], 'essid':df['essid'], 'coretemp':df['coretemp'], 'memavaiable':df['memavaiable']} )
         self.rplink.setlocaldata( {'theme':self.cnf["global"]["theme"]} )
-        print('global->theme-> ',self.cnf["global"]["theme"])
+        # print('global->theme-> ',self.cnf["global"]["theme"])
         # clock face 'theme' 
         self.themes={}
         
