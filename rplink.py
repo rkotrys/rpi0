@@ -8,8 +8,9 @@ import rplink_helper as h
 
 class rplink:
     """ class 'rplink' xchange information and command with 'rpihub' server """
-    def __init__(self, display, rpilink_address='rpi.ontime24.pl',rpilink_period=1, localdata={}):
+    def __init__(self, display, parent, rpilink_address='rpi.ontime24.pl',rpilink_period=1, localdata={}):
         """ constructor """
+        self.parent=parent
         self.display=display
         self.rpilink_address=rpilink_address
         self.rplink_period=rpilink_period
@@ -66,6 +67,9 @@ class rplink:
                         # hostname    
                         if r['cmd']['name']=='hostname' and r['cmd']['sn']==self.d['serial']:
                             h.hostname(r['cmd']['value'])
+                        # theme    
+                        if r['cmd']['name']=='theme' and r['cmd']['sn']==self.d['serial']:
+                            self.parent.setnextclockfacecolor(r['cmd']['value'])
                         # reboot
                         if r['cmd']['name']=='reboot' and r['cmd']['sn']==self.d['serial']:
                             result = proc.run(['/bin/systemctl', 'reboot'],capture_output=True, text=True);
