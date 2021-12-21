@@ -334,7 +334,7 @@ class clock:
 
     def nextbk( self, pin ):
         """ KEY3 """
-        self.setnextclockfacecolor('red')    
+        self.setnextclockfacecolor()    
         
 
     def getselfinfo(self):
