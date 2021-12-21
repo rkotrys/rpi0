@@ -296,6 +296,18 @@ class clock:
         #    print( "{} {}".format(item[0],item[1]) )            
         #print( output )
 
+    def setnextclockfacecolor(self,color=None):
+        if color in self.cnf["clock"]["faces"]:
+            self.cnf["global"]["theme"]=color
+        else:    
+            colors=list(self.backs.keys())
+            try:
+                next=colors[ colors.index(self.cnf["global"]["theme"]) + 1  ]
+            except (ValueError, IndexError):
+                next=colors[0]
+            self.cnf["global"]["theme"]=next    
+        clock.cnf.save()
+        
 
     """  buttons on right callbaks """
     def sinfo2( self=None, pin=None ):
@@ -322,14 +334,8 @@ class clock:
 
     def nextbk( self, pin ):
         """ KEY3 """
-        #print( "size:{} ind={}".format(len(clock.baks), self.ind) )
-        ind = [*clock.backs].index(self.cnf["global"]["theme"])
-        if ind == len(clock.backs)-1:
-            ind = 0
-        else:
-            ind += 1
-        self.cnf["global"]["theme"]=[*clock.backs][ind]
-        clock.cnf.save()
+        self.setnextclockfacecolor('red')    
+        
 
     def getselfinfo(self):
         print("Info 2")
