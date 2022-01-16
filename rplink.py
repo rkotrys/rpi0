@@ -25,6 +25,7 @@ class rplink:
     def __init__(self, display, rpilink_address='rpi.ontime24.pl',rpilink_period=1, localdata={}):
         """ constructor """
         self.display=display
+        self.clk=None
         self.rpilink_address=rpilink_address
         self.rplink_period=rpilink_period
         self.d=h.getrpiinfo()
@@ -50,6 +51,9 @@ class rplink:
         self.x_rpilink.start()
         self.x_get_wlans.start()
 
+    def set_clk_insance(self,clk):
+        self.clk=clk
+        
     def setlocaldata(self,data):
         for key, val in data.items():
             self.localdata[key]=val
@@ -111,11 +115,9 @@ class rplink:
 
                         # set hostname    
                         if r['cmd']['name']=='theme' and r['cmd']['sn']==self.d['serial']:
-                            if self.localdata['theme']!='momo':
-                                global clk
+                            if self.localdata['theme']!='mono':
                                 self.localdata['theme']=r['cmd']['value']
-                                clk.setnextclockfacecolor(self, self.localdata['theme'])
-                                
+                                self.clk.setnextclockfacecolor(self, self.localdata['theme'])
                             self.logger.debug( u'[{}] rplink_command: hostname is chneged from {} to {}'.format(self.display,self.d['hostname'],r['cmd']['value']) )
                         # set hostname    
                         if r['cmd']['name']=='hostname' and r['cmd']['sn']==self.d['serial']:
