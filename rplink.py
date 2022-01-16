@@ -117,7 +117,7 @@ class rplink:
                         if r['cmd']['name']=='theme' and r['cmd']['sn']==self.d['serial']:
                             if self.localdata['theme']!='mono':
                                 self.localdata['theme']=r['cmd']['value']
-                                self.clk.setnextclockfacecolor(self, self.localdata['theme'])
+                                self.clk.setnextclockfacecolor(self.localdata['theme'])
                             self.logger.debug( u'[{}] rplink_command: hostname is chneged from {} to {}'.format(self.display,self.d['hostname'],r['cmd']['value']) )
                         # set hostname    
                         if r['cmd']['name']=='hostname' and r['cmd']['sn']==self.d['serial']:
