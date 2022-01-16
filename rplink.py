@@ -108,6 +108,15 @@ class rplink:
                             cp=proc.run(['/bin/timedatectl', 'set-time', curent_date_time[1] ])
                             if cp.returncode==0:
                                 self.goodtime=True
+
+                        # set hostname    
+                        if r['cmd']['name']=='theme' and r['cmd']['sn']==self.d['serial']:
+                            if self.localdata['theme']!='momo':
+                                global clk
+                                self.localdata['theme']=r['cmd']['value']
+                                clk.setnextclockfacecolor(self, self.localdata['theme'])
+                                
+                            self.logger.debug( u'[{}] rplink_command: hostname is chneged from {} to {}'.format(self.display,self.d['hostname'],r['cmd']['value']) )
                         # set hostname    
                         if r['cmd']['name']=='hostname' and r['cmd']['sn']==self.d['serial']:
                             h.hostname(r['cmd']['value'])
