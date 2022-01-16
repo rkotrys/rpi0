@@ -6,7 +6,7 @@ import Kbd2, Clock, rplink
 # global components
 kbd=None
 clk=None
-rpl=None
+#rpl=None
 def main():
     # global components
     global kbd, clk, rpl
