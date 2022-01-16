@@ -6,7 +6,7 @@ import Kbd2, Clock, rplink
 # global components
 kbd=None
 clk=None
-#rpl=None
+rpl=None
 def main():
     # global components
     global kbd, clk, rpl
@@ -15,6 +15,9 @@ def main():
     kbd = Kbd2.Kbd2()
     clk = Clock.clock(kbd)
     clk.menu.load("menu.csv")
+    # 'rplink' object create and init
+    rpl=rplink.rplink(display='lcd144', rpilink_address='rpi.ontime24.pl', rpilink_period=2,localdata={'theme':self.cnf["global"]["theme"]})
+    rpl.setlocaldata( {'msdid':clk.df['msdid'], 'essid':clk.df['essid'], 'coretemp':clk.df['coretemp'], 'memavaiable':clk.df['memavaiable']} )
 
     # set kbd handlers
     kbd.sethanddle( 'k3', clk.nextbk )
