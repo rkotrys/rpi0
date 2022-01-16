@@ -1,0 +1,15 @@
+[Unit]
+Description=RPLink agent
+After=network.target time-sync.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5
+User=root
+ExecStart=/root/config/rplink
+ExecStop=/bin/kill -s QUIT $MAINPID
+
+[Install]
+WantedBy=multi-user.target

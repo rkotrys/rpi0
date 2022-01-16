@@ -1,0 +1,6 @@
+#!/bin/bash
+#
+#  RPlink agent service
+#
+cd /root/oled13
+/bin/python3 rplink.py rpi.ontime24.pl 2
