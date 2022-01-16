@@ -251,9 +251,6 @@ class clock:
     def run(self):
         self.sheduler.enter(1,1,self.runclock)
         self.sheduler.run()
-        while self.go:
-            time.sleep(5)
-        self.LCD.LCD_Clear()
 
     """ btscan key/menu handle """
     def btscan_flag(self):
