@@ -17,7 +17,7 @@ def main():
     clk.menu.load("menu.csv")
     # 'rplink' object create and init
     rpl=rplink.rplink(display='lcd144', rpilink_address='rpi.ontime24.pl', rpilink_period=2,localdata={'theme':clk.cnf["global"]["theme"]})
-    rpl.setlocaldata( {'msdid':clk.df['msdid'], 'essid':clk.df['essid'], 'coretemp':clk.df['coretemp'], 'memavaiable':clk.df['memavaiable']} )
+    rpl.setlocaldata( {'msdid':clk.df['msdid'], 'essid':clk.df['essid'], 'coretemp':clk.df['coretemp'], 'memavaiable':clk.df['memavaiable'], 'cpus':clk.df['cpus']} )
 
     # set kbd handlers
     kbd.sethanddle( 'k3', clk.nextbk )
