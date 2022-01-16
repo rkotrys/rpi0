@@ -48,6 +48,7 @@ def main():
         clk.LCD.LCD_Clear()
 
     except IOError as e:
+        print(e)
         clk.go=False
         rpl.logger.debug( u'[{}] detect IOError {}'.format(rpl.display, e) )
         clk.LCD.LCD_Clear()
