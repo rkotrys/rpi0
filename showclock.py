@@ -1,4 +1,4 @@
-import time, sys
+import time, sys, signal
 #from functools import partial
 import RPi.GPIO as GPIO
 import Kbd2, Clock, rplink
