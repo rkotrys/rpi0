@@ -73,7 +73,7 @@ class clock:
         self.rpihub=False
         self.goodtime=False
         # 'rplink' object create and init
-        self.rplink=rplink.rplink(display='lcd144', parent=self, rpilink_address='rpi.ontime24.pl', rpilink_period=2,localdata={'theme':self.cnf["global"]["theme"]})
+        self.rplink=rplink.rplink(display='lcd144', rpilink_address='rpi.ontime24.pl', rpilink_period=2,localdata={'theme':self.cnf["global"]["theme"]})
         self.rplink.setlocaldata( {'msdid':self.df['msdid'], 'essid':self.df['essid'], 'coretemp':self.df['coretemp'], 'memavaiable':self.df['memavaiable']} )
         # print('global->theme-> ',self.cnf["global"]["theme"])
 
