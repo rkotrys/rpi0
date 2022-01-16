@@ -1,18 +1,16 @@
-import time, math,sys,sched
+import time, sched, sys
 import subprocess as proc
 import threading, requests, json, base64
 
 from PIL.ImageDraw import Draw
-#import numpy as np
-#import tr
 import LCD_1in44
 import LCD_Config
 
 from PIL import Image,ImageDraw,ImageFont,ImageColor,ImageFilter
 import Menu, Appconfig
-import helper as hlp
-import rplink_helper as rph
-import rplink as rplink
+import rplink
+# import helper_old as hlp
+import helper as rph
 
 class clock:
     images = ""

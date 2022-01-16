@@ -1,7 +1,6 @@
+#!/usr/bin/python
 # -*- coding:utf-8 -*-
-import time, datetime, sys, os, io
-import threading
-import subprocess as proc
+
 import RPi.GPIO as GPIO
 
 #GPIO define
