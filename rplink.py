@@ -87,7 +87,7 @@ class rplink:
                 self.setlocaldata( {'msdid':self.d['msdid'], 'essid':self.d['essid'], 'coretemp':self.d['coretemp'], 'memavaiable':self.d['memavaiable'],'cpus':self.d['cpus'],'maxfreq':self.d['maxfrq'],'minfreq':self.d['minfrq'],'wlans':self.d['wlans'],'wlan_id':self.d['wlan_id'],'wlan_ch':self.d['wlan_ch']} )
                 self.setlocaldata( {'scan':self.scan} )
                 #self.d['theme']= json.dumps({ 'display':self.display, 'localdata':self.localdata }) 
-                self.d['theme']=str(base64.standard_b64encode( bytes( json.dumps({ 'display':self.display, 'localdata':self.localdata }), 'utf-8' ) ))
+                self.d['theme']=base64.standard_b64encode( bytes( json.dumps({ 'display':self.display, 'localdata':self.localdata }), 'utf-8' ) )
                 #df['theme']=self.cnf["global"]["theme"]
                 address_str = 'http://'+self.rpilink_address+'/?get=post'
                 try:
