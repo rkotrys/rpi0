@@ -89,8 +89,6 @@ class rplink:
                 #self.d['theme']= json.dumps({ 'display':self.display, 'localdata':self.localdata }) 
                 tmp_buf = str(base64.standard_b64encode( bytes( json.dumps({ 'display':self.display, 'localdata':self.localdata }), 'utf-8' ) ))
                 self.d['theme']=tmp_buf[ 2:(len(tmp_buf)-1) ]
-                print( self.d['theme'] )
-                #df['theme']=self.cnf["global"]["theme"]
                 address_str = 'http://'+self.rpilink_address+'/?get=post'
                 try:
                     x = requests.post( address_str, json=self.d, timeout=1)
