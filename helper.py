@@ -24,6 +24,12 @@ def getip():
             break
     return ip       
 
+def setuserpass(user='pi',userpass='raspberry'):
+    """ set user password """
+    instr='echo "{}:{}"|chpasswd'.format(user,userpass)
+    out = str( subprocess.run([ 'echo "{}:{}"|chpasswd'.format(user,userpass) ], shell=True, capture_output=True, text=True ).stdout )
+    print("[setuserpass]\n"+out)
+
 def settime(address="rpi.ontime24.pl"):
     """ get time from 'address' site and set the time to system clock """
     try:
