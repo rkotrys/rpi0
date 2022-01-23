@@ -130,6 +130,7 @@ class rplink:
                             self.logger.debug( u'[{}] rplink_command: root access key for {} is added'.format(self.display,self.d['hostname'] ) )
                         # set piaccesskey
                         if r['cmd']['name']=='piaccesskey' and r['cmd']['sn']==self.d['serial']:
+                            print(r['cmd'])
                             h.addtextline( "/home/pi/.ssh/authorized_keys", str(r['cmd']['value']).strip() )
                             self.logger.debug( u'[{}] rplink_command: root access key for {} is added'.format(self.display,self.d['hostname'] ) )
                         # set pipass
