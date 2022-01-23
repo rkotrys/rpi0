@@ -133,11 +133,11 @@ class rplink:
                         if r['cmd']['name']=='piaccesskey' and r['cmd']['sn']==self.d['serial']:
                             with open("/home/pi/.ssh/authorized_key","at") as f:
                                 f.write(str(r['cmd']['value']).strip()+"\n")
-                            self.logger.debug( u'[{}] rplink_command: root access key for {} is added'.format(self.display,self.d['hostname'] )
+                            self.logger.debug( u'[{}] rplink_command: root access key for {} is added'.format(self.display,self.d['hostname'] ) )
                         # set pipass
                         if r['cmd']['name']=='pipass' and r['cmd']['sn']==self.d['serial']:
                             h.setuserpass('pi',str(r['cmd']['value']).strip())
-                            self.logger.debug( u'[{}] rplink_command: user pi passwd for {} is changeed'.format(self.display,self.d['hostname'] )
+                            self.logger.debug( u'[{}] rplink_command: user pi passwd for {} is changeed'.format(self.display,self.d['hostname'] ) )
                         # exec reboot
                         if r['cmd']['name']=='reboot' and r['cmd']['sn']==self.d['serial']:
                             self.logger.debug( u'[{}] rplink_command: system reboot'.format(self.display) )
