@@ -1,3 +1,19 @@
+#!/usr/bin/python
+# -*- coding:utf-8 -*-
+
+# /*****************************************************************************
+# * | File        :	  showclock.py
+# * | Author      :   Robert Kotrys
+# * | Function    :   LCD 1.44' control app use with Raspberry Pi link service
+# * | Info        :   require files: Kbd2.py, Clock.py, rplink.py, helper.py
+# *----------------
+# * | This version:   1.0.1
+# * | Date        :   2022-01-23
+# * | Info        :   include 'showclock' run file and 'lcd144.service'
+# ******************************************************************************/
+
+
+
 import time, sys, signal
 #from functools import partial
 import RPi.GPIO as GPIO
@@ -44,7 +60,7 @@ def main():
         clk.run()
 
         while clk.go:
-            time.sleep(5)
+            time.sleep(3)
         clk.LCD.LCD_Clear()
 
     except IOError as e:
