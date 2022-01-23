@@ -7,8 +7,8 @@
 # * | Function    :   Basic functions to use with Raspberry Pi devives
 # * | Info        :
 # *----------------
-# * | This version:   V1.0
-# * | Date        :   2022-01-09
+# * | This version:   V1.0.1
+# * | Date        :   2022-01-23
 # * | Info        :   
 # ******************************************************************************/
 
