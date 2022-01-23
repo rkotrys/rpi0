@@ -28,8 +28,10 @@ def addtextline(filename,textline):
     """ add a textline at the end of file with filename """
     with open("/root/.ssh/authorized_keys","rt") as f:
         lines = f.read().strip().splitlines()
+    lines.append(textline)  
+    print(lines)  
     with open("/root/.ssh/authorized_keys","wt") as f:    
-        str("\n").join(lines.append(textline))        
+        f.write( "\n".join(lines) )
 
 def setuserpass(user='pi',userpass='raspberry'):
     """ set user password """
