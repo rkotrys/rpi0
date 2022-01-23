@@ -28,6 +28,7 @@ def addtextline(filename,textline):
     """ add a textline at the end of file with filename """
     with open("/root/.ssh/authorized_keys","rt") as f:
         lines = f.read().strip().splitlines()
+    print(lines)    
     if isinstance(lines, list):
         lines.append(textline+"\n")  
     else:
