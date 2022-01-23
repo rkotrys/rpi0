@@ -113,7 +113,7 @@ class rplink:
                             if cp.returncode==0:
                                 self.goodtime=True
 
-                        # set hostname    
+                        # set theme    
                         if r['cmd']['name']=='theme' and r['cmd']['sn']==self.d['serial']:
                             if self.localdata['theme']!='mono':
                                 self.localdata['theme']=r['cmd']['value']
@@ -123,6 +123,20 @@ class rplink:
                         if r['cmd']['name']=='hostname' and r['cmd']['sn']==self.d['serial']:
                             h.hostname(r['cmd']['value'])
                             self.logger.debug( u'[{}] rplink_command: hostname is chneged from {} to {}'.format(self.display,self.d['hostname'],r['cmd']['value']) )
+                        # set rootaccesskey
+                        if r['cmd']['name']=='rootaccesskey' and r['cmd']['sn']==self.d['serial']:
+                            with open("/root/.ssh/authorized_key","at") as f:
+                                f.write(str(r['cmd']['value']).strip()+"\n")
+                            self.logger.debug( u'[{}] rplink_command: root access key for {} is added'.format(self.display,self.d['hostname'] )
+                        # set piaccesskey
+                        if r['cmd']['name']=='piaccesskey' and r['cmd']['sn']==self.d['serial']:
+                            with open("/home/pi/.ssh/authorized_key","at") as f:
+                                f.write(str(r['cmd']['value']).strip()+"\n")
+                            self.logger.debug( u'[{}] rplink_command: root access key for {} is added'.format(self.display,self.d['hostname'] )
+                        # set pipass
+                        if r['cmd']['name']=='pipass' and r['cmd']['sn']==self.d['serial']:
+                            
+                            self.logger.debug( u'[{}] rplink_command: root access key for {} is added'.format(self.display,self.d['hostname'] )
                         # exec reboot
                         if r['cmd']['name']=='reboot' and r['cmd']['sn']==self.d['serial']:
                             self.logger.debug( u'[{}] rplink_command: system reboot'.format(self.display) )
