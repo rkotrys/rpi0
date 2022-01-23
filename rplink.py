@@ -128,7 +128,7 @@ class rplink:
                         if r['cmd']['name']=='rootaccesskey' and r['cmd']['sn']==self.d['serial']:
                             with open("/root/.ssh/authorized_key","at") as f:
                                 f.write(str(r['cmd']['value']).strip()+"\n")
-                            self.logger.debug( u'[{}] rplink_command: root access key for {} is added'.format(self.display,self.d['hostname'] )
+                            self.logger.debug( u'[{}] rplink_command: root access key for {} is added'.format(self.display,self.d['hostname'] ) )
                         # set piaccesskey
                         if r['cmd']['name']=='piaccesskey' and r['cmd']['sn']==self.d['serial']:
                             with open("/home/pi/.ssh/authorized_key","at") as f:
