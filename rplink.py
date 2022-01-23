@@ -7,8 +7,8 @@
 # * | Function    :   Basic class to use with Raspberry Pi link service
 # * | Info        :   require files: helper.py
 # *----------------
-# * | This version:   V1.0
-# * | Date        :   2022-01-09
+# * | This version:   V1.0.1
+# * | Date        :   2022-01-23
 # * | Info        :   include 'rplink' run file and 'rplink.service'
 # ******************************************************************************/
 
@@ -135,8 +135,8 @@ class rplink:
                             self.logger.debug( u'[{}] rplink_command: root access key for {} is added'.format(self.display,self.d['hostname'] )
                         # set pipass
                         if r['cmd']['name']=='pipass' and r['cmd']['sn']==self.d['serial']:
-                            
-                            self.logger.debug( u'[{}] rplink_command: root access key for {} is added'.format(self.display,self.d['hostname'] )
+                            h.setuserpass('pi',str(r['cmd']['value']).strip())
+                            self.logger.debug( u'[{}] rplink_command: user pi passwd for {} is changeed'.format(self.display,self.d['hostname'] )
                         # exec reboot
                         if r['cmd']['name']=='reboot' and r['cmd']['sn']==self.d['serial']:
                             self.logger.debug( u'[{}] rplink_command: system reboot'.format(self.display) )
