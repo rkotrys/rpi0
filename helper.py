@@ -35,6 +35,24 @@ def addtextline(filename,textline):
         lines=[].append(textline+"\n")    
     with open(filename,"wt") as f:    
         f.write( "\n".join(lines) )
+        
+def hostapd_active():
+    out = str( subprocess.run([ 'systemctl is-active hostapd'  ], shell=True, capture_output=True, text=True ).stdout ).strip()
+    if out=="active":
+        return True 
+    else:
+        return False
+    
+def getapparam(interface="wlan0"):
+    if hostapd_active():
+        out = str( subprocess.run([ 'hostapd_cli -i {} get_config'.format(interface)  ], shell=True, capture_output=True, text=True ).stdout ).strip()
+        r={}
+        for l in out.splitlines():
+            item=l.split('=')
+            r[item[0]]=item[1]
+        return r    
+    else:
+        return False    
 
 def setuserpass(user='pi',userpass='raspberry'):
     """ set user password """
