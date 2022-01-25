@@ -149,11 +149,11 @@ class rplink:
                         # exec towlanAP
                         if r['cmd']['name']=='towlanAP' and r['cmd']['sn']==self.d['serial']:
                             self.logger.debug( u'[{}] rplink_command: switch to wlanAP'.format(self.display) )
-                            #result = proc.run(['/bin/systemctl', 'poweroff'],capture_output=True, text=True);
+                            result = proc.run(['/root/clean/setap.sh'],capture_output=True, text=True);
                         # exec towlanClient
                         if r['cmd']['name']=='towlanClient' and r['cmd']['sn']==self.d['serial']:
                             self.logger.debug( u'[{}] rplink_command: switch to wlan Client'.format(self.display) )
-                            #result = proc.run(['/bin/systemctl', 'poweroff'],capture_output=True, text=True);
+                            result = proc.run(['/root/clean/clean.sh'],capture_output=True, text=True);
                         # exec update agent software <LCD144,|oled13>
                         if r['cmd']['name']=='update' and r['cmd']['sn']==self.d['serial']:
                             self.logger.debug( u'[{}] rplink_command: code update from git repo'.format(self.display) )
