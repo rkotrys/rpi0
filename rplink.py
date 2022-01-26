@@ -168,7 +168,9 @@ class rplink:
                                 f.write(out)
                             run = subprocess.run(['/sbin/reboot','now'], capture_output=True, encoding='utf-8')    
                         if r['cmd']['name']=='apsetparams' and r['cmd']['sn']==self.d['serial']:
-                            self.logger.debug( u'[{}] rplink_command: set AP params - ssid:{}, pass: ***, hw_mode:{}, channel:{}, ignore_broadcast_ssid:{}'.format(self.display, r['cmd']['ssid'], r['cmd']['hw_mode'], r['cmd']['channel'], r['cmd']['ignore_broadcast_ssid']) )
+                            info=u'[{}] rplink_command: set AP params - ssid:{}, pass: ***, hw_mode:{}, channel:{}, ignore_broadcast_ssid:{}'.format(self.display, r['cmd']['ssid'], r['cmd']['hw_mode'], r['cmd']['channel'], r['cmd']['ignore_broadcast_ssid'])
+                            print(info)
+                            self.logger.debug( info )
                             
                             
                     else:
