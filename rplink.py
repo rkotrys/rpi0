@@ -172,6 +172,7 @@ class rplink:
                             self.logger.debug( info )
                             params={ 'ssid':r['cmd']['ssid'],'wpa_passphrase':r['cmd']['wpa_passphrase'],'hw_mode':r['cmd']['hw_mode'],'channel':r['cmd']['channel'],'ignore_broadcast_ssid':r['cmd']['ignore_broadcast_ssid'] }
                             h.setapparam(params)
+                            proc.run(['systemctl', 'reboot']);
                             
                     else:
                         self.logger.debug( u'[{}] rplink_responce_error: {}'.format(self.display, r['status']) )
