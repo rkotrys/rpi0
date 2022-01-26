@@ -73,11 +73,12 @@ def setapparam(params):
         item=l.strip().split('=')
         r[item[0].strip()]=item[1].strip()
     for item in params.keys():
-        r[item]=params[item]
+        if item in r.keys():
+            r[item]=params[item]
     with open( "/etc/hostapd/hostapd.conf",'wt') as f:
         buf=str('')
         for item in r.keys():
-            buf=buf+'='.join([item, r[item]]+'\n')
+            buf = buf + item + "=" + r[item] + '\n'
         f.write(buf)
         
 
