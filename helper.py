@@ -46,13 +46,40 @@ def hostapd_active():
 def getapparam(interface="wlan0"):
     if hostapd_active():
         out = str( subprocess.run([ 'hostapd_cli -i {} get_config'.format(interface)  ], shell=True, capture_output=True, text=True ).stdout ).strip()
+        out2 = str( subprocess.run([ 'hostapd_cli -i {} status'.format(interface)  ], shell=True, capture_output=True, text=True ).stdout ).strip()
         r={}
         for l in out.splitlines():
-            item=l.split('=')
+            item=l.strip().split('=')
             r[item[0]]=item[1]
+        for l in out2.splitlines():
+            item=l.strip().split('=')
+            if (item[0] in ['freq','channel','beacon_int','num_sta[0]','max_txpower']):
+                r[item[0]]=item[1]
+        with open( "/etc/hostapd/hostapd.conf",'rt') as f:
+            out3 = f.read().strip()
+        for l in out3.splitlines():
+            item=l.strip().split('=')
+            if (item[0].strip() in ['wpa_passphrase']):
+                r[item[0].strip()]=item[1].strip()
         return r    
     else:
         return False    
+    
+def setapparam(params):
+    with open( "/etc/hostapd/hostapd.conf",'rt') as f:
+        out3 = f.read().strip()
+    r = {}
+    for l in out3.splitlines():
+        item=l.strip().split('=')
+        r[item[0].strip()]=item[1].strip()
+    for item in params.keys():
+        r[item]=params[item]
+    with open( "/etc/hostapd/hostapd.conf",'wt') as f:
+        buf=str('')
+        for item in r.keys():
+            buf=buf+'='.join([item, r[item]]+'\n')
+        f.write(buf)
+        
 
 def setuserpass(user='pi',userpass='raspberry'):
     """ set user password """
