@@ -59,7 +59,7 @@ def getapparam(interface="wlan0"):
             out3 = f.read().strip()
         for l in out3.splitlines():
             item=l.strip().split('=')
-            if (item[0].strip() in ['wpa_passphrase']):
+            if (item[0].strip() in ['wpa_passphrase','country_code','interface','hw_mode','ignore_broadcast_ssid']):
                 r[item[0].strip()]=item[1].strip()
         return r    
     else:
