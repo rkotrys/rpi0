@@ -195,12 +195,12 @@ class clock:
         self.drawtemp(draw)
         self.drawhostname(draw)
         self.drawonline(draw)
+        self.drawbt(draw)
 
         tm = time.localtime()
         #print("time:",tm[3],tm[4],tm[5],"\n")
         im = Image.alpha_composite( im, self.drawhands( (tm[3],tm[4],tm[5]), (12, 22, 35), image ) )
-        draw = ImageDraw.Draw(im)
-        self.drawbt(draw)
+        
         return im
 
     """ thread """
