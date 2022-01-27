@@ -56,8 +56,8 @@ class clock:
         # show info flag
         self.showinfo = False
         # threads periods
-        self.rpilink_period = 3
-        self.isonline_period = 1
+#self.rpilink_period = 3
+#self.isonline_period = 1
         # temperature alarm
         self.temp_cpu_alarm = 50
         # set curent date time flag
@@ -162,11 +162,11 @@ class clock:
 
     def drawonline(self, draw):
         if self.isonline_flag:
-            if self.rpihub:
-                globe_color=self.cnf["clock"]["mem_color"]
+            if self.isapactive:
+                icon=clock.icons["ap"]
             else:
-                globe_color=self.cnf["clock"]["icons_color"]
-            draw.text( (64-8,31), chr(clock.icons["globe"])+u'', font=self.symbols, fill=tuple(globe_color) )
+                icon=clock.icons["globe"]
+            draw.text( (64-8,31), chr(icon)+u'', font=self.symbols, fill=tuple(self.cnf["clock"]["icons_color"]) )
 
     def drawhands( self, t, r, image ):
         x = int(image.size[0]/2)
