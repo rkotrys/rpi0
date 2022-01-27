@@ -47,7 +47,7 @@ class clock:
         self.df=rph.getrpiinfo()
         self.netdev=rph.getnetdev()
         # set is on-line flag
-        self.isonline_flag = rph.online_status( address=self.rpilink_address )
+        self.isonline_flag = False
         self.isapactive = rph.hostapd_active()
         # bluetooth params
         self.btscan = False
