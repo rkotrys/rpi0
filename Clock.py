@@ -150,7 +150,7 @@ class clock:
     def drawbt(self,draw):        
         draw.rectangle([(1,1),(17,17)], fill='#00000011', outline='#00000011', width=1)
         if self.btscan_show:
-            draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols, fill=tuple(self.cnf["btscan"]["btscan_color"]) )
+            draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols_large, fill=tuple(self.cnf["btscan"]["btscan_color"]) )
         else:            
             draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols, fill=tuple(self.cnf["clock"]["icons_color"]) )
 
@@ -191,7 +191,6 @@ class clock:
         draw = ImageDraw.Draw(im)
         
         self.drawnetwork(draw)
-        self.drawbt(draw)
         self.drawcpu(draw)       
         self.drawtemp(draw)
         self.drawhostname(draw)
@@ -200,6 +199,8 @@ class clock:
         tm = time.localtime()
         #print("time:",tm[3],tm[4],tm[5],"\n")
         im = Image.alpha_composite( im, self.drawhands( (tm[3],tm[4],tm[5]), (12, 22, 35), image ) )
+        draw = ImageDraw.Draw(im)
+        self.drawbt(draw)
         return im
 
     """ thread """
