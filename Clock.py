@@ -150,10 +150,10 @@ class clock:
     def drawbt(self,draw):        
         
         if self.btscan_show:
-            draw.rectangle([(1,1),(17,17)], fill='#00000011', outline='#00000011', width=1)
+            draw.rectangle([(1,1),(30,30)], fill='#00000011', outline='#00000011', width=1)
             draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols_large, fill=tuple(self.cnf["btscan"]["btscan_color"]) )
         else:
-            draw.rectangle([(1,1),(30,30)], fill='#00000011', outline='#00000011', width=1)
+            draw.rectangle([(1,1),(17,17)], fill='#00000011', outline='#00000011', width=1)
             draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols, fill=tuple(self.cnf["clock"]["icons_color"]) )
 
     def drawonline(self, draw):
