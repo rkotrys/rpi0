@@ -46,7 +46,7 @@ class rplink:
         self.localdata=localdata
         proc.run(['/bin/timedatectl', 'set-ntp', 'false' ])
         # start
-        self.x_checklink = threading.Thread( name='checklink', target=self.checklink, args=(), daemon=True)
+        self.x_checklink = threading.Thread( name='checklink', target=self.checklink, args=(self.rpilink_address,self.rplink_period), daemon=True)
         self.x_rpilink = threading.Thread( name='rpilink', target=self.rpilink, args=(), daemon=True)
         self.x_get_wlans = threading.Thread( name='get_wlans', target=self.get_wlans, args=(), daemon=True)
         self.x_checklink.start()
@@ -66,11 +66,13 @@ class rplink:
     def stop(self):
         self.go=False
 
-    def checklink(self,address='8.8.8.8'):
+    def checklink(self,address='8.8.8.8',period=1):
         """ thread """
         while self.go:
+            time.sleep(period)
             self.isonline=h.online_status(address)
-            time.sleep(self.rplink_period)
+            if self.clk!=None:
+                self.clk.isonline_flag=self.isonline
 
     def get_wlans(self):
         """ thread """
