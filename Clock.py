@@ -8,7 +8,7 @@ import LCD_Config
 
 from PIL import Image,ImageDraw,ImageFont,ImageColor,ImageFilter
 import Menu, Appconfig
-import rplink
+# import rplink
 # import helper_old as hlp
 import helper as rph
 
@@ -48,6 +48,7 @@ class clock:
         self.netdev=rph.getnetdev()
         # set is on-line flag
         self.isonline_flag = rph.online_status( address=self.rpilink_address )
+        self.isapactive = rph.hostapd_active()
         # bluetooth params
         self.btscan = False
         self.btscan_show = False

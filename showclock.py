@@ -38,13 +38,14 @@ def main():
         signal.signal(signal.SIGHUP, sighup_handler)
     
         # init global components
+        # keyboard driver
         kbd = Kbd2.Kbd2()
-        clk = Clock.clock(kbd)
-        clk.menu.load("menu.csv")
-        # 'rplink' object create and init
+        # 'rplink' and 'Clock' object create and init
         rpl=rplink.rplink(display='lcd144', rpilink_address=link_address, rpilink_period=link_period,localdata={'theme':clk.cnf["global"]["theme"]})
+        clk = Clock.clock(kbd)
         rpl.set_clk_insance(clk)
         rpl.setlocaldata( {'msdid':clk.df['msdid'], 'essid':clk.df['essid'], 'coretemp':clk.df['coretemp'], 'memavaiable':clk.df['memavaiable'], 'cpus':clk.df['cpus']} )
+        clk.menu.load("menu.csv")
 
         # set kbd handlers
         kbd.sethanddle( 'k3', clk.nextbk )
