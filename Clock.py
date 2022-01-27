@@ -296,8 +296,7 @@ class clock:
         else:
             self.info = u'host: ' + self.df['hostname']
             if self.isapactive:
-                #self.info = self.info + u'\nAP: {}\npass: "{}"'.format(self.df.AP['ssid'], self.df.AP['wpa_passphrase'])
-                print( self.rpl.AP.keys() )
+                self.info = self.info + u'\nAP: {}\npass: "{}"'.format(self.rpl.AP['ssid'], self.rpl.AP['wpa_passphrase'])
             for dev in self.netdev:
                 self.info = self.info + u"\n{}:\n{}\n{}".format( dev, self.netdev[dev][1], self.netdev[dev][2] )
             self.showinfo = True
