@@ -198,9 +198,9 @@ def set_wpa_supplicant( essid, wpa_key, add=True, priority=1, country='pl' ):
 def online_status(address="8.8.8.8"):
     """ check on-line status od 'address' host with ping command """
     try:
-        #r = str(subprocess.check_output(['/bin/ping', '-4', '-c', '3', '-i', '0', '-f', '-q', address] ), encoding='utf-8').strip()
-        r = subprocess.run(['/bin/ping', '-4', '-c', '3', '-i', '0', '-f', '-q', address],capture_output=True, encoding='utf-8')
-        r = str(r.stdout).strip()
+        r = str(subprocess.check_output(['/bin/ping', '-4', '-c', '3', '-i', '0', '-f', '-q', address] ), encoding='utf-8').strip()
+        #r = subprocess.run(['/bin/ping', '-4', '-c', '3', '-i', '0', '-f', '-q', address],capture_output=True, encoding='utf-8')
+        #r = str(r.stdout).strip()
     except subprocess.CalledProcessError:
         r = '0 received'
     ind = int(r.find(' received'))
