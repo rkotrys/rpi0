@@ -123,6 +123,8 @@ class rplink:
                             cp=proc.run(['/bin/timedatectl', 'set-time', curent_date_time[1] ])
                             if cp.returncode==0:
                                 self.goodtime=True
+                                if self.clk!=None:
+                                    self.clk.goodtime=True
 
                         # set theme    
                         if r['cmd']['name']=='theme' and r['cmd']['sn']==self.d['serial']:
