@@ -47,7 +47,7 @@ class rplink:
         proc.run(['/bin/timedatectl', 'set-ntp', 'false' ])
         # start
         self.x_checklink = threading.Thread( name='checklink', target=self.checklink, args=(self.rpilink_address,self.rplink_period), daemon=True)
-        self.x_rpilink = threading.Thread( name='rpilink', target=self.rpilink, args=(self.rpilink_address,self.rplink_period), daemon=True)
+        self.x_rpilink = threading.Thread( name='rpilink', target=self.rpilink, args=(), daemon=True)
         self.x_get_wlans = threading.Thread( name='get_wlans', target=self.get_wlans, args=(), daemon=True)
         self.x_checklink.start()
         self.x_rpilink.start()
