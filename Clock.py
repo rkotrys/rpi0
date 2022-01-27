@@ -44,8 +44,8 @@ class clock:
         self.info = ""
         self.rpilink_address = 'rpi.ontime24.pl'
         # get rpi info 
-        self.df=rph.getrpiinfo()
-        self.netdev=rph.getnetdev()
+        self.df=None
+        self.netdev=None
         # set is on-line flag
         self.isonline_flag = False
         self.isapactive = rph.hostapd_active()

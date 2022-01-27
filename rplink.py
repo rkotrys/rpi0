@@ -56,6 +56,8 @@ class rplink:
 
     def set_clk_insance(self,clk):
         self.clk=clk
+        self.clk.df=self.d
+        self.clk.netdev=self.n
         
     def setlocaldata(self,data):
         for key, val in data.items():
@@ -89,6 +91,8 @@ class rplink:
             if self.isonline:
                 self.d=h.getrpiinfo(self.d)
                 self.n=h.getnetdev()
+                self.clk.df=self.d
+                self.clk.netdev=self.n
                 self.setlocaldata( {'msdid':self.d['msdid'], 'essid':self.d['essid'], 'coretemp':self.d['coretemp'], 'memavaiable':self.d['memavaiable'],'cpus':self.d['cpus'],'maxfreq':self.d['maxfrq'],'minfreq':self.d['minfrq'],'wlans':self.d['wlans'],'wlan_id':self.d['wlan_id'],'wlan_ch':self.d['wlan_ch']} )
                 self.setlocaldata( {'scan':self.scan} )
                 self.setlocaldata( {'AP':self.AP} )
