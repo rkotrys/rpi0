@@ -96,10 +96,13 @@ class clock:
         # threads ******************************
         self.x_cpuload = threading.Thread( name='cpuload', target=self.runcpu, args=(), daemon=True)
         self.x_cpuload.start()
-        self.x_isonline = threading.Thread( name='isonline', target=self.isonline, args=(), daemon=True)
-        self.x_isonline.start()
+        #self.x_isonline = threading.Thread( name='isonline', target=self.isonline, args=(), daemon=True)
+        #self.x_isonline.start()
         # end threads **************************
 
+    """ set ref to rpl 'rplink' object """
+    def set_rpl(self,rpl):
+        self.rpl=rpl        
 
     """ thread """
     def isonline(self):

@@ -46,6 +46,7 @@ def main():
         rpl.set_clk_insance(clk)
         rpl.setlocaldata( {'msdid':clk.df['msdid'], 'essid':clk.df['essid'], 'coretemp':clk.df['coretemp'], 'memavaiable':clk.df['memavaiable'], 'cpus':clk.df['cpus']} )
         clk.menu.load("menu.csv")
+        clk.set_rpl(rpl)
 
         # set kbd handlers
         kbd.sethanddle( 'k3', clk.nextbk )
