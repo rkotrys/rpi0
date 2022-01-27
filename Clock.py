@@ -123,14 +123,13 @@ class clock:
         draw.rectangle([(0,127),(3,int(127*(1 - self.mem/100.0)))], fill=tuple(self.cnf["clock"]["mem_color"]), outline=tuple(self.cnf["clock"]["mem_color_outline"]), width=1)
 
     def drawtemp(self,draw):
-        with open('/sys/class/thermal/thermal_zone0/temp','r') as f:
-            tempraw = f.read()
-        temp=rph.gettemp()    
-        if temp > self.temp_cpu_alarm:
+        #with open('/sys/class/thermal/thermal_zone0/temp','r') as f:
+        #    tempraw = f.read()
+        if self.df['coretemp'] > self.temp_cpu_alarm:
             color=(255,0,0)
         else:
             color=tuple(self.cnf["clock"]["icons_color"])
-        self.msg = u"{:2.0f}".format(temp) + u'°'
+        self.msg = u"{:2.0f}".format(self.df['coretemp']) + u'°'
         draw.text( ((128-self.font.getsize('40')[0])/2,82), self.msg, font=self.font, fill=color )
 
     def drawhostname(self,draw):
