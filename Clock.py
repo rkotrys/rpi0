@@ -32,6 +32,8 @@ class clock:
         self.kbd = kbd
         # menu driver
         self.menu = Menu.Menu( (128,128), [(3,63-12),(125,63+15)], self )
+        # rplink service - initialize after clock init
+        self.rpl=None
         # run flag
         self.go = True
         # state data
@@ -70,11 +72,6 @@ class clock:
         # flags
         self.rpihub=False
         self.goodtime=False
-#        # 'rplink' object create and init
-#        self.rplink=rplink.rplink(display='lcd144', rpilink_address='rpi.ontime24.pl', rpilink_period=2,localdata={'theme':self.cnf["global"]["theme"]})
-#        self.rplink.setlocaldata( {'msdid':self.df['msdid'], 'essid':self.df['essid'], 'coretemp':self.df['coretemp'], 'memavaiable':self.df['memavaiable']} )
-        # print('global->theme-> ',self.cnf["global"]["theme"])
-
         # clock face 'theme' 
         self.themes={}
         for n in self.cnf["clock"]["faces"]:
@@ -207,23 +204,11 @@ class clock:
 
     """ thread """
     def runclock(self):
-#        if not self.goodtime:
-#            if self.curent_date_time != False:
-#                proc.run(['/bin/timedatectl', 'set-ntp', 'false' ])
-#                #print("STOP",self.curent_date_time[0]," ",self.curent_date_time[1],"\n");
-#                proc.run(['/bin/timedatectl', 'set-time', self.curent_date_time[0] ])
-#                #print("DATE: "+self.curent_date_time[0]+"\n")
-#                cp=proc.run(['/bin/timedatectl', 'set-time', self.curent_date_time[1] ])
-#                #print("TIME: "+self.curent_date_time[1]+"\n")
-#                if cp.returncode==0:
-#                    self.goodtime=True
-#                    time.sleep(5)
         if self.go:
-            #print("runclock: \n")
             self.sheduler.enter(1,1,self.runclock)
-        self.netdev = rph.getnetdev()
+        #self.netdev = rph.getnetdev()
         im = self.drowclockface()
-        """ KEY2 - buttons action """
+        """ showinfo buttons action """
         if self.showinfo:
            imtext = Image.new( "RGBA", self.clock_image.size, (0,0,0,0) )
            drawtext = ImageDraw.Draw(imtext)
@@ -294,7 +279,7 @@ class clock:
         clock.cnf.save()
         
 
-    """  buttons on right callbaks """
+    """  buttons on right - callbaks """
     def sinfo2( self=None, pin=None ):
         """ KEY1 """
         if self.showinfo==True:
@@ -303,8 +288,6 @@ class clock:
             buf=str(proc.check_output(['df','-h'] ), encoding='utf-8').strip().splitlines()[1].strip().split()
             self.info = u'SN: ' + self.df['serial'] + u'\nChip: ' + self.df['chip'] + u'\nArch: ' + self.df['machine'] + u'\nRaspberry Pi OS'+ u'\n' + self.df['version'] + u'\nCore: ' + self.df['release'] + u'\nPTUUID: ' + self.df['puuid'] + '\nFS: ' + buf[1] + ', ' + buf[3] + ' free' + u'\nRAM: {:4.2f} GB'.format(float(self.df['memtotal']))
             self.showinfo = True
-        #print("EXIT!")
-        #self.go = False
 
     def sinfo(self, pin ):
         """ KEY2 """
@@ -312,6 +295,8 @@ class clock:
             self.showinfo = False
         else:
             self.info = u'host: ' + self.df['hostname']
+            if self.isapactive:
+                self.info = self.info + u'\nAP: {}\npass: "{}"'.format(self.df.AP['ssid'], self.df.AP['wpa_passphrase'])
             for dev in self.netdev:
                 self.info = self.info + u"\n{}:\n{}\n{}".format( dev, self.netdev[dev][1], self.netdev[dev][2] )
             self.showinfo = True
