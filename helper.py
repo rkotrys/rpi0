@@ -59,7 +59,7 @@ def getap_stalist():
         l=line.strip().split()
         ip=l[1].strip().replace('(','',1).replace(')','',1)
         name=l[0].strip
-        hosts[l[4].strip()]={ 'ip':ip, 'hostname':name }
+        hosts[l[3].strip()]={ 'ip':ip, 'hostname':name }
     for mac in sta:
         if mac in hosts.keys():
             sta[mac]['ip']=hosts[mac]['ip']
