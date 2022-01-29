@@ -92,6 +92,8 @@ class rplink:
                 self.d=h.getrpiinfo(self.d)
                 self.n=h.getnetdev()
                 self.AP=h.getapparam()
+                if self.AP!=False:
+                    
                 if self.clk!=None:
                     self.clk.df=self.d
                     self.clk.netdev=self.n
