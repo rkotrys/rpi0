@@ -49,7 +49,7 @@ def getap_stalist():
     for line in out:
         if line.strip().split()[0]=='Station':
             station=line.strip().split()[1]
-            sta[station]={}
+            sta[station]={'mac':station}
         else:
             l=line.strip().split(':')
             sta[station][l[0].strip()]=l[1].strip()
