@@ -93,7 +93,7 @@ class rplink:
                 self.n=h.getnetdev()
                 self.AP=h.getapparam()
                 if self.AP!=False:
-                    pass
+                    self.AP['stations']=h.getap_stalist()
                 if self.clk!=None:
                     self.clk.df=self.d
                     self.clk.netdev=self.n
