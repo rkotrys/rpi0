@@ -53,6 +53,20 @@ def getap_stalist():
         else:
             l=line.strip().split(':')
             sta[station][l[0].strip()]=l[1].strip()
+    hosts={}        
+    out = str( subprocess.run([ 'arp -i wlan0 -a' ], shell=True, capture_output=True, text=True ).stdout ).strip().splitlines()
+    for line in out:
+        l=line.strip().split()
+        ip=l[1].strip().replace('(','',1).replace(')','',1)
+        name=l[0].strip
+        hosts[l[4].strip()]={ 'ip':ip, 'hostname':name }
+    for mac in sta:
+        if mac in hosts.keys():
+            sta[mac]['ip']=hosts[mac]['ip']
+            sta[mac]['hostname']=hosts[mac]['hostname']
+        else:
+            sta[mac]['ip']='--'
+            sta[mac]['hostname']='--'
     return sta        
         
         
