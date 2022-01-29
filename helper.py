@@ -67,7 +67,7 @@ def getap_stalist():
         else:
             sta[mac]['ip']='--'
             sta[mac]['hostname']='--'
-    return sta        
+    return (sta, hosts)        
         
         
     
