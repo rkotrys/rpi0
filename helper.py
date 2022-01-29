@@ -43,6 +43,20 @@ def hostapd_active():
     else:
         return False
     
+def getap_stalist():
+    sta={}
+    out = str( subprocess.run([ 'iw wlan0 station dump' ], shell=True, capture_output=True, text=True ).stdout ).strip().splitlines()
+    for line in out:
+        if line.strip().split()[0]=='Station':
+            station=line.strip().split()[1]
+            sta[station]={}
+        else:
+            l=line.strip().split(':')
+            sta[station][l[0].strip()]=l[1].strip()
+    return sta        
+        
+        
+    
 def getapparam(interface="wlan0"):
     if hostapd_active():
         out = str( subprocess.run([ 'hostapd_cli -i {} get_config'.format(interface)  ], shell=True, capture_output=True, text=True ).stdout ).strip()
