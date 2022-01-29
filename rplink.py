@@ -53,6 +53,7 @@ class rplink:
         self.x_rpilink.start()
         if self.AP!=False:
             self.x_get_wlans.start()
+            print('\nscan for wlans is started\n')
 
     def set_clk_insance(self,clk):
         self.clk=clk
