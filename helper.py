@@ -143,7 +143,7 @@ def setip(ip='192.168.99.1/24', interface='wlan0', mode='static'):
             if len(val)==0 or val[0]=='#':
                 continue
             if val.split('=')[0]=='dhcp-range':
-                range=val.split('=')[0].strip().split(',')
+                range=val.split('=')[1].strip().split(',')
                 af=range[0].split('.')
                 at=range[1].split('.')
                 mask=range[2]
