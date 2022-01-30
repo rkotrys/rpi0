@@ -116,7 +116,8 @@ def setip(ip='192.168.99.1/24', interface='wlan0', mode='static'):
     with open( "/etc/dhcpcd.conf",'rt') as f:
         out = f.readlines()
     for inx, val in enumerate(out):
-        val=val.strip().replace('\n','')
+        val=val.strip()
+        out[inx]=val
         if len(val)==0 or val[0]=='#':
             continue
         if val=='interface '+interface:
