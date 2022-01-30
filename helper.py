@@ -125,9 +125,9 @@ def setip(ip='192.168.99.1/24', interface='wlan0', mode='static'):
                 if out[inx+1].split('=')[0].strip()=='static ip_address':
                     out[inx+1]='static ip_address='+ip
         if mode=='fallback':
-            if val.split('=')[0]=='fallback':
-                out[inx]='fallback='+interface
-            if val=='profile '+interface:
+            if out[inx].split('=')[0]=='fallback':
+                out[inx]='fallback=static_'+interface
+            if val=='profile static_'+interface:
                 if out[inx+1].split('=')[0].strip()=='static ip_address':
                     out[inx+1]='static ip_address='+ip
     #print( '\n'.join(out) )            
