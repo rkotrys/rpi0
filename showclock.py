@@ -49,7 +49,7 @@ def main():
         clk.set_rpl(rpl)
 
         # set kbd handlers
-        kbd.sethanddle( 'k3', clk.nextbk )
+        # kbd.sethanddle( 'k3', clk.nextbk )
         kbd.sethanddle( 'k2', clk.sinfo )
         kbd.sethanddle( 'k1', clk.sinfo2 )
         kbd.sethanddle( 'left', clk.menu.start )
