@@ -112,7 +112,7 @@ def setapparam(params):
         f.write(buf)
 
 def setip(ip='192.168.99.1/24', interface='wlan0', mode='static'):
-    """ set IP and mask on interface, mode= 'static'|'falback' """
+    """ set IP and mask on interface, mode= 'static'|'fallback' """
     with open( "/etc/dhcpcd.conf",'rt') as f:
         out = f.readlines()
     for inx, val in enumerate(out):
@@ -120,10 +120,20 @@ def setip(ip='192.168.99.1/24', interface='wlan0', mode='static'):
         out[inx]=val
         if len(val)==0 or val[0]=='#':
             continue
-        if val=='interface '+interface:
-            if out[inx+1].split('=')[0].strip()=='static ip_address':
-                out[inx+1]='static ip_address='+ip
-    print( '\n'.join(out) )            
+        if mode=='static':
+            if val=='interface '+interface:
+                if out[inx+1].split('=')[0].strip()=='static ip_address':
+                    out[inx+1]='static ip_address='+ip
+        if mode=='fallback':
+            if val.split('=')[0]=='fallback':
+                out[inx]='fallback='+interface
+            if val=='profile '+interface:
+                if out[inx+1].split('=')[0].strip()=='static ip_address':
+                    out[inx+1]='static ip_address='+ip
+    #print( '\n'.join(out) )            
+    with open( "/etc/dhcpcd.conf",'wt') as f:
+        f.write('\n'.join(out))
+    
                 
     
 
