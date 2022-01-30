@@ -134,6 +134,31 @@ def setip(ip='192.168.99.1/24', interface='wlan0', mode='static'):
     with open( "/etc/dhcpcd.conf",'wt') as f:
         f.write('\n'.join(out)+'\n')
 
+    if interface=='wlan0' and mode=='static':
+        with open( "/etc/dnsmasq.conf",'rt') as f:
+            out = f.readlines()
+        for inx, val in enumerate(out):
+            val=val.strip()
+            out[inx]=val
+            if len(val)==0 or val[0]=='#':
+                continue
+            if val.split('=')[0]=='dhcp-range':
+                range=val.split('=')[0].strip().split(',')
+                af=range[0].split('.')
+                at=range[1].split('.')
+                mask=range[2]
+                lt=range[3]
+                newip=str(ip).split('/')[0].split('.')
+                newip[3]=af[3]
+                naf='.'.join(newip)
+                newip[3]=at[3]
+                nat='.'.join(newip)
+                out[inx]='dhcp-range={},{},{},{}'.format(naf,nat,mask,lt)
+    with open( "/etc/dnsmasq.conf",'wt') as f:
+        f.write('\n'.join(out)+'\n')
+                
+        
+
 def setuserpass(user='pi',userpass='raspberry'):
     """ set user password """
     out = str( subprocess.run([ 'echo "{}:{}"|chpasswd'.format(user,userpass) ], shell=True, capture_output=True, text=True ).stdout )
