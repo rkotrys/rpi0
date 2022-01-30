@@ -122,7 +122,7 @@ def setip(ip='192.168.99.1/24', interface='wlan0', mode='static'):
         if val=='interface '+interface:
             if out[inx+1].split('=')[0].strip()=='static ip_address':
                 out[inx+1]='static ip_address='+ip
-    print( '\n'.join(out) )            
+    print( ''.join(out) )            
                 
     
 
