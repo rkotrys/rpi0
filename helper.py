@@ -116,13 +116,13 @@ def setip(ip='192.168.99.1/24', interface='wlan0', mode='static'):
     with open( "/etc/dhcpcd.conf",'rt') as f:
         out = f.readlines()
     for inx, val in enumerate(out):
-        val=val.strip()
+        val=val.strip().replace('\n','')
         if len(val)==0 or val[0]=='#':
             continue
         if val=='interface '+interface:
             if out[inx+1].split('=')[0].strip()=='static ip_address':
                 out[inx+1]='static ip_address='+ip
-    print( ''.join(out) )            
+    print( '\n'.join(out) )            
                 
     
 
