@@ -37,6 +37,7 @@ def addtextline(filename,textline):
         f.write( "\n".join(lines) )
         
 def hostapd_active():
+    """ check hostapd.service is active """
     out = str( subprocess.run([ 'systemctl is-active hostapd'  ], shell=True, capture_output=True, text=True ).stdout ).strip()
     if out=="active":
         return True 
@@ -44,6 +45,7 @@ def hostapd_active():
         return False
     
 def getap_stalist():
+    """ read detail information on STA asociated with AP as a dictionary od MAC of SATA """
     sta={}
     out = str( subprocess.run([ 'iw wlan0 station dump' ], shell=True, capture_output=True, text=True ).stdout ).strip().splitlines()
     for line in out:
@@ -68,9 +70,9 @@ def getap_stalist():
             sta[mac]['hostname']='--'
     return sta 
         
-        
     
 def getapparam(interface="wlan0"):
+    """ read main params of AP and return dictionary or false if AP is not active """
     if hostapd_active():
         out = str( subprocess.run([ 'hostapd_cli -i {} get_config'.format(interface)  ], shell=True, capture_output=True, text=True ).stdout ).strip()
         out2 = str( subprocess.run([ 'hostapd_cli -i {} status'.format(interface)  ], shell=True, capture_output=True, text=True ).stdout ).strip()
@@ -93,6 +95,7 @@ def getapparam(interface="wlan0"):
         return False    
     
 def setapparam(params):
+    """ set/update AP params from dictionary 'params' to hostapd.conf """
     with open( "/etc/hostapd/hostapd.conf",'rt') as f:
         out3 = f.read().strip()
     r = {}
@@ -107,7 +110,21 @@ def setapparam(params):
         for item in r.keys():
             buf = buf + item + "=" + r[item] + '\n'
         f.write(buf)
-        
+
+def setip(ip='192.168.99.1/24', interface='wlan0', mode='static'):
+    """ set IP and mask on interface, mode= 'static'|'falback' """
+    with open( "/etc/dhcpcd.conf",'rt') as f:
+        out = f.readlines()
+    for inx, val in enumerate(out):
+        val=val.strip()
+        if len(val)==0 or val[0]=='#':
+            continue
+        if val=='interface '+interface:
+            if out[inx+1].split('=').strip()=='static ip_address':
+                out[inx+1]='static ip_address='+ip
+    print( '\n'.join(out) )            
+                
+    
 
 def setuserpass(user='pi',userpass='raspberry'):
     """ set user password """
