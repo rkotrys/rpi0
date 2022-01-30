@@ -133,9 +133,6 @@ def setip(ip='192.168.99.1/24', interface='wlan0', mode='static'):
     #print( '\n'.join(out) )            
     with open( "/etc/dhcpcd.conf",'wt') as f:
         f.write('\n'.join(out)+'\n')
-    
-                
-    
 
 def setuserpass(user='pi',userpass='raspberry'):
     """ set user password """
