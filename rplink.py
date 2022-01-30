@@ -167,10 +167,12 @@ class rplink:
                         if r['cmd']['name']=='towlanClient' and r['cmd']['sn']==self.d['serial']:
                             self.logger.debug( u'[{}] rplink_command: switch to wlan Client'.format(self.display) )
                             result = proc.run(['/root/clean/clean.sh'],capture_output=True, text=True);
-                        # set pipass
+                        # set updatewlan0ip
                         if r['cmd']['name']=='updatewlan0ip' and r['cmd']['sn']==self.d['serial']:
                             h.setip(str(r['cmd']['value']).strip(),'wlan0','static')
                             self.logger.debug( u'[{}] rplink_command: IP for wlan0 update to {} for{}'.format(self.display, str(r['cmd']['value']).strip(), self.d['hostname'] ) )
+                            #self.logger.debug( u'[{}] rplink_command: system reboot'.format(self.display) )
+                            #proc.run(['/bin/systemctl', 'reboot'],capture_output=True, text=True);
                         # exec update agent software <LCD144,|oled13>
                         if r['cmd']['name']=='update' and r['cmd']['sn']==self.d['serial']:
                             self.logger.debug( u'[{}] rplink_command: code update from git repo'.format(self.display) )
