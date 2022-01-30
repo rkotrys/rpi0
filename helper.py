@@ -154,8 +154,8 @@ def setip(ip='192.168.99.1/24', interface='wlan0', mode='static'):
                 newip[3]=at[3]
                 nat='.'.join(newip)
                 out[inx]='dhcp-range={},{},{},{}'.format(naf,nat,mask,lt)
-    with open( "/etc/dnsmasq.conf",'wt') as f:
-        f.write('\n'.join(out)+'\n')
+        with open( "/etc/dnsmasq.conf",'wt') as f:
+            f.write('\n'.join(out)+'\n')
                 
         
 
