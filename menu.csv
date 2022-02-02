@@ -1,10 +1,8 @@
 Label,type,exec
 #Set Wifi|DHCP,f,showtemp
-Del all Eth0 IP,f,./delip eth0 all
+CLEAN config,f,/root/clean/clean.sh
 Set Et: .1.24,f,./setip eth0 192.168.1.40/24
 Del Et: .1.24,f,./delip eth0 192.168.1.40/24 
-Set Et: .10.24,f,./setip eth0 192.168.10.40/24
-Del Et: .10.24,f,./delip eth0 192.168.10.40/24 
 eth0 UP,f,ifconfig eth0 up
 eth0 DOWN,f,ifconfig eth0 down
 REBOOT,f,reboot now
