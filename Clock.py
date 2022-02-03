@@ -158,10 +158,7 @@ class clock:
 
     def drawonline(self, draw):
         if self.isonline_flag:
-            if self.isapactive:
-                icon=clock.icons["ap"]
-            else:
-                icon=clock.icons["globe"]
+            icon=clock.icons["globe"]
             draw.text( (64-8,31), chr(icon)+u'', font=self.symbols, fill=tuple(self.cnf["clock"]["icons_color"]) )
 
     def drawhands( self, t, r, image ):
