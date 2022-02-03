@@ -95,6 +95,7 @@ class rplink:
                 if self.AP!=False:
                     self.AP['bridge']=True if 'br0' in self.n.keys() else False;
                     self.AP['stations']=h.getap_stalist()
+                    self.AP['br0']='--' if self.AP['bridge']==False else self.n['br0'][1]
                 if self.clk!=None:
                     self.clk.df=self.d
                     self.clk.netdev=self.n
