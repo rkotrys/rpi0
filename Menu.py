@@ -28,7 +28,8 @@ class Menu:
         for item in arg.split(' '):
             if item != '':
                 a.append(item)
-        r = str(proc.check_output( a ), encoding='utf-8').strip()
+        result = proc.run([arg],shell=True,capture_output=True,encoding='utf-8');        
+        #r = str(proc.check_output( a ), encoding='utf-8').strip()
         #print( label, r, '\n' )
         menu.active = False
         #return r
