@@ -297,7 +297,11 @@ class clock:
             self.info = u'host: ' + self.df['hostname']
             if self.isapactive:
                 self.info = self.info + u'\nWL: {}\nPS: {}'.format(self.rpl.AP['ssid'], self.rpl.AP['wpa_passphrase'])
+            bridgeflag = True if 'br0' in self.netdev.keys() else False;
             for dev in self.netdev:
+                if bridgeflag:
+                    if dev in ['eth0', 'wlan0']:
+                        continue
                 self.info = self.info + u"\n{}:\n{}\n{}".format( dev, self.netdev[dev][1], self.netdev[dev][2] )
             self.showinfo = True
             #print(self.info)
