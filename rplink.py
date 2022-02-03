@@ -163,6 +163,9 @@ class rplink:
                             result = proc.run(['/bin/systemctl', 'poweroff'],capture_output=True, text=True);
                         # exec towlanAP
                         if r['cmd']['name']=='towlanAP' and r['cmd']['sn']==self.d['serial']:
+                            if self.clk!=None:
+                                self.clk.info=u'\n\n\n\ switch to AP mode\n and RELOAD'
+                                self.clk.showinfo=True
                             self.logger.debug( u'[{}] rplink_command: switch to wlanAP'.format(self.display) )
                             result = proc.run(['/root/clean/setap.sh >/root/clean/setap.log'],shell=True,capture_output=True,encoding='utf-8');
                             result = proc.run(['/bin/systemctl', 'reboot'],capture_output=True, text=True);
