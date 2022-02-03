@@ -291,7 +291,7 @@ def getnetdev():
     netdev={}
     with open('/proc/net/dev','r') as f:
         dev = f.read()
-        for devname in ['eth0', 'eth1', 'wlan0', 'wlan1']:
+        for devname in ['br0', 'eth0', 'eth1', 'wlan0', 'wlan1']:
             if dev.find(devname) > -1:
                 buf = str(subprocess.check_output([ 'ip', '-4', 'address', 'show', 'dev', devname ]), encoding='utf-8')
                 if len(buf)>1: 
