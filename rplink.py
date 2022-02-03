@@ -93,6 +93,7 @@ class rplink:
                 self.n=h.getnetdev()
                 self.AP=h.getapparam()
                 if self.AP!=False:
+                    self.AP['bridge']=True if 'br0' in self.n.keys() else False;
                     self.AP['stations']=h.getap_stalist()
                 if self.clk!=None:
                     self.clk.df=self.d
@@ -163,6 +164,10 @@ class rplink:
                         if r['cmd']['name']=='towlanAP' and r['cmd']['sn']==self.d['serial']:
                             self.logger.debug( u'[{}] rplink_command: switch to wlanAP'.format(self.display) )
                             result = proc.run(['/root/clean/setap.sh'],capture_output=True, text=True);
+                        # exec towlanBridgeAP
+                        if r['cmd']['name']=='towlanBridgeAP' and r['cmd']['sn']==self.d['serial']:
+                            self.logger.debug( u'[{}] rplink_command: switch to towlanBridgeAP'.format(self.display) )
+                            result = proc.run(['/root/clean/setbrap.sh'],capture_output=True, text=True);
                         # exec towlanClient
                         if r['cmd']['name']=='towlanClient' and r['cmd']['sn']==self.d['serial']:
                             self.logger.debug( u'[{}] rplink_command: switch to wlan Client'.format(self.display) )
