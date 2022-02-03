@@ -163,15 +163,18 @@ class rplink:
                         # exec towlanAP
                         if r['cmd']['name']=='towlanAP' and r['cmd']['sn']==self.d['serial']:
                             self.logger.debug( u'[{}] rplink_command: switch to wlanAP'.format(self.display) )
-                            result = proc.run(['/root/clean/setap.sh'],capture_output=True, text=True);
+                            result = proc.run(['/root/clean/setap.sh >/root/clean/setap.log'],shell=True,capture_output=True,encoding='utf-8');
+                            result = proc.run(['/bin/systemctl', 'reboot'],capture_output=True, text=True);
                         # exec towlanBridgeAP
                         if r['cmd']['name']=='towlanBridgeAP' and r['cmd']['sn']==self.d['serial']:
                             self.logger.debug( u'[{}] rplink_command: switch to towlanBridgeAP'.format(self.display) )
-                            result = proc.run(['/root/clean/setbrap.sh'],capture_output=True, text=True);
+                            result = proc.run(['/root/clean/setbrap.sh >/root/clean/setbrap.log'],shell=True,capture_output=True,encoding='utf-8');
+                            result = proc.run(['/bin/systemctl', 'reboot'],capture_output=True, text=True);
                         # exec towlanClient
                         if r['cmd']['name']=='towlanClient' and r['cmd']['sn']==self.d['serial']:
                             self.logger.debug( u'[{}] rplink_command: switch to wlan Client'.format(self.display) )
-                            result = proc.run(['/root/clean/clean.sh'],capture_output=True, text=True);
+                            result = proc.run(['/root/clean/clean.sh >/root/clean/clean.log'],shell=True,capture_output=True,encoding='utf-8');
+                            result = proc.run(['/bin/systemctl', 'reboot'],capture_output=True, text=True);
                         # set updatewlan0ip
                         if r['cmd']['name']=='updatewlan0ip' and r['cmd']['sn']==self.d['serial']:
                             h.setip(str(r['cmd']['value']).strip(),'wlan0','static')
