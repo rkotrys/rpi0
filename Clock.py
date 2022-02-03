@@ -144,6 +144,8 @@ class clock:
                 #break
         if wififlag and ethflag:
             symbol = chr(clock.icons["wifi_eth"])+u''
+        if self.rpi.AP!=False:
+            symbol = chr(clock.icons["ap"])+u''
         draw.rectangle([(128-17,1),(128,18)], fill='#00000011', outline='#00000011', width=1)
         draw.text( (128-17,1), symbol, font=self.symbols, fill=tuple(self.cnf["clock"]["icons_color"]) )
 
