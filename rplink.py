@@ -155,32 +155,47 @@ class rplink:
                             self.logger.debug( u'[{}] rplink_command: user pi passwd for {} is changeed'.format(self.display,self.d['hostname'] ) )
                         # exec reboot
                         if r['cmd']['name']=='reboot' and r['cmd']['sn']==self.d['serial']:
+                            if self.clk!=None:
+                                self.clk.info=u'\n\n!!!\n system RELOAD\n!!!'
+                                self.clk.showinfo=True
                             self.logger.debug( u'[{}] rplink_command: system reboot'.format(self.display) )
                             result = proc.run(['/bin/systemctl', 'reboot'],capture_output=True, text=True);
                         # exec poweroff
                         if r['cmd']['name']=='poweroff' and r['cmd']['sn']==self.d['serial']:
+                            if self.clk!=None:
+                                self.clk.info=u'\n\n!!!\n system POWER OFF\n!!!'
+                                self.clk.showinfo=True
                             self.logger.debug( u'[{}] rplink_command: system poweroff'.format(self.display) )
                             result = proc.run(['/bin/systemctl', 'poweroff'],capture_output=True, text=True);
                         # exec towlanAP
                         if r['cmd']['name']=='towlanAP' and r['cmd']['sn']==self.d['serial']:
                             if self.clk!=None:
-                                self.clk.info=u'\n\n\n\ switch to AP mode\n and RELOAD'
+                                self.clk.info=u'\n\n!!!\n switch to:\n Routed AP mode\n and RELOAD\n!!!'
                                 self.clk.showinfo=True
                             self.logger.debug( u'[{}] rplink_command: switch to wlanAP'.format(self.display) )
                             result = proc.run(['/root/clean/setap.sh >/root/clean/setap.log'],shell=True,capture_output=True,encoding='utf-8');
                             result = proc.run(['/bin/systemctl', 'reboot'],capture_output=True, text=True);
                         # exec towlanBridgeAP
                         if r['cmd']['name']=='towlanBridgeAP' and r['cmd']['sn']==self.d['serial']:
+                            if self.clk!=None:
+                                self.clk.info=u'\n\n!!!\n switch to:\n Bridged AP mode\n and RELOAD\n!!!'
+                                self.clk.showinfo=True
                             self.logger.debug( u'[{}] rplink_command: switch to towlanBridgeAP'.format(self.display) )
                             result = proc.run(['/root/clean/setbrap.sh >/root/clean/setbrap.log'],shell=True,capture_output=True,encoding='utf-8');
                             result = proc.run(['/bin/systemctl', 'reboot'],capture_output=True, text=True);
                         # exec towlanClient
                         if r['cmd']['name']=='towlanClient' and r['cmd']['sn']==self.d['serial']:
+                            if self.clk!=None:
+                                self.clk.info=u'\n\n!!!\n switch to:\n WLAN Station mode\n and RELOAD\n!!!'
+                                self.clk.showinfo=True
                             self.logger.debug( u'[{}] rplink_command: switch to wlan Client'.format(self.display) )
                             result = proc.run(['/root/clean/clean.sh >/root/clean/clean.log'],shell=True,capture_output=True,encoding='utf-8');
                             result = proc.run(['/bin/systemctl', 'reboot'],capture_output=True, text=True);
                         # set updatewlan0ip
                         if r['cmd']['name']=='updatewlan0ip' and r['cmd']['sn']==self.d['serial']:
+                            if self.clk!=None:
+                                self.clk.info=u'\n\n!!!\n update IP to:\n '+str(r['cmd']['value']).strip()+'\n and RELOAD\n!!!'
+                                self.clk.showinfo=True
                             h.setip(str(r['cmd']['value']).strip(),'wlan0','static')
                             self.logger.debug( u'[{}] rplink_command: IP for wlan0 update to {} for{}'.format(self.display, str(r['cmd']['value']).strip(), self.d['hostname'] ) )
                             self.logger.debug( u'[{}] rplink_command: system reboot'.format(self.display) )
