@@ -43,6 +43,29 @@ def hostapd_active():
         return True 
     else:
         return False
+
+def bluetooth_activ():
+    """ test bluetooth rfcomm status """
+    out = str( subprocess.run([ 'systemctl is-active rfcomm'  ], shell=True, capture_output=True, text=True ).stdout ).strip()
+    if out=="active":
+        return True 
+    else:
+        return False
+
+def getbluetooth_activ():
+    """ read bluetooth status info """
+    out = str( subprocess.run([ 'echo "show\n"|blutoothctl'  ], shell=True, capture_output=True, text=True ).stdout ).strip().splitlines()
+    bt={}
+    for line in out:
+        line=line.strip()
+        if line.split()[0]=="Controller":
+            bt['Controler']=line.split()[1]
+            continue
+        l=line.strip().split(":")[0]
+        if l in ['Name','Powered','Discoverable','Pairable','Discovering']:
+            bt[l]=line.strip().split(":")[0]
+    return bt        
+        
     
 def getap_stalist():
     """ read detail information on STA asociated with AP as a dictionary od MAC of SATA """
