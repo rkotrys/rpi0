@@ -63,7 +63,7 @@ def getbluetooth_info():
             continue
         l=line.strip().split(":")[0]
         if l in ['Name','Powered','Discoverable','Pairable','Discovering']:
-            bt[l]=line.strip().split(":")[0]
+            bt[l]=line.strip().split(":")[1]
     return bt        
         
     
