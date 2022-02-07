@@ -68,6 +68,8 @@ def getbluetooth_info():
     devices={}
     for line in out:
         l=line.strip().split()
+        if l[0]!='Device':
+            continue
         if len(l)>2:
             devices[l[1]]=l[2]
         else:
@@ -78,6 +80,8 @@ def getbluetooth_info():
     paired={}
     for line in out:
         l=line.strip().split()
+        if l[0]!='Device':
+            continue
         if len(l)>2:
             paired[l[1]]=l[2]
         else:    
