@@ -362,6 +362,7 @@ def getrpiinfo(dictionary=True, df={} ):
         df['wlan_id'] = '--'
         df['wlan_ch'] = '--'
     df['coretemp']=gettemp()
+    df['bluetooth']=getbluetooth_info()
     # static
     if newdata:
         r = subprocess.run(['/bin/lscpu'], capture_output=True, encoding='utf-8')
