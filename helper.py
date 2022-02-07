@@ -54,7 +54,7 @@ def bluetooth_activ():
 
 def getbluetooth_info():
     """ read bluetooth status info """
-    out = str( subprocess.run([ 'echo "show\n"|bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout ).strip().splitlines()
+    out = str( subprocess.run([ 'echo -e "show\n"|bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout ).strip().splitlines()
     bt={}
     for line in out:
         line=line.strip()
@@ -64,6 +64,24 @@ def getbluetooth_info():
         l=line.strip().split(":")[0]
         if l in ['Name','Powered','Discoverable','Pairable','Discovering']:
             bt[l]=line.strip().split(":")[1]
+    out = str( subprocess.run([ 'echo -e "devices\n"|bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout ).strip().splitlines()        
+    devices={}
+    for line in out:
+        l=line.strip().split()
+        if len(l)>2:
+            devices[l[1]]=l[2]
+        else:    
+            devices[l[1]]='--'
+    bt['devices']=devices        
+    out = str( subprocess.run([ 'echo -e "paired-devices\n"|bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout ).strip().splitlines()        
+    paired={}
+    for line in out:
+        l=line.strip().split()
+        if len(l)>2:
+            paired[l[1]]=l[2]
+        else:    
+            paired[l[1]]='--'
+    bt['paired']=devices        
     return bt        
         
     
