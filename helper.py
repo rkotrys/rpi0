@@ -52,6 +52,17 @@ def bluetooth_activ():
     else:
         return False
 
+def get_bluetoothscan():
+    """ scan bluetooth with hcitool """
+    out = str( subprocess.run([ 'hcitool scan'  ], shell=True, capture_output=True, text=True ).stdout ).strip().splitlines()
+    devices={}
+    for line in out:
+        l=line.strip().split()
+        if l[0]=='Scanning':
+            continue
+        devices[l[1]]=l[0]
+    return devices
+
 def getbluetooth_info():
     """ read bluetooth status info """
     out = str( subprocess.run([ 'echo "show\n"|bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout ).strip().splitlines()
