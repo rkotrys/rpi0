@@ -161,6 +161,14 @@ class rplink:
                         if r['cmd']['name']=='btconnect' and r['cmd']['sn']==self.d['serial']:
                             h.btconnect( str( r['cmd']['value']).strip() )
                             self.logger.debug( u'[{}] rplink_command: bluetootch connect to {}'.format(self.display,self.d['hostname'], str( r['cmd']['value']).strip() ) )
+                        # exec btdisconnect
+                        if r['cmd']['name']=='btdisconnect' and r['cmd']['sn']==self.d['serial']:
+                            h.btdisconnect( str( r['cmd']['value']).strip() )
+                            self.logger.debug( u'[{}] rplink_command: bluetootch disconnect from {}'.format(self.display,self.d['hostname'], str( r['cmd']['value']).strip() ) )
+                        # exec btremove
+                        if r['cmd']['name']=='btremove' and r['cmd']['sn']==self.d['serial']:
+                            h.btremove( str( r['cmd']['value']).strip() )
+                            self.logger.debug( u'[{}] rplink_command: remove bluetootch device {}'.format(self.display,self.d['hostname'], str( r['cmd']['value']).strip() ) )
                         # exec reboot
                         if r['cmd']['name']=='reboot' and r['cmd']['sn']==self.d['serial']:
                             if self.clk!=None:
