@@ -32,6 +32,7 @@ class rplink:
         self.d=h.getrpiinfo()
         self.n=h.getnetdev()
         self.AP=h.getapparam()
+        self.bthosts={}
         self.go=True
         self.isonline=False
         self.rpihub=False
@@ -93,6 +94,7 @@ class rplink:
                 self.d=h.getrpiinfo(self.d)
                 self.n=h.getnetdev()
                 self.AP=h.getapparam()
+                self.d['bluetooth']['bthosts']=self.bthosts
                 if self.AP!=False:
                     self.AP['bridge']=True if 'br0' in self.n.keys() else False;
                     self.AP['stations']=h.getap_stalist()
