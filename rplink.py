@@ -80,9 +80,10 @@ class rplink:
     def get_wlans(self):
         """ thread """
         while self.go:
-            time.sleep(1.5)
+            time.sleep(2)
             self.scan = h.get_wlans()
-            time.sleep(9.33)
+            self.bthosts=h.get_bluetoothscan()
+            time.sleep(15)
         
     def rpilink(self):
         """ thread """
