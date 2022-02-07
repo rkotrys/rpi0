@@ -60,7 +60,7 @@ def get_bluetoothscan():
         l=line.strip().split()
         if l[0]=='Scanning':
             continue
-        devices[l[1]]=l[0]
+        devices[l[0]]=l[1]
     return devices    
     #return '\n'.join(out)
 
