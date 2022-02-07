@@ -64,7 +64,7 @@ def getbluetooth_info():
         l=line.strip().split(":")[0]
         if l in ['Name','Powered','Discoverable','Pairable','Discovering']:
             bt[l]=line.strip().split(":")[1]
-            
+    return bt        
     out = str( subprocess.run([ 'echo -e "devices\n"|bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout ).strip().splitlines()        
     devices={}
     for line in out:
