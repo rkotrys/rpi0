@@ -102,6 +102,7 @@ class rplink:
                 self.setlocaldata( {'msdid':self.d['msdid'], 'essid':self.d['essid'], 'coretemp':self.d['coretemp'], 'memavaiable':self.d['memavaiable'],'cpus':self.d['cpus'],'maxfreq':self.d['maxfrq'],'minfreq':self.d['minfrq'],'wlans':self.d['wlans'],'wlan_id':self.d['wlan_id'],'wlan_ch':self.d['wlan_ch']} )
                 self.setlocaldata( {'scan':self.scan} )
                 self.setlocaldata( {'AP':self.AP} )
+                self.setlocaldata( {'bluetooth':self.d['bluetooth']} )
                 #self.d['theme']= json.dumps({ 'display':self.display, 'localdata':self.localdata }) 
                 tmp_buf = str(base64.standard_b64encode( bytes( json.dumps({ 'display':self.display, 'localdata':self.localdata }), 'utf-8' ) ))
                 self.d['theme']=tmp_buf[ 2:(len(tmp_buf)-1) ]
