@@ -44,7 +44,7 @@ def hostapd_active():
     else:
         return False
 
-def bluetooth_activ():
+def bluetooth_activ():  
     """ test bluetooth rfcomm status """
     out = str( subprocess.run([ 'systemctl is-active rfcomm'  ], shell=True, capture_output=True, text=True ).stdout ).strip()
     if out=="active":
