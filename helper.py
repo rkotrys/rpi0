@@ -54,7 +54,7 @@ def bluetooth_activ():
 
 def getbluetooth_info():
     """ read bluetooth status info """
-    out = str( subprocess.run([ 'echo "show\n"|blutoothctl'  ], shell=True, capture_output=True, text=True ).stdout ).strip().splitlines()
+    out = str( subprocess.run([ 'echo "show\n"|bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout ).strip().splitlines()
     bt={}
     for line in out:
         line=line.strip()
