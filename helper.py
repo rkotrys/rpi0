@@ -61,7 +61,8 @@ def get_bluetoothscan():
         if l[0]=='Scanning':
             continue
         devices[l[1]]=l[0]
-    return '\n'.join(out)
+    return devices    
+    #return '\n'.join(out)
 
 def getbluetooth_info():
     """ read bluetooth status info """
