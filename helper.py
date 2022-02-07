@@ -70,7 +70,8 @@ def getbluetooth_info():
         l=line.strip().split()
         if len(l)>2:
             devices[l[1]]=l[2]
-        else:    
+        else:
+            print(l)    
             devices[l[1]]='--'
     bt['devices']=devices        
     out = str( subprocess.run([ 'echo -e "paired-devices\n"|bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout ).strip().splitlines()        
