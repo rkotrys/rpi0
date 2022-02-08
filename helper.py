@@ -105,12 +105,6 @@ def btdiscover():
     out = str( subprocess.run([ 'echo pairable on\n"|bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout )
     out = str( subprocess.run([ 'echo discoverable on\n"|bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout )
 
-def btconnect(address):
-    out = str( subprocess.run([ 'echo unblock '+address+'"\n"|bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout )
-    out = str( subprocess.run([ 'echo trust '+address+'"\n"|bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout )
-    out = str( subprocess.run([ 'echo pair '+address+'"\n"|bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout )
-    out = str( subprocess.run([ 'echo connect '+address+'"\n"|bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout )
-
 def btremove(address):
     out = str( subprocess.run([ 'echo disconnect '+address+'"\n"|bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout )
     out = str( subprocess.run([ 'echo remove '+address+'"\n"|bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout )

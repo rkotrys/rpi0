@@ -50,6 +50,7 @@ class rplink:
         self.x_checklink = threading.Thread( name='checklink', target=self.checklink, args=(self.rpilink_address,self.rplink_period), daemon=True)
         self.x_rpilink = threading.Thread( name='rpilink', target=self.rpilink, args=(), daemon=True)
         self.x_get_wlans = threading.Thread( name='get_wlans', target=self.get_wlans, args=(), daemon=True)
+        self.x_runbtscan= threading.Thread( name='runbtscan', target=self.runbtscan, args=() )
         self.x_checklink.start()
         self.x_rpilink.start()
         if self.AP==False:
@@ -67,6 +68,11 @@ class rplink:
     def getlocaldata(self):
         return self.localdata
     
+    def runbtscan(self):
+        self.bthosts=h.get_bluetoothscan()
+        return 0
+
+    
     def stop(self):
         self.go=False
 
@@ -81,10 +87,9 @@ class rplink:
     def get_wlans(self):
         """ thread """
         while self.go:
-            time.sleep(2)
+            time.sleep(1)
             self.scan = h.get_wlans()
-            self.bthosts=h.get_bluetoothscan()
-            time.sleep(15)
+            time.sleep(9)
         
     def rpilink(self):
         """ thread """
@@ -165,6 +170,10 @@ class rplink:
                         if r['cmd']['name']=='btremove' and r['cmd']['sn']==self.d['serial']:
                             h.btremove( str( r['cmd']['value']).strip() )
                             self.logger.debug( u'[{}] rplink_command: remove bluetootch device {}'.format(self.display,self.d['hostname'], str( r['cmd']['value']).strip() ) )
+                        # exec btscan
+                        if r['cmd']['name']=='btscan' and r['cmd']['sn']==self.d['serial']:
+                            self.x_runbtscan.start()
+                            self.logger.debug( u'[{}] rplink_command: bluetooth can start'.format(self.display,self.d['hostname'], str( r['cmd']['value']).strip() ) )
                         # exec reboot
                         if r['cmd']['name']=='reboot' and r['cmd']['sn']==self.d['serial']:
                             if self.clk!=None:
