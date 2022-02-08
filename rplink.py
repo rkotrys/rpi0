@@ -173,7 +173,7 @@ class rplink:
                         # exec btscan
                         if r['cmd']['name']=='btscan' and r['cmd']['sn']==self.d['serial']:
                             self.x_runbtscan.start()
-                            self.logger.debug( u'[{}] rplink_command: bluetooth can start'.format(self.display,self.d['hostname'], str( r['cmd']['value']).strip() ) )
+                            self.logger.debug( u'[{}] rplink_command: bluetooth start scanninf for devices, str( r['cmd']['value']).strip() ) )
                         # exec reboot
                         if r['cmd']['name']=='reboot' and r['cmd']['sn']==self.d['serial']:
                             if self.clk!=None:
