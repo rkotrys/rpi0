@@ -33,6 +33,7 @@ class rplink:
         self.n=h.getnetdev()
         self.AP=h.getapparam()
         self.bthosts={}
+        self.bthostsflag=True
         self.go=True
         self.isonline=False
         self.rpihub=False
@@ -73,7 +74,10 @@ class rplink:
     
     def runbtscan(self):
         """ thread """
-        self.bthosts=h.get_bluetoothscan()
+        if self.bthostsflag:
+            self.bthostsflag=False
+            self.bthosts=h.get_bluetoothscan()
+            self.bthostsflag=True
         return 0
     
     def checklink(self,address='8.8.8.8',period=1):
