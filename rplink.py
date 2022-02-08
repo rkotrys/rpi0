@@ -165,15 +165,15 @@ class rplink:
                         # exec btdiscover
                         if r['cmd']['name']=='btdiscover' and r['cmd']['sn']==self.d['serial']:
                             h.btdiscover()
-                            self.logger.debug( u'[{}] rplink_command: bluetootch discoverable on'.format(self.display,self.d['hostname'], str( r['cmd']['value']).strip() ) )
+                            self.logger.debug( u'[{}] rplink_command: bluetootch discoverable on'.format(self.display) )
                         # exec btremove
                         if r['cmd']['name']=='btremove' and r['cmd']['sn']==self.d['serial']:
                             h.btremove( str( r['cmd']['value']).strip() )
-                            self.logger.debug( u'[{}] rplink_command: remove bluetootch device {}'.format(self.display,self.d['hostname'], str( r['cmd']['value']).strip() ) )
+                            self.logger.debug( u'[{}] rplink_command: remove bluetootch device {}'.format(self.display, str( r['cmd']['value']).strip() ) )
                         # exec btscan
                         if r['cmd']['name']=='btscan' and r['cmd']['sn']==self.d['serial']:
                             self.x_runbtscan.start()
-                            self.logger.debug( u'[{}] rplink_command: bluetooth start scanninf for devices, str( r['cmd']['value']).strip() ) )
+                            self.logger.debug( u'[{}] rplink_command: bluetooth start scanninf for devices'.format( self.display ) )
                         # exec reboot
                         if r['cmd']['name']=='reboot' and r['cmd']['sn']==self.d['serial']:
                             if self.clk!=None:
