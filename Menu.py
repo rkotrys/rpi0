@@ -25,10 +25,6 @@ class Menu:
     def myexec( self, label='', menu=False, arg=False ):
         if arg==False:
             return
-        a = []
-        for item in arg.split(' '):
-            if item != '':
-                a.append(item)
         result = proc.run([arg],shell=True,capture_output=True,encoding='utf-8');        
         #r = str(proc.check_output( a ), encoding='utf-8').strip()
         #print( label, r, '\n' )
