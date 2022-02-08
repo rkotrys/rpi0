@@ -74,8 +74,6 @@ class rplink:
     
     def runbtscan(self):
         """ thread """
-        if self.bthostsflag:
-            self.bthostsflag=False
             self.bthosts=h.get_bluetoothscan()
             self.bthostsflag=True
         return 0
@@ -180,8 +178,11 @@ class rplink:
                             self.logger.debug( u'[{}] rplink_command: remove bluetootch device {}'.format(self.display, str( r['cmd']['value']).strip() ) )
                         # exec btscan
                         if r['cmd']['name']=='btscan' and r['cmd']['sn']==self.d['serial']:
-                            self.x_runbtscan.start()
-                            self.logger.debug( u'[{}] rplink_command: bluetooth start scanninf for devices'.format( self.display ) )
+                             if self.bthostsflag:
+                                self.bthostsflag=False
+                                self.x_runbtscan.start()
+                                self.bthostsflag=True
+                                self.logger.debug( u'[{}] rplink_command: bluetooth start scanninf for devices'.format( self.display ) )
                         # exec reboot
                         if r['cmd']['name']=='reboot' and r['cmd']['sn']==self.d['serial']:
                             if self.clk!=None:
