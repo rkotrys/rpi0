@@ -66,7 +66,7 @@ def get_bluetoothscan():
 
 def getbluetooth_info():
     """ read bluetooth status info """
-    out = str( subprocess.run([ 'echo "show\n"|bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout ).strip().splitlines()
+    out = str( subprocess.run([ 'echo "show\n"|/bin/bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout ).strip().splitlines()
     bt={}
     for line in out:
         line=line.strip()
@@ -76,7 +76,7 @@ def getbluetooth_info():
         l=line.strip().split(":")[0]
         if l in ['Name','Powered','Discoverable','Pairable','Discovering']:
             bt[l]=line.strip().split(":")[1]
-    out = str( subprocess.run([ 'echo "devices\n"|bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout ).strip().splitlines()        
+    out = str( subprocess.run([ 'echo "devices\n"|/bin/bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout ).strip().splitlines()        
     devices={}
     for line in out:
         l=line.strip().split()
@@ -87,7 +87,7 @@ def getbluetooth_info():
         else:
             devices[l[1]]='--'
     bt['devices']=devices        
-    out = str( subprocess.run([ 'echo "paired-devices\n"|bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout ).strip().splitlines()        
+    out = str( subprocess.run([ 'echo "paired-devices\n"|/bin/bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout ).strip().splitlines()        
     paired={}
     for line in out:
         l=line.strip().split()
@@ -101,13 +101,13 @@ def getbluetooth_info():
     return bt        
 
 def btdiscover():
-    out = str( subprocess.run([ 'echo power on\n"|bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout )
-    out = str( subprocess.run([ 'echo pairable on\n"|bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout )
-    out = str( subprocess.run([ 'echo discoverable on\n"|bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout )
+    out = str( subprocess.run([ 'echo power on\n"|/bin/bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout )
+    out = str( subprocess.run([ 'echo pairable on\n"|/bin/bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout )
+    out = str( subprocess.run([ 'echo discoverable on\n"|/bin/bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout )
 
 def btremove(address):
-    out = str( subprocess.run([ 'echo disconnect '+address+'"\n"|bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout )
-    out = str( subprocess.run([ 'echo remove '+address+'"\n"|bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout )
+    out = str( subprocess.run([ 'echo disconnect '+address+'"\n"|/bin/bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout )
+    out = str( subprocess.run([ 'echo remove '+address+'"\n"|/bin/bluetoothctl'  ], shell=True, capture_output=True, text=True ).stdout )
     
 def getap_stalist():
     """ read detail information on STA asociated with AP as a dictionary od MAC of SATA """
