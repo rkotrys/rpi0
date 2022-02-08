@@ -6,7 +6,7 @@ StartLimitIntervalSec=0
 [Service]
 Type=simple
 Restart=always
-RestartSec=5
+RestartSec=20
 User=root
 ExecStart=/root/lcd144/showclock
 ExecStop=/bin/kill -s QUIT $MAINPID
