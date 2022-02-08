@@ -166,6 +166,10 @@ class rplink:
                         if r['cmd']['name']=='btdiscover' and r['cmd']['sn']==self.d['serial']:
                             h.btdiscover()
                             self.logger.debug( u'[{}] rplink_command: bluetootch discoverable on'.format(self.display) )
+                        # exec btdiscoveroff
+                        if r['cmd']['name']=='btdiscoveroff' and r['cmd']['sn']==self.d['serial']:
+                            h.btdiscoveroff()
+                            self.logger.debug( u'[{}] rplink_command: bluetootch discoverable off'.format(self.display) )
                         # exec btremove
                         if r['cmd']['name']=='btremove' and r['cmd']['sn']==self.d['serial']:
                             h.btremove( str( r['cmd']['value']).strip() )
