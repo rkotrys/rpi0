@@ -105,6 +105,10 @@ def btdiscover():
     out = str( subprocess.run([ '/bin/bluetoothctl pairable on'  ], shell=True, capture_output=True, text=True ).stdout )
     out = str( subprocess.run([ '/bin/bluetoothctl discoverable on'  ], shell=True, capture_output=True, text=True ).stdout )
 
+def btdiscoveroff():
+    out = str( subprocess.run([ '/bin/bluetoothctl pairable off'  ], shell=True, capture_output=True, text=True ).stdout )
+    out = str( subprocess.run([ '/bin/bluetoothctl discoverable off'  ], shell=True, capture_output=True, text=True ).stdout )
+
 def btremove(address):
     out = str( subprocess.run([ '/bin/bluetoothctl disconnect '+address  ], shell=True, capture_output=True, text=True ).stdout )
     out = str( subprocess.run([ '/bin/bluetoothctl remove '+address  ], shell=True, capture_output=True, text=True ).stdout )
