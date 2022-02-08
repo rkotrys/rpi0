@@ -74,8 +74,7 @@ class rplink:
     
     def runbtscan(self):
         """ thread """
-            self.bthosts=h.get_bluetoothscan()
-            self.bthostsflag=True
+        self.bthosts=h.get_bluetoothscan()
         return 0
     
     def checklink(self,address='8.8.8.8',period=1):
