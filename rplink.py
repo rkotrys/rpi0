@@ -87,9 +87,9 @@ class rplink:
     def get_wlans(self):
         """ thread """
         while self.go:
-            time.sleep(1)
+            time.sleep(5)
             self.scan = h.get_wlans()
-            time.sleep(9)
+            time.sleep(5)
         
     def rpilink(self):
         """ thread """
