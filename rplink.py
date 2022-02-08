@@ -50,7 +50,7 @@ class rplink:
         self.x_checklink = threading.Thread( name='checklink', target=self.checklink, args=(self.rpilink_address,self.rplink_period), daemon=True)
         self.x_rpilink = threading.Thread( name='rpilink', target=self.rpilink, args=(), daemon=True)
         self.x_get_wlans = threading.Thread( name='get_wlans', target=self.get_wlans, args=(), daemon=True)
-        self.x_runbtscan= threading.Thread( name='runbtscan', target=self.runbtscan, args=() )
+        self.x_runbtscan= threading.Thread( name='runbtscan', target=self.runbtscan, args=(),  daemon=True)
         self.x_checklink.start()
         self.x_rpilink.start()
         if self.AP==False:
@@ -65,17 +65,17 @@ class rplink:
         for key, val in data.items():
             self.localdata[key]=val
 
+    def stop(self):
+        self.go=False
+
     def getlocaldata(self):
         return self.localdata
     
     def runbtscan(self):
+        """ thread """
         self.bthosts=h.get_bluetoothscan()
         return 0
-
     
-    def stop(self):
-        self.go=False
-
     def checklink(self,address='8.8.8.8',period=1):
         """ thread """
         while self.go:
