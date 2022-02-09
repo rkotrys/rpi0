@@ -271,6 +271,8 @@ class clock:
             self.sheduler.enter( self.cnf["btscan"]["btscan_period"],100,self.btscan_run )
         self.bt_th = threading.Thread( name='btscan_exec', target=self.btscan_exec, args=(), daemon=True)
         self.bt_th.start()
+        self.info="\n\n!!!\nBluetooth scan\n  scan time: 10s\n!!!"
+        self.showinfo=True
 
     """ thread """
     def btscan_exec(self):
