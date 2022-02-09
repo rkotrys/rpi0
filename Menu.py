@@ -64,7 +64,6 @@ class Menu:
 
     def show(self):
         if self.active:
-            self.count=self.contmax
             im = Image.new('RGBA',(128,128),tuple(self.cnf["menu"]["bg_color"]))
             dr = ImageDraw.Draw(im)
 
