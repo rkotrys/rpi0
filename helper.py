@@ -105,6 +105,7 @@ def getbluetooth_info():
             l=line.strip().split(':')
             if l[0].strip()=='Connected' and l[1].strip()=='yes':
                 bt['connected']=dev
+                print(dev)
     return bt        
 
 def btdiscover():
