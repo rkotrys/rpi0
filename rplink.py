@@ -78,7 +78,7 @@ class rplink:
         while self.go:
             if self.bthostsflag:
                 self.bthosts=h.get_bluetoothscan()
-                self.logger.debug( u'[{}] rplink_command: bluetooth finish scanning for devices'.format( self.display ) )
+                self.logger.debug( u'[{}] rplink_command: bluetooth scan END'.format( self.display ) )
                 self.bthostsflag=False
             else:
                 time.sleep(1)
@@ -185,7 +185,7 @@ class rplink:
                         if r['cmd']['name']=='btscan' and r['cmd']['sn']==self.d['serial']:
                              if self.bthostsflag==False:
                                 self.bthostsflag=True
-                                self.logger.debug( u'[{}] rplink_command: bluetooth start scanninf for devices'.format( self.display ) )
+                                self.logger.debug( u'[{}] rplink_command: bluetooth scan START'.format( self.display ) )
                         # exec reboot
                         if r['cmd']['name']=='reboot' and r['cmd']['sn']==self.d['serial']:
                             if self.clk!=None:
