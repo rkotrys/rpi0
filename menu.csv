@@ -3,8 +3,8 @@ Label,type,exec
 REBOOT,f,reboot now
 DOWN,f,shutdown now
 CLEAN config,f,/root/clean/clean.sh
-BT discover ON,p,menu.parent.btdiscover_on()
 BT discover OFF,p,menu.parent.btdiscover_off()
+BT discover ON,p,menu.parent.btdiscover_on()
 #Set Et: .1.24,f,./setip eth0 192.168.1.24/24
 #Del Et: .1.24,f,./delip eth0 192.168.1.24/24 
 #eth0 UP,f,ifconfig eth0 up
