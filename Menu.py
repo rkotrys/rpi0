@@ -64,6 +64,7 @@ class Menu:
 
     def show(self):
         if self.active:
+            self.count=self.contmax
             im = Image.new('RGBA',(128,128),tuple(self.cnf["menu"]["bg_color"]))
             dr = ImageDraw.Draw(im)
 
@@ -91,10 +92,13 @@ class Menu:
     def run(self,name):
         if self.active:
             self.state[self.selected]['action']( label=self.state[self.selected]['label'], menu=self )
+            self.count=self.contmax
+            self.active=False
 
     """ next item key handler """
     def next(self,name):
         if self.active:
+            self.count=self.contmax
             if self.selected < len(self.state)-1:
                 self.selected += 1
             else:
@@ -103,6 +107,7 @@ class Menu:
     """ previous item key handler """
     def previous(self,name):
         if self.active:
+            self.count=self.contmax
             if self.selected > 0:
                 self.selected -= 1
             else:
@@ -113,14 +118,17 @@ class Menu:
         if not self.active:
             #print( "start" )
             self.active = True
+            self.count=self.contmax
         else:
             #print( "stop" )
             self.active = False
+            self.count=self.contmax
 
 
     """ stop (switcg off and deactivate menu visibility) item key handler """
     def stop(self,name):
         #print( "stop" )
         if self.active:
+            self.count=self.contmax
             self.active = False
 
