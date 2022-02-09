@@ -183,7 +183,7 @@ class rplink:
                             self.logger.debug( u'[{}] rplink_command: remove bluetootch device {}'.format(self.display, str( r['cmd']['value']).strip() ) )
                         # exec btscan
                         if r['cmd']['name']=='btscan' and r['cmd']['sn']==self.d['serial']:
-                             if self.bthostsflag:
+                             if self.bthostsflag==False:
                                 self.bthostsflag=True
                                 self.logger.debug( u'[{}] rplink_command: bluetooth start scanninf for devices'.format( self.display ) )
                         # exec reboot
