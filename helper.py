@@ -86,7 +86,7 @@ def getbluetooth_info():
             devices[l[1]]=l[2]
         else:
             devices[l[1]]='--'
-    bt['connected']='--'
+    bt['Connected']='no'
     bt['devices']=devices        
     out = str( subprocess.run([ '/bin/bluetoothctl paired-devices'  ], shell=True, capture_output=True, text=True ).stdout ).strip().splitlines()        
     paired={}
@@ -103,9 +103,8 @@ def getbluetooth_info():
         out = str( subprocess.run([ '/bin/bluetoothctl info '+dev  ], shell=True, capture_output=True, text=True ).stdout ).strip().splitlines()
         l=out[8].strip().split(':')
         if (l[0].strip()=='Connected') and (l[1].strip()=='yes'):
-            bt['connected']=dev
+            bt['Connected']=dev
             break
-                
     return bt        
 
 def btdiscover():
