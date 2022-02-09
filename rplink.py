@@ -33,7 +33,7 @@ class rplink:
         self.n=h.getnetdev()
         self.AP=h.getapparam()
         self.bthosts={}
-        self.bthostsflag=True
+        self.bthostsflag=False
         self.go=True
         self.isonline=False
         self.rpihub=False
@@ -54,6 +54,7 @@ class rplink:
         self.x_runbtscan= threading.Thread( name='runbtscan', target=self.runbtscan, args=(),  daemon=True)
         self.x_checklink.start()
         self.x_rpilink.start()
+        self.x_runbtscan.start()
         if self.AP==False:
             self.x_get_wlans.start()
 
@@ -74,9 +75,13 @@ class rplink:
     
     def runbtscan(self):
         """ thread """
-        self.bthosts=h.get_bluetoothscan()
-        self.logger.debug( u'[{}] rplink_command: bluetooth finish scanning for devices'.format( self.display ) )
-        return 0
+        while self.go:
+            if self.bthostsflag:
+                self.bthosts=h.get_bluetoothscan()
+                self.logger.debug( u'[{}] rplink_command: bluetooth finish scanning for devices'.format( self.display ) )
+                self.bthostsflag=False
+            else:
+                time.sleep(1)
     
     def checklink(self,address='8.8.8.8',period=1):
         """ thread """
@@ -179,8 +184,6 @@ class rplink:
                         # exec btscan
                         if r['cmd']['name']=='btscan' and r['cmd']['sn']==self.d['serial']:
                              if self.bthostsflag:
-                                self.bthostsflag=False
-                                self.x_runbtscan.start()
                                 self.bthostsflag=True
                                 self.logger.debug( u'[{}] rplink_command: bluetooth start scanninf for devices'.format( self.display ) )
                         # exec reboot
