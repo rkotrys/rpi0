@@ -103,7 +103,7 @@ def getbluetooth_info():
         out = str( subprocess.run([ '/bin/bluetoothctl info '+dev  ], shell=True, capture_output=True, text=True ).stdout ).strip().splitlines()
         for lines in out:
             l=line.strip().split(':')
-            if l[0]=='Connected' and l[1]=='yes':
+            if l[0].strip()=='Connected' and l[1].strip()=='yes':
                 bt['connected']=dev
     return bt        
 
