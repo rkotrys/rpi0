@@ -91,8 +91,8 @@ class Menu:
     """ run key handler (activete/exec the menu action command)"""
     def run(self,name):
         if self.active:
-            self.state[self.selected]['action']( label=self.state[self.selected]['label'], menu=self )
             self.count=self.contmax
+            self.state[self.selected]['action']( label=self.state[self.selected]['label'], menu=self )
             self.active=False
 
     """ next item key handler """

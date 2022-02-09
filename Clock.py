@@ -211,13 +211,13 @@ class clock:
             self.sheduler.enter(1,1,self.runclock)
         #self.netdev = rph.getnetdev()
         if self.showinfo:
-            if self.showinfocount==0:
+            if self.showinfocount<1:
                 self.showinfocount=self.showinfomax
                 self.showinfo=False
             else:
                 self.showinfocount-=1
         if self.menu.active:
-            if self.menu.count==0:
+            if self.menu.count<1:
                 self.menu.count=self.menu.contmax
                 self.menu.active=False
             else:
@@ -242,6 +242,22 @@ class clock:
     def run(self):
         self.sheduler.enter(1,1,self.runclock)
         self.sheduler.run()
+
+    """ bt discover ON key/menu handle """
+    def btdiscover_on(self):
+        self.menu.active=False    
+        rph.btdiscover()
+        self.info="\n\n!!!\nBT discover ON\n!!!"
+        self.showinfo=True
+        self.showinfocount=3
+
+    """ bt discover OFF key/menu handle """
+    def btdiscover_off(self):
+        self.menu.active=False    
+        rph.btdiscoveroff()
+        self.info="\n\n!!!\nBT discover OFF\n!!!"
+        self.showinfo=True
+        self.showinfocount=3
 
     """ btscan key/menu handle """
     def btscan_flag(self):
