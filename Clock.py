@@ -157,10 +157,10 @@ class clock:
         color=tuple(self.cnf["clock"]["background_color"])
         if self.df['bluetooth']['Discoverable']=='yes':
             color=tuple(self.cnf["btscan"]["icons_color"])    
-        if self.btscan_show:
-            color=tuple(self.cnf["btscan"]["btscan_color"])
-        if self.df['bluetooth']['Connect']!='no':
+        if self.df['bluetooth']['Connected']!='no':
             color=tuple(self.cnf["btscan"]["btscan_connect_color"])    
+        if self.rpl.bthostsflag:
+            color=tuple(self.cnf["btscan"]["btscan_color"])
         draw.text( (1,1), chr(clock.icons["bt"])+u'', font=self.symbols, fill=color )
 
     def drawonline(self, draw):
