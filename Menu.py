@@ -12,6 +12,8 @@ class Menu:
         self.cnf = parent.cnf
         self.parent = parent
         self.active = False
+        self.contmax=10
+        self.count=self.contmax
         self.state = []
         self.size = size
         self.box = box

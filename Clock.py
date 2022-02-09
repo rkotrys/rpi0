@@ -1,6 +1,7 @@
 import time, sched, sys
 import subprocess as proc
 import threading, requests, json, base64
+from functools import partial
 
 from PIL.ImageDraw import Draw
 import LCD_1in44
@@ -57,6 +58,8 @@ class clock:
         self.btdev = {}
         # show info flag
         self.showinfo = False
+        self.showinfomax=10
+        self.showinfocount=self.showinfomax
         # temperature alarm
         self.temp_cpu_alarm = 50
         # set curent date time flag
@@ -207,6 +210,18 @@ class clock:
         if self.go:
             self.sheduler.enter(1,1,self.runclock)
         #self.netdev = rph.getnetdev()
+        if self.showinfo:
+            if self.showinfocount==0:
+                self.showinfocount=self.showinfomax
+                self.showinfo=False
+            else:
+                self.showinfocount-=1
+        if self.menu.active:
+            if self.menu.count==0:
+                self.menu.count=self.menu.contmax
+                self.menu.active=False
+            else:
+                self.menu.count-=1
         im = self.drowclockface()
         """ showinfo buttons action """
         if self.showinfo:
@@ -227,6 +242,17 @@ class clock:
     def run(self):
         self.sheduler.enter(1,1,self.runclock)
         self.sheduler.run()
+
+    """ btscan key/menu handle """
+    def btscan_flag(self):
+        if self.btscan:
+            self.btscan = False
+        else:
+            self.btscan = True
+            with open('btdev.txt', 'w') as f:
+                f.write( "" )
+            self.btscan_run()
+        self.menu.active=False    
 
     """ btscan key/menu handle """
     def btscan_flag(self):
