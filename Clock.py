@@ -217,7 +217,6 @@ class clock:
             else:
                 self.showinfocount-=1
         if self.menu.active:
-            print( self.menu.count )
             if self.menu.count<1:
                 self.menu.count=self.menu.contmax
                 self.menu.active=False
