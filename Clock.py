@@ -247,7 +247,7 @@ class clock:
     def btdiscover_on(self):
         self.menu.active=False    
         rph.btdiscover()
-        self.info="\n\n!!!\nBT discover ON\n!!!"
+        self.info="\n!!!\n\nBT discover ON\nBT pairiable ON\n valid 5 min\n\n!!!"
         self.showinfo=True
         self.showinfocount=3
 
@@ -255,7 +255,7 @@ class clock:
     def btdiscover_off(self):
         self.menu.active=False    
         rph.btdiscoveroff()
-        self.info="\n\n!!!\nBT discover OFF\n!!!"
+        self.info="\n!!!\n\nBT discover OFF\nBT pairiable ON\n\n!!!"
         self.showinfo=True
         self.showinfocount=3
 
