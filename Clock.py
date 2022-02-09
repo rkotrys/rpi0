@@ -155,7 +155,7 @@ class clock:
     def drawbt(self,draw):        
         draw.rectangle([(0,0),(17,17)], fill='#00000011', outline='#00000011', width=1)
         color=tuple(self.cnf["clock"]["background_color"])
-        if self.df['bluetooth']['Discoverable']=='yes':
+        if self.df['bluetooth']['Discoverable'].strip()!='no':
             color=tuple(self.cnf["btscan"]["icons_color"])    
         if self.df['bluetooth']['Connected']!='no':
             color=tuple(self.cnf["btscan"]["btscan_connect_color"])    
