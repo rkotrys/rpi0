@@ -55,7 +55,8 @@ apt-get purge -y -q netfilter-persistent iptables-persistent
 fi
 #
 echo "Delete MASQUERADE"
-MASQ=`iptables -t nat -L POSTROUTING --line-numbers|grep MASQUERADE|nawk '{print $1}'`
+_TMP=`iptables -t nat -L POSTROUTING --line-numbers|grep MASQUERADE|nawk '{print $1}'`
+MASQ=`echo -e $_TMP|sort -b`
 for N in $MASQ
 do
 iptables -t nat -D POSTROUTING $N
