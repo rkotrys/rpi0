@@ -2,7 +2,8 @@
 #
 # clean access point config in RPI4
 #
-cp /root/lcd144/clean/dhcpcd.conf /etc/dhcpcd.conf
+cp /root/lcd144/clean/clean/dhcpcd.conf /etc/dhcpcd.conf
+cp /root/lcd144/clean/clean/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
 #
 FILE="/etc/sysctl.d/routed-ap.conf"
 if test -f "$FILE"; then
