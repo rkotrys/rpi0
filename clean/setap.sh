@@ -53,7 +53,7 @@ NETF=`apt --installed list 2>/dev/null |grep -e netfilter-persistent -e iptables
 if [ -z $NETF ]
 then
 echo "Instaled: netfilter-persistent iptables-persistent"
-apt-get install -y -q netfilter-persistent iptables-persistent
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -q netfilter-persistent iptables-persistent
 fi
 #
 # set NAT on eth0
