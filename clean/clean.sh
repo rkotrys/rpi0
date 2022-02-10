@@ -48,7 +48,7 @@ fi
 # netfilter-persistent iptables-persistent
 echo "[netfilter-persistent iptables-persistent]"
 NETF=`apt --installed list 2>/dev/null |grep -e netfilter-persistent -e iptables-persistent`
-if [ -n $NETF ]
+if [ -n "$NETF" ]
 then
 echo "Purge netfilter-persistent iptables-persistent"
 sudo DEBIAN_FRONTEND=noninteractive apt-get purge -y -q netfilter-persistent iptables-persistent
