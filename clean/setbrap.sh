@@ -2,7 +2,7 @@
 #
 # set bridged AP
 #
-SETAP=/root/clean/setbrap
+SETAP="/root/lcd144/clean/setbrap"
 #
 # bridge-utils
 BRU=`apt --installed list 2>/dev/null |grep bridge-utils`
@@ -38,7 +38,11 @@ apt-get purge -y -q netfilter-persistent iptables-persistent
 fi
 #
 echo "Delete MASQUERADE"
-iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
+MASQ=`iptables -t nat -L POSTROUTING --line-numbers|grep MASQUERADE|nawk '{print $1}'`
+for N in $MASQ
+do
+iptables -t nat -D POSTROUTING $N
+done
 #
 # routed-ap.conf
 if [ -e "/etc/sysctl.d/routed-ap.conf" ]
@@ -46,11 +50,12 @@ then
 rm /etc/sysctl.d/routed-ap.conf
 fi
 echo "Copy config file"
-cp $SETAP/dhcpcd.conf /etc/dhcpcd.conf
-cp $SETAP/hostapd.conf /etc/hostapd/hostapd.conf
-cp $SETAP/bridge-br0.netdev /etc/systemd/network/bridge-br0.netdev
-cp $SETAP/br0-member-eth0.network  /etc/systemd/network/br0-member-eth0.network
+cp -f $SETAP/dhcpcd.conf /etc/dhcpcd.conf
+cp -f $SETAP/hostapd.conf /etc/hostapd/hostapd.conf
+cp -f $SETAP/bridge-br0.netdev /etc/systemd/network/bridge-br0.netdev
+cp -f $SETAP/br0-member-eth0.network  /etc/systemd/network/br0-member-eth0.network
 #
+# enable systemd-networkd
 $SYSNET=`systemctl is-active systemd-networkd`
 if [ "$SYSNET" != "active" ]
 then
@@ -59,8 +64,9 @@ systemctl unmask systemd-networkd
 systemctl enable systemd-networkd
 fi
 #
-echo "Uncbock WLAN"
-sudo rfkill unblock wlan
+echo "Uncbock WLAN and bluetooth"
+rfkill unblock wlan
+rfkill unblock bluetooth
 #
 echo "Activate: apt autoremove"
 apt-get -y -q autoremove

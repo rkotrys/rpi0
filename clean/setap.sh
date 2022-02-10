@@ -2,7 +2,7 @@
 #
 # set routed AP
 #
-SETAP="/root/clean/setap"
+SETAP="/root/lcd144/clean/setap"
 #
 #
 # cleaning conf files
@@ -53,14 +53,14 @@ NETF=`apt --installed list 2>/dev/null |grep -e netfilter-persistent -e iptables
 if [ -z $NETF ]
 then
 echo "Instaled: netfilter-persistent iptables-persistent"
-sudo apt-get install -y -q netfilter-persistent iptables-persistent
+apt-get install -y -q netfilter-persistent iptables-persistent
 fi
 #
 # set NAT on eth0
 echo "Set MASQUERADE"
-sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 echo "Save MASQUERADE"
-sudo netfilter-persistent save
+netfilter-persistent save
 #
 # set conf files
 cp $SETAP/dhcpcd.conf /etc/dhcpcd.conf
@@ -73,8 +73,9 @@ cp $SETAP/hostapd.conf /etc/hostapd/hostapd.conf
 echo "Copy: $SETAP/hostapd.conf"
 #
 # unblock radio
-sudo rfkill unblock wlan
-echo "WLAN unblocked"
+rfkill unblock wlan
+rfkill unblock bluetooth
+echo "WLAN and Bluetooth unblocked"
 #
 echo "Activate: apt autoremove"
 apt-get -y -q autoremove

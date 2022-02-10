@@ -1,13 +1,15 @@
 #!/bin/bash
 #
+CLEANP="/root/lcd144/clean/clean"
+CLEANBT="/root/lcd144/clean/bt"
 # clean access point config in RPI4
 #
-cp -f /root/lcd144/clean/clean/dhcpcd.conf /etc/dhcpcd.conf
-cp -f /root/lcd144/clean/clean/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
-cp -f /root/lcd144/clean/bt/bluetooth.service /lib/systemd/system/bluetooth.service
-cp -f /root/lcd144/clean/bt/rfcomm.service /etc/systemd/system/rfcomm.service
-cp -f /root/lcd144/clean/bt/main.conf /etc/bluetooth/main.conf
-cp -f /root/lcd144/clean/bt/rfcomm.conf /etc/bluetooth/rfcomm.conf
+cp -f $CLEANP/dhcpcd.conf /etc/dhcpcd.conf
+cp -f $CLEANP/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
+cp -f $CLEANBT/bluetooth.service /lib/systemd/system/bluetooth.service
+cp -f $CLEANBT/rfcomm.service /etc/systemd/system/rfcomm.service
+cp -f $CLEANBT/main.conf /etc/bluetooth/main.conf
+cp -f $CLEANBT/rfcomm.conf /etc/bluetooth/rfcomm.conf
 #
 # rfcomm enable
 RFCOMM=`systemctl is-active rfcomm`
@@ -53,7 +55,11 @@ apt-get purge -y -q netfilter-persistent iptables-persistent
 fi
 #
 echo "Delete MASQUERADE"
-iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
+MASQ=`iptables -t nat -L POSTROUTING --line-numbers|grep MASQUERADE|nawk '{print $1}'`
+for N in $MASQ
+do
+iptables -t nat -D POSTROUTING $N
+done
 #
 # hostapd
 HOSTAPD=`systemctl is-active hostapd`
