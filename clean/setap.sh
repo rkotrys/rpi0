@@ -29,7 +29,7 @@ fi
 #
 # hostapd
 STATUS=`apt --installed list 2>/dev/null |grep hostapd`
-if [ -z $STATUS ]
+if [ -z "$STATUS" ]
 then
 apt-get -y -q install hostapd
 echo "Inatalled: hostapd"
@@ -39,7 +39,7 @@ systemctl enable hostapd
 #
 # dnsmasq
 STATUS=`apt --installed list 2>/dev/null |grep dnsmasq`
-if [ -z $STATUS ]
+if [ -z "$STATUS" ]
 then
 apt-get install -y -q dnsmasq
 echo "Inatalled: dnsmasq"
@@ -50,7 +50,7 @@ systemctl enable dnsmasq
 # netfilter-persistent iptables-persistent
 echo "Install: netfilter-persistent iptables-persistent"
 NETF=`apt --installed list 2>/dev/null |grep -e netfilter-persistent -e iptables-persistent`
-if [ -z $NETF ]
+if [ -z "$NETF" ]
 then
 echo "Instaled: netfilter-persistent iptables-persistent"
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -q netfilter-persistent iptables-persistent
