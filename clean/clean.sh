@@ -51,7 +51,7 @@ NETF=`apt --installed list 2>/dev/null |grep -e netfilter-persistent -e iptables
 if [ -n $NETF ]
 then
 echo "Purge netfilter-persistent iptables-persistent"
-apt-get purge -y -q netfilter-persistent iptables-persistent
+sudo DEBIAN_FRONTEND=noninteractive apt-get purge -y -q netfilter-persistent iptables-persistent
 fi
 #
 echo "Delete MASQUERADE"
