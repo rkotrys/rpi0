@@ -2,7 +2,7 @@
 #
 # clean access point config in RPI4
 #
-cp /root/clean/clean/dhcpcd.conf /etc/dhcpcd.conf
+cp /root/lcd144/clean/dhcpcd.conf /etc/dhcpcd.conf
 #
 FILE="/etc/sysctl.d/routed-ap.conf"
 if test -f "$FILE"; then
