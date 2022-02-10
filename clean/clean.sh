@@ -2,8 +2,20 @@
 #
 # clean access point config in RPI4
 #
-cp /root/lcd144/clean/clean/dhcpcd.conf /etc/dhcpcd.conf
-cp /root/lcd144/clean/clean/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
+cp -f /root/lcd144/clean/clean/dhcpcd.conf /etc/dhcpcd.conf
+cp -f /root/lcd144/clean/clean/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
+cp -f /root/lcd144/clean/bt/bluetooth.service /lib/systemd/system/bluetooth.service
+cp -f /root/lcd144/clean/bt/rfcomm.service /etc/systemd/system/rfcomm.service
+cp -f /root/lcd144/clean/bt/main.conf /etc/bluetooth/main.conf
+cp -f /root/lcd144/clean/bt/rfcomm.conf /etc/bluetooth/rfcomm.conf
+#
+# rfcomm enable
+RFCOMM=`systemctl is-active rfcomm`
+if [ "$RFCOMM" != "active" ]
+then
+systemctl unmask rfcomm
+systemctl enable frcomm
+fi
 #
 FILE="/etc/sysctl.d/routed-ap.conf"
 if test -f "$FILE"; then
