@@ -84,7 +84,7 @@ class rplink:
         self.x_checklink.stop()
         self.x_get_wlans.stop()
         self.x_runbtscan.stop()
-        proc.run(['/bin/systemctl', 'reboot'],capture_output=True, text=True);
+        proc.run(['/sbin/reboot', 'now']);
         
     def poweroff(self):
         #self.go=False
@@ -94,7 +94,7 @@ class rplink:
         self.x_checklink.stop()
         self.x_get_wlans.stop()
         self.x_runbtscan.stop()
-        proc.run(['/bin/systemctl', 'poweroff'],capture_output=True, text=True);
+        proc.run(['/sbin/shutdown', 'now']);
 
     def getlocaldata(self):
         return self.localdata
