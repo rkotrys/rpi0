@@ -329,11 +329,11 @@ def get_wlans(sortkey='level'):
 def set_wpa_supplicant( essid, wpa_key, add=True, priority=1, country='pl' ):
     if len(essid)>1 and len(wpa_key)>7:
         head=u"country={}\nupdate_config=1\nctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\n".format(country)
-        net=str(u'\nnetwork={\nscan_ssid=1\nssid=\"[[1]]\"\npsk=[[2]]\npriority=[[3]]\n}\n')
+        net=str(u'\nnetwork={\nscan_ssid=1\npriority=[[3]]\nssid=\"[[1]]\"\npsk=[[2]]\n}\n')
         r = subprocess.run(['echo '+str(wpa_key)+' |/bin/wpa_passphrase '+str(essid) ],shell=True,capture_output=True,encoding='utf-8')
         if r.returncode==0:
             psk=str(r.stdout).splitlines()[4].strip().split('=')[1]
-            net=net.replace( '[[1]]', essid ).replace( '[[2]]', psk) .replace( '[[3]]', str(priority) )
+            net=net.replace( '[[1]]', str(essid).strip() ).replace( '[[2]]', str(psk).strip()).replace( '[[3]]', str(priority).strip() )
             if add:
                 net_dic=get_wlans_def()
                 buf=head + net
