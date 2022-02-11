@@ -69,6 +69,15 @@ class rplink:
 
     def stop(self):
         self.go=False
+        if self.clk!=None:
+            self.clk.go=False
+            self.clk.x_cpuload.stop()
+        self.x_checklink.stop()
+        self.x_rpilink.stop()
+        self.x_get_wlans.stop()
+        self.x_runbtscan.stop()
+        
+        
 
     def getlocaldata(self):
         return self.localdata
