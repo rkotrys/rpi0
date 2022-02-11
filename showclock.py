@@ -67,17 +67,21 @@ def main():
 
     except IOError as e:
         print(e)
-        clk.go=False
         rpl.logger.debug( u'[{}] detect IOError {}'.format(rpl.display, e) )
         clk.LCD.LCD_Clear()
+        clk.go=False
+        rpl.go=False
+        rpl.stop()
         time.sleep(3)
         GPIO.cleanup()
         sys.exit( 0 )
         
     except KeyboardInterrupt:    
-        clk.go=False
         rpl.logger.debug( u'[{}] exit by KeyboardInterrupt {}'.format(rpl.display) )
         clk.LCD.LCD_Clear()
+        clk.go=False
+        rpl.go=False
+        rpl.stop()
         time.sleep(3)
         GPIO.cleanup()
         sys.exit( 0 )
@@ -87,18 +91,22 @@ def main():
 # sugnal handlers
 def sigint_handler(signum, frame):
     global clk,rpl
-    clk.go=False
     rpl.logger.debug( u'[{}] exit by sigint'.format(rpl.display) )
     clk.LCD.LCD_Clear()
+    clk.go=False
+    rpl.go=False
+    rpl.stop()
     time.sleep(3)
     GPIO.cleanup()
     sys.exit( 0 )    
 
 def sigterm_handler(signum, frame):
     global clk, rpl
-    clk.go=False
     rpl.logger.debug( u'[{}] exit by sigterm'.format(rpl.display) )
     clk.LCD.LCD_Clear()
+    clk.go=False
+    rpl.go=False
+    rpl.stop()
     time.sleep(3) 
     GPIO.cleanup()
     sys.exit( 0 )    
