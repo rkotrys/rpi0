@@ -77,6 +77,7 @@ class rplink:
         self.go=False
 
     def reboot(self):
+        proc.run(['/sbin/reboot', 'now']);
         #self.go=False
         if self.clk!=None:
             #self.clk.go=False
