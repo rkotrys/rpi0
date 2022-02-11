@@ -85,7 +85,7 @@ class rplink:
         if self.clk!=None:
             self.clk.go=False
             self.clk.x_cpuload.stop()
-        proc.run(['/sbin/reboot', 'now']);
+        #proc.run(['/sbin/reboot', 'now']);
         
     def poweroff(self):
         proc.run(['/sbin/shutdown', 'now']);
@@ -96,7 +96,7 @@ class rplink:
         if self.clk!=None:
             self.clk.go=False
             self.clk.x_cpuload.stop()
-        proc.run(['/sbin/shutdown', 'now']);
+        #proc.run(['/sbin/shutdown', 'now']);
 
     def getlocaldata(self):
         return self.localdata
