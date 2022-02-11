@@ -1,7 +1,7 @@
 Label,type,exec
 #Set Wifi|DHCP,f,showtemp
-REBOOT,f,reboot now
-DOWN,f,shutdown now
+REBOOT,p,menu.parent.rpl.reboot()
+DOWN,p,menu.parent.rpl.poweroff()
 CLEAN config,f,/root/lcd144/clean/clean.sh > /root/lcd144/clean/clean.log
 BT discover OFF,p,menu.parent.btdiscover_off()
 BT discover ON,p,menu.parent.btdiscover_on()
