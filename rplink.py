@@ -78,23 +78,24 @@ class rplink:
 
     def reboot(self):
         proc.run(['/sbin/reboot', 'now']);
-        #self.go=False
-        if self.clk!=None:
-            #self.clk.go=False
-            self.clk.x_cpuload.stop()
         self.x_checklink.stop()
         self.x_get_wlans.stop()
         self.x_runbtscan.stop()
+        self.go=False
+        if self.clk!=None:
+            self.clk.go=False
+            self.clk.x_cpuload.stop()
         proc.run(['/sbin/reboot', 'now']);
         
     def poweroff(self):
-        #self.go=False
-        if self.clk!=None:
-            #self.clk.go=False
-            self.clk.x_cpuload.stop()
+        proc.run(['/sbin/shutdown', 'now']);
         self.x_checklink.stop()
         self.x_get_wlans.stop()
         self.x_runbtscan.stop()
+        self.go=False
+        if self.clk!=None:
+            self.clk.go=False
+            self.clk.x_cpuload.stop()
         proc.run(['/sbin/shutdown', 'now']);
 
     def getlocaldata(self):
