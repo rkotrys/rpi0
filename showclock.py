@@ -72,7 +72,7 @@ def main():
         clk.go=False
         rpl.go=False
         rpl.stop()
-        time.sleep(3)
+        time.sleep(1)
         GPIO.cleanup()
         sys.exit( 0 )
         
@@ -82,7 +82,7 @@ def main():
         clk.go=False
         rpl.go=False
         rpl.stop()
-        time.sleep(3)
+        time.sleep(1)
         GPIO.cleanup()
         sys.exit( 0 )
     
@@ -96,7 +96,7 @@ def sigint_handler(signum, frame):
     clk.go=False
     rpl.go=False
     rpl.stop()
-    time.sleep(3)
+    time.sleep(1)
     GPIO.cleanup()
     sys.exit( 0 )    
 
@@ -107,7 +107,7 @@ def sigterm_handler(signum, frame):
     clk.go=False
     rpl.go=False
     rpl.stop()
-    time.sleep(3) 
+    time.sleep(1) 
     GPIO.cleanup()
     sys.exit( 0 )    
 
