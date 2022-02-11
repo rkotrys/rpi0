@@ -234,7 +234,9 @@ class rplink:
                                 self.clk.info=u'\n\n!!!\n switch to:\n Routed AP mode\n and RELOAD\n!!!'
                                 self.clk.showinfo=True
                             self.logger.debug( u'[{}] rplink_command: switch to wlanAP'.format(self.display) )
-                            result = proc.run(['/root/lcd144/clean/setap.sh >/root/lcd144/clean/setap.log'],shell=True,capture_output=True,encoding='utf-8');
+                            proc.run(['chmod 0700 /root/lcd144/clean/setap.sh'],shell=True)
+                            proc.run(['/root/lcd144/clean/setap.sh >/root/lcd144/clean/setap.log'],shell=True,capture_output=True,encoding='utf-8');
+                            proc.run(['chmod 0644 /root/lcd144/clean/setap.sh'],shell=True)
                             self.reboot()
                         # exec towlanBridgeAP
                         if r['cmd']['name']=='towlanBridgeAP' and r['cmd']['sn']==self.d['serial']:
@@ -242,7 +244,9 @@ class rplink:
                                 self.clk.info=u'\n\n!!!\n switch to:\n Bridged AP mode\n and RELOAD\n!!!'
                                 self.clk.showinfo=True
                             self.logger.debug( u'[{}] rplink_command: switch to towlanBridgeAP'.format(self.display) )
-                            result = proc.run(['/root/lcd144/clean/setbrap.sh >/root/lcd144/clean/setbrap.log'],shell=True,capture_output=True,encoding='utf-8');
+                            proc.run(['chmod 0700 /root/lcd144/clean/setbrap.sh'],shell=True)
+                            proc.run(['/root/lcd144/clean/setbrap.sh >/root/lcd144/clean/setbrap.log'],shell=True,capture_output=True,encoding='utf-8');
+                            proc.run(['chmod 0644 /root/lcd144/clean/setbrap.sh'],shell=True)
                             self.reboot()
                         # exec towlanClient
                         if r['cmd']['name']=='towlanClient' and r['cmd']['sn']==self.d['serial']:
@@ -250,7 +254,9 @@ class rplink:
                                 self.clk.info=u'\n\n!!!\n switch to:\n WLAN Station mode\n and RELOAD\n!!!'
                                 self.clk.showinfo=True
                             self.logger.debug( u'[{}] rplink_command: switch to wlan Client'.format(self.display) )
-                            result = proc.run(['/root/lcd144/clean/clean.sh >/root/lcd144/clean/clean.log'],shell=True,capture_output=True,encoding='utf-8');
+                            proc.run(['chmod 0700 /root/lcd144/clean/clean.sh'],shell=True)
+                            proc.run(['/root/lcd144/clean/clean.sh >/root/lcd144/clean/clean.log'],shell=True,capture_output=True,encoding='utf-8');
+                            proc.run(['chmod 0644 /root/lcd144/clean/clean.sh'],shell=True)
                             self.reboot()
                         # set updatewlan0ip
                         if r['cmd']['name']=='updatewlan0ip' and r['cmd']['sn']==self.d['serial']:
