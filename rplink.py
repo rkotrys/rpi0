@@ -75,8 +75,26 @@ class rplink:
         self.x_checklink.stop()
         self.x_get_wlans.stop()
         self.x_runbtscan.stop()
+
+    def reboot(self):
+        self.go=False
+        if self.clk!=None:
+            self.clk.go=False
+            self.clk.x_cpuload.stop()
+        self.x_checklink.stop()
+        self.x_get_wlans.stop()
+        self.x_runbtscan.stop()
+        proc.run(['/bin/systemctl', 'reboot'],capture_output=True, text=True);
         
-        
+    def poweroff(self):
+        self.go=False
+        if self.clk!=None:
+            self.clk.go=False
+            self.clk.x_cpuload.stop()
+        self.x_checklink.stop()
+        self.x_get_wlans.stop()
+        self.x_runbtscan.stop()
+        proc.run(['/bin/systemctl', 'poweroff'],capture_output=True, text=True);
 
     def getlocaldata(self):
         return self.localdata
@@ -200,16 +218,14 @@ class rplink:
                                 self.clk.info=u'\n\n!!!\n system RELOAD\n!!!'
                                 self.clk.showinfo=True
                             self.logger.debug( u'[{}] rplink_command: system reboot'.format(self.display) )
-                            self.stop()
-                            result = proc.run(['/bin/systemctl', 'reboot'],capture_output=True, text=True);
+                            self.reboot()
                         # exec poweroff
                         if r['cmd']['name']=='poweroff' and r['cmd']['sn']==self.d['serial']:
                             if self.clk!=None:
                                 self.clk.info=u'\n\n!!!\n system POWER OFF\n!!!'
                                 self.clk.showinfo=True
                             self.logger.debug( u'[{}] rplink_command: system poweroff'.format(self.display) )
-                            self.stop()
-                            result = proc.run(['/bin/systemctl', 'poweroff'],capture_output=True, text=True);
+                            self.poweroff()
                         # exec towlanAP
                         if r['cmd']['name']=='towlanAP' and r['cmd']['sn']==self.d['serial']:
                             if self.clk!=None:
@@ -217,8 +233,7 @@ class rplink:
                                 self.clk.showinfo=True
                             self.logger.debug( u'[{}] rplink_command: switch to wlanAP'.format(self.display) )
                             result = proc.run(['/root/lcd144/clean/setap.sh >/root/lcd144/clean/setap.log'],shell=True,capture_output=True,encoding='utf-8');
-                            self.stop()
-                            result = proc.run(['/bin/systemctl', 'reboot'],capture_output=True, text=True);
+                            self.reboot()
                         # exec towlanBridgeAP
                         if r['cmd']['name']=='towlanBridgeAP' and r['cmd']['sn']==self.d['serial']:
                             if self.clk!=None:
@@ -226,8 +241,7 @@ class rplink:
                                 self.clk.showinfo=True
                             self.logger.debug( u'[{}] rplink_command: switch to towlanBridgeAP'.format(self.display) )
                             result = proc.run(['/root/lcd144/clean/setbrap.sh >/root/lcd144/clean/setbrap.log'],shell=True,capture_output=True,encoding='utf-8');
-                            self.stop()
-                            result = proc.run(['/bin/systemctl', 'reboot'],capture_output=True, text=True);
+                            self.reboot()
                         # exec towlanClient
                         if r['cmd']['name']=='towlanClient' and r['cmd']['sn']==self.d['serial']:
                             if self.clk!=None:
@@ -235,8 +249,7 @@ class rplink:
                                 self.clk.showinfo=True
                             self.logger.debug( u'[{}] rplink_command: switch to wlan Client'.format(self.display) )
                             result = proc.run(['/root/lcd144/clean/clean.sh >/root/lcd144/clean/clean.log'],shell=True,capture_output=True,encoding='utf-8');
-                            self.stop()
-                            result = proc.run(['/bin/systemctl', 'reboot'],capture_output=True, text=True);
+                            self.reboot()
                         # set updatewlan0ip
                         if r['cmd']['name']=='updatewlan0ip' and r['cmd']['sn']==self.d['serial']:
                             if self.clk!=None:
@@ -245,8 +258,7 @@ class rplink:
                             h.setip(str(r['cmd']['value']).strip(),'wlan0','static')
                             self.logger.debug( u'[{}] rplink_command: IP for wlan0 update to {} for{}'.format(self.display, str(r['cmd']['value']).strip(), self.d['hostname'] ) )
                             self.logger.debug( u'[{}] rplink_command: system reboot'.format(self.display) )
-                            self.stop()
-                            proc.run(['/bin/systemctl', 'reboot'],capture_output=True, text=True);
+                            self.reboot()
                         # exec update agent software <LCD144,|oled13>
                         if r['cmd']['name']=='update' and r['cmd']['sn']==self.d['serial']:
                             self.logger.debug( u'[{}] rplink_command: code update from git repo'.format(self.display) )
@@ -259,15 +271,13 @@ class rplink:
                             out=h.set_wpa_supplicant(essid=r['cmd']['essid'],wpa_key=r['cmd']['wpa_key'])
                             with open('/etc/wpa_supplicant/wpa_supplicant.conf', "wt") as f:
                                 f.write(out)
-                            self.stop()
-                            run = subprocess.run(['/sbin/reboot','now'], capture_output=True, encoding='utf-8')    
+                            self.reboot()
                         if r['cmd']['name']=='apsetparams' and r['cmd']['sn']==self.d['serial']:
                             info=u'[{}] rplink_command: set AP params - ssid:"{}", pass: ***, hw_mode:{}, channel:{}, ignore_broadcast_ssid:{}'.format(self.display, r['cmd']['ssid'], r['cmd']['hw_mode'], r['cmd']['channel'], r['cmd']['ignore_broadcast_ssid'])
                             self.logger.debug( info )
                             params={ 'ssid':r['cmd']['ssid'],'wpa_passphrase':r['cmd']['wpa_passphrase'],'hw_mode':r['cmd']['hw_mode'],'channel':r['cmd']['channel'],'ignore_broadcast_ssid':r['cmd']['ignore_broadcast_ssid'] }
                             h.setapparam(params)
-                            self.stop()
-                            proc.run(['systemctl', 'reboot']);
+                            self.reboot()
                             
                     else:
                         self.logger.debug( u'[{}] rplink_responce_error: {}'.format(self.display, r['status']) )
@@ -306,20 +316,23 @@ def main():
         
     except KeyboardInterrupt:    
         rpl.logger.debug( u'[{}] exit by KeyboardInterrupt {}'.format(rpl.display) )
-        time.sleep(3)
+        rpl.stop()
+        time.sleep(1)
         sys.exit( 0 )    
 
 
 def sigint_handler(signum, frame):
     global rpl
     rpl.logger.debug( u'[{}] exit by sigint'.format(rpl.display) )
-    time.sleep(3)
+    rpl.stop()
+    time.sleep(1)
     sys.exit( 0 )    
 
 def sigterm_handler(signum, frame):
     global rpl
     rpl.logger.debug( u'[{}] exit by sigterm'.format(rpl.display) )
-    time.sleep(3) 
+    rpl.stop()
+    time.sleep(1) 
     sys.exit( 0 )    
 
 def sighup_handler(signum, frame):
