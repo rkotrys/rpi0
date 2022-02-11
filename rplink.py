@@ -73,7 +73,6 @@ class rplink:
             self.clk.go=False
             self.clk.x_cpuload.stop()
         self.x_checklink.stop()
-        self.x_rpilink.stop()
         self.x_get_wlans.stop()
         self.x_runbtscan.stop()
         
