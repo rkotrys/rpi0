@@ -71,7 +71,7 @@ class rplink:
         r = str( subprocess.run([ 'ps -ef |grep "pi " |grep "/lib/systemd/systemd --user"'  ], shell=True, capture_output=True, text=True ).stdout ).strip().split()
         no=1
         print("len {}: {}".format(no,len(r)) )
-        while len(r.output)>0:
+        while len(r)>0:
             no+=1
             procno=r[1].strip()
             subprocess.run([ 'kill -9 {}'.format(procno)  ], shell=True, capture_output=True, text=True )
