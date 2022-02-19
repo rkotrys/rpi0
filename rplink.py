@@ -68,7 +68,7 @@ class rplink:
             self.localdata[key]=val
             
     def rfcommreset(self):
-        r = str( subprocess.run([ 'ps -ef |grep -e "pi " -v "root " |grep " 1 "'  ], shell=True, capture_output=True, text=True ).stdout ).strip().split()
+        r = str( subprocess.run([ 'ps -ef |grep -e "pi "|grep -v "root " |grep " 1 "'  ], shell=True, capture_output=True, text=True ).stdout ).strip().split()
         no=1
         print(r)
         print("len {}: {}".format(no,len(r)) )
@@ -76,7 +76,7 @@ class rplink:
             no=no+1
             procno=r[1].strip()
             subprocess.run([ 'kill -9 {}'.format(procno)  ], shell=True, capture_output=True, text=True )
-            r = str( subprocess.run([ 'ps -ef |grep -e "pi " -v "root " |grep " 1 " '  ], shell=True, capture_output=True, text=True ).stdout ).strip().split()
+            r = str( subprocess.run([ 'ps -ef |grep -e "pi "|grep -v "root " |grep " 1 " '  ], shell=True, capture_output=True, text=True ).stdout ).strip().split()
             print(r)
             print("len {}: {}".format(no,len(r)) )
             if no>10:
