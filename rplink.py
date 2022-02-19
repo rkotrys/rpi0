@@ -68,11 +68,15 @@ class rplink:
             self.localdata[key]=val
             
     def rfcommreset(self):
-        r = str(subprocess.run([ 'ps -ef |grep -e pi |grep -e "/lib/systemd/systemd --user"'  ], shell=True, capture_output=True, text=True )).strip().split()
+        r = str(subprocess.run([ 'ps -ef |grep "pi " |grep "/lib/systemd/systemd --user"'  ], shell=True, capture_output=True, text=True )).strip().split()
+        no=1
+        print("len {}: {}".format(no,len(r)) )
         while len(r)>0:
+            no+=1
             procno=r[1].strip()
             subprocess.run([ 'kill -9 {}'.format(procno)  ], shell=True, capture_output=True, text=True )
             r = str(subprocess.run([ 'ps -ef |grep -e "pi " |grep " 1 " '  ], shell=True, capture_output=True, text=True )).strip().split()
+            print("len {}: {}".format(no,len(r)) )
                 
             
     def stop(self):
