@@ -77,6 +77,12 @@ class rplink:
             subprocess.run([ 'kill -9 {}'.format(procno)  ], shell=True, capture_output=True, text=True )
             r = str( subprocess.run([ 'ps -ef |grep -e "pi " |grep " 1 " '  ], shell=True, capture_output=True, text=True ).stdout ).strip().split()
             print("len {}: {}".format(no,len(r)) )
+            if self.clk!=None:
+                self.clk.menu.active=False
+                self.clk.info="\n!!!\n\nBT console reset\n\n!!!"
+                self.clk.showinfo=True
+                self.clk.showinfocount=3
+
                 
             
     def stop(self):
