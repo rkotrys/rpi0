@@ -3,6 +3,7 @@ Label,type,exec
 REBOOT,p,menu.parent.rpl.reboot()
 DOWN,p,menu.parent.rpl.poweroff()
 CLEAN config,f,bash /root/lcd144/clean/clean.sh; reboot now
+Restart BT com,p,menu.parent.rfcommreset()
 BT discover OFF,p,menu.parent.btdiscover_off()
 BT discover ON,p,menu.parent.btdiscover_on()
 #Set Et: .1.24,f,./setip eth0 192.168.1.24/24
