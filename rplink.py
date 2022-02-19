@@ -79,7 +79,7 @@ class rplink:
             r = str( subprocess.run([ 'ps -ef |grep -e "pi "|grep -v "root " |grep " 1 " '  ], shell=True, capture_output=True, text=True ).stdout ).strip().split()
             print(r)
             print("len {}: {}".format(no,len(r)) )
-            if no>10:
+            if no>6:
                 break
             if self.clk!=None:
                 self.clk.menu.active=False
