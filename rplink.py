@@ -70,13 +70,17 @@ class rplink:
     def rfcommreset(self):
         r = str( subprocess.run([ 'ps -ef |grep "pi " |grep "/lib/systemd/systemd --user"'  ], shell=True, capture_output=True, text=True ).stdout ).strip().split()
         no=1
+        print(r)
         print("len {}: {}".format(no,len(r)) )
         while len(r)>0:
             no+=1
             procno=r[1].strip()
             subprocess.run([ 'kill -9 {}'.format(procno)  ], shell=True, capture_output=True, text=True )
             r = str( subprocess.run([ 'ps -ef |grep -e "pi " |grep " 1 " '  ], shell=True, capture_output=True, text=True ).stdout ).strip().split()
+            print(r)
             print("len {}: {}".format(no,len(r)) )
+            if no>10:
+                break
             if self.clk!=None:
                 self.clk.menu.active=False
                 self.clk.info="\n!!!\n\nBT console reset\n\n!!!"
