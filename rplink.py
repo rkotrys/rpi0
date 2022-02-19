@@ -68,19 +68,17 @@ class rplink:
             self.localdata[key]=val
             
     def rfcommreset(self):
-        r = str( subprocess.run([ 'ps -ef |grep -e "pi "|grep -v "root " |grep " 1 "'  ], shell=True, capture_output=True, text=True ).stdout ).strip().split()
+        r = str( subprocess.run([ 'ps -ef  |grep -v "root "|grep -e "pi "'  ], shell=True, capture_output=True, text=True ).stdout ).strip().splitlines()
         no=1
         print(r)
-        print("len {}: {}".format(no,len(r)) )
-        while len(r)>0:
-            no=no+1
-            procno=r[1].strip()
-            subprocess.run([ 'kill -9 {}'.format(procno)  ], shell=True, capture_output=True, text=True )
-            r = str( subprocess.run([ 'ps -ef |grep -e "pi "|grep -v "root " |grep " 1 " '  ], shell=True, capture_output=True, text=True ).stdout ).strip().split()
-            print(r)
-            print("len {}: {}".format(no,len(r)) )
-            if no>6:
-                break
+        if len(r)>0:
+            proc=[]
+            for l in r:
+                proc.append(l.split()[1].strip())
+            print( proc )    
+            for p in proc:
+                subprocess.run([ 'kill -9 {}'.format(p)  ], shell=True, capture_output=True, text=True )    
+                print("kill {}".format(p))
             if self.clk!=None:
                 self.clk.menu.active=False
                 self.clk.info="\n!!!\n\nBT console reset\n\n!!!"
