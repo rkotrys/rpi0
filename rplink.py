@@ -73,7 +73,7 @@ class rplink:
         print(r)
         print("len {}: {}".format(no,len(r)) )
         while len(r)>0:
-            no+=1
+            no=no+1
             procno=r[1].strip()
             subprocess.run([ 'kill -9 {}'.format(procno)  ], shell=True, capture_output=True, text=True )
             r = str( subprocess.run([ 'ps -ef |grep -e "pi " -v "root " |grep " 1 " '  ], shell=True, capture_output=True, text=True ).stdout ).strip().split()
