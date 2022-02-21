@@ -11,6 +11,7 @@ cp -f $CLEANBT/rfcomm.service /etc/systemd/system/rfcomm.service
 cp -f $CLEANBT/main.conf /etc/bluetooth/main.conf
 cp -f $CLEANBT/rfcomm.conf /etc/bluetooth/rfcomm.conf
 #
+#
 # rfcomm enable
 RFCOMM=`systemctl is-active rfcomm`
 if [ "$RFCOMM" != "active" ]
