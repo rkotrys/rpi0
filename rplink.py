@@ -149,7 +149,8 @@ class rplink:
         """ thread """
         while self.go:
             time.sleep(self.rplink_period)    
-            if not self.x_checklink.is_alive():
+            if self.x_checklink.is_alive()!=True:
+                self.x_checklink=threading.Thread( name='checklink', target=self.checklink, args=(self.rpilink_address,self.rplink_period), daemon=True)
                 self.x_checklink.start()
             if self.isonline:
                 self.d=h.getrpiinfo(self.d)
