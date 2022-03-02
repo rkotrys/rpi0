@@ -133,6 +133,7 @@ class rplink:
         """ thread """
         while self.go:
             time.sleep(period)
+            self.logger.debug( u'[{}] ON-LINE STATUS: {}'.format(self.display, self.isonline) )
             self.isonline=h.online_status(address)
             if self.clk!=None:
                 self.clk.isonline_flag=self.isonline
