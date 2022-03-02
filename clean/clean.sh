@@ -8,7 +8,7 @@ cp -f $CLEANP/dhcpcd.conf /etc/dhcpcd.conf
 cp -f $CLEANP/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
 cp -f $CLEANBT/bluetooth.service /lib/systemd/system/bluetooth.service
 cp -f $CLEANBT/rfcomm.service /etc/systemd/system/rfcomm.service
-cp -f $CLEANBT/main.conf /etc/bluetooth/main.conf
+#cp -f $CLEANBT/main.conf /etc/bluetooth/main.conf
 cp -f $CLEANBT/rfcomm.conf /etc/bluetooth/rfcomm.conf
 #
 #
