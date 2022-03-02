@@ -153,7 +153,7 @@ class clock:
         draw.text( (128-17,1), symbol, font=self.symbols, fill=tuple(self.cnf["clock"]["icons_color"]) )
 
     def drawbt(self,draw):        
-        draw.rectangle([(0,0),(17,17)], fill='#000000ff', outline='#ff0000ff', width=1)
+        draw.rectangle([(0,0),(17,17)], fill='#000000ff', outline='#000000ff', width=0)
         color=tuple(self.cnf["clock"]["background_color"])
         if self.df['bluetooth']['Discoverable'].strip()=='yes':
             color=tuple(self.cnf["clock"]["icons_color"])    
