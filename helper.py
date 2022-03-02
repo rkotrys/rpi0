@@ -356,11 +356,12 @@ def online_status(address="8.8.8.8"):
         r = str(r.stdout).strip()
     except subprocess.CalledProcessError:
         r = '0 received'
-    ind = int(r.find(' received'))
-    if( int(r[ind-1:ind]) > 0 ):
-        return True
-    else:
-        return False        
+    finally:    
+        ind = int(r.find(' received'))
+        if( int(r[ind-1:ind]) > 0 ):
+            return True
+        else:
+            return False        
     
 def getnetdev():
     """ scan net devices and return basic prams as dictionary: netdev[devname]=(devname,ip,mac) """
