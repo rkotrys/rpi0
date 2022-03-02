@@ -52,7 +52,7 @@ class rplink:
         self.x_rpilink = threading.Thread( name='rpilink', target=self.rpilink, args=(), daemon=True)
         self.x_get_wlans = threading.Thread( name='get_wlans', target=self.get_wlans, args=(), daemon=True)
         self.x_runbtscan= threading.Thread( name='runbtscan', target=self.runbtscan, args=(),  daemon=True)
-        self.x_checklink.start()
+        #self.x_checklink.start()
         self.x_rpilink.start()
         self.x_runbtscan.start()
         if self.AP==False:
