@@ -1,23 +1,31 @@
 #!/bin/bash
 #
+SYS_VERSION=`cat /etc/os-release|grep VERSION_ID|nawk -F= '{print $2}'|sed 's/"//g' - `
+#
 CLEANP="/root/lcd144/clean/clean"
 CLEANBT="/root/lcd144/clean/bt"
 # clean access point config in RPI4
 #
 cp -f $CLEANP/dhcpcd.conf /etc/dhcpcd.conf
 cp -f $CLEANP/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
-cp -f $CLEANBT/bluetooth.service /lib/systemd/system/bluetooth.service
 cp -f $CLEANBT/rfcomm.service /etc/systemd/system/rfcomm.service
-#cp -f $CLEANBT/main.conf /etc/bluetooth/main.conf
+cp -f $CLEANBT/main.conf /etc/bluetooth/main.conf
 cp -f $CLEANBT/rfcomm.conf /etc/bluetooth/rfcomm.conf
 #
+if [ $SYS_VERSION=="10"]; then
+cp -f $CLEANBT/bluetooth.service.10 /lib/systemd/system/bluetooth.service
+fi
+#
+if [ $SYS_VERSION=="11"]; then
+cp -f $CLEANBT/bluetooth.service.11 /lib/systemd/system/bluetooth.service
+fi
 #
 # rfcomm enable
 RFCOMM=`systemctl is-active rfcomm`
 if [ "$RFCOMM" != "active" ]
 then
 systemctl unmask rfcomm
-systemctl enable frcomm
+systemctl enable rfcomm
 fi
 #
 FILE="/etc/sysctl.d/routed-ap.conf"
