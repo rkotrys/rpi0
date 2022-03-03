@@ -12,11 +12,11 @@ cp -f $CLEANBT/rfcomm.service /etc/systemd/system/rfcomm.service
 cp -f $CLEANBT/main.conf /etc/bluetooth/main.conf
 cp -f $CLEANBT/rfcomm.conf /etc/bluetooth/rfcomm.conf
 #
-if [ $SYS_VERSION=="10"]; then
+if [ $SYS_VERSION=="10" ]; then
 cp -f $CLEANBT/bluetooth.service.10 /lib/systemd/system/bluetooth.service
 fi
 #
-if [ $SYS_VERSION=="11"]; then
+if [ $SYS_VERSION=="11" ]; then
 cp -f $CLEANBT/bluetooth.service.11 /lib/systemd/system/bluetooth.service
 fi
 #
