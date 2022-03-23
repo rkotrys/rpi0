@@ -54,6 +54,7 @@ rm -f $FILE
 echo "Remove: $FILE"
 fi
 #
+#
 # netfilter-persistent iptables-persistent
 echo "[netfilter-persistent iptables-persistent]"
 NETF=`apt --installed list 2>/dev/null |grep -e netfilter-persistent -e iptables-persistent`
