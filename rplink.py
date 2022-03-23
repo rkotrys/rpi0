@@ -7,8 +7,8 @@
 # * | Function    :   Basic class to use with Raspberry Pi link service
 # * | Info        :   require files: helper.py
 # *----------------
-# * | This version:   V1.0.1
-# * | Date        :   2022-01-23
+# * | This version:   V1.0.2
+# * | Date        :   2022-03-23
 # * | Info        :   include 'rplink' run file and 'rplink.service'
 # ******************************************************************************/
 
