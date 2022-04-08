@@ -334,7 +334,7 @@ class clock:
             self.showinfo = False
         else:
             buf=str(proc.check_output(['df','-h'] ), encoding='utf-8').strip().splitlines()[1].strip().split()
-            self.info = u'SN: ' + self.df['serial'] + u'\nChip: ' + self.df['chip'] + u'\nArch: ' + self.df['machine'] + u'\nRaspberry Pi OS'+ u'\n' + self.df['version'] + u'\nCore: ' + self.df['release'] + u'\nPTUUID: ' + self.df['puuid'] + '\nFS: ' + buf[1] + ', ' + buf[3] + ' free' + u'\nRAM: {:4.2f} GB'.format(float(self.df['memtotal']))
+            self.info = u'SN: ' + self.df['serial'] + u'\nChip: ' + self.df['chip'] + u'\nArch: ' + self.df['machine'] + u'\nRaspberry Pi OS'+ u'\n' + self.df['version'] + u'\nCore: ' + self.df['release'] + u'\nPTUUID: ' + self.df['puuid'] + '\nFS: ' + buf[1] + ', ' + buf[3] + ' free' + u'\nRAM: {:4.2f} MB'.format(float(self.df['memtotal']))
             self.showinfo = True
 
     def sinfo(self, pin ):
