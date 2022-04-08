@@ -382,6 +382,16 @@ def getnetdev():
 def getrpiinfo(dictionary=True, df={} ):
     """ getrpiinfo(out=True) collect RPi params and status information, return as dictionary """
     newdata = True if len(df)==0 else False
+    if newdata:
+        df['data_ticks']=0
+        btinfo=True
+    else:
+        df['data_ticks']=df['data_ticks']+1
+        if df['data_ticks']>5:
+            btinfo=True
+            df['data_ticks']=0
+        else:
+            btinfo=False             
     df['hostname']=str(subprocess.check_output(['hostname'] ), encoding='utf-8').strip()
     netdev=getnetdev()
     if "eth0" in netdev.keys():
@@ -416,9 +426,11 @@ def getrpiinfo(dictionary=True, df={} ):
         df['wlan_id'] = '--'
         df['wlan_ch'] = '--'
     df['coretemp']=gettemp()
-    df['bluetooth']=getbluetooth_info()
+    if btinfo:
+        df['bluetooth']=getbluetooth_info()
     # static
     if newdata:
+        df['data_ticks']=0
         r = subprocess.run(['/bin/lscpu'], capture_output=True, encoding='utf-8')
         if r.returncode==0:
             lines=str(r.stdout).strip().splitlines()
